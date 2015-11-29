@@ -11,7 +11,6 @@ namespace Anne.Foundation
 
         public static void Start()
         {
-            
         }
 
         public static void End()

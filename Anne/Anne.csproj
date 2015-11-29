@@ -111,9 +111,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Foundation\DisposableChecker.cs" />
-    <Compile Include="Foundation\Mvvm\ModelBase.cs" />
-    <Compile Include="Foundation\Mvvm\ViewModelBase.cs" />
     <Compile Include="MainWindow\MainWindowVm.cs" />
     <Compile Include="MainWindow\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -151,6 +148,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Anne.Foundation\Anne.Foundation.csproj">
+      <Project>{8aa5c1d9-fbb3-42d6-ab8d-2451b2c0e3bf}</Project>
+      <Name>Anne.Foundation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Anne.Model\Anne.Model.csproj">
       <Project>{4f0c4980-8c8f-43cb-8540-01a07fa5b3fa}</Project>
       <Name>Anne.Model</Name>
