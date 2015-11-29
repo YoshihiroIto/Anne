@@ -23,6 +23,10 @@
         <mainWindow:MainWindowVm />
     </Window.DataContext>
 
-    <Grid />
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400" />
+        </Grid.ColumnDefinitions>
+    </Grid>
 </Window>
 
