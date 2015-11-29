@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mainWindow="clr-namespace:Anne.MainWindow"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:git="clr-namespace:Anne.Model.Git;assembly=Anne.Model"
         Title="{Binding Title.Value,
                         Mode=OneWay}"
         Width="525"
@@ -24,9 +25,29 @@
     </Window.DataContext>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
+
+        <Grid.Resources>
+            <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
+                <TextBlock Text="{Binding Name.Value, Mode=OneWay}" />
+            </DataTemplate>
+        </Grid.Resources>
+
+        <ListView Grid.Row="0"
+                  ItemTemplate="{StaticResource BranchTemplate}"
+                  ItemsSource="{Binding Repository.LocalBranches,
+                                        Mode=OneWay}" />
+
+        <ListView Grid.Row="1"
+                  ItemTemplate="{StaticResource BranchTemplate}"
+                  ItemsSource="{Binding Repository.RemoteBranches,
+                                        Mode=OneWay}" />
     </Grid>
 </Window>
 
