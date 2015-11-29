@@ -93,6 +93,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="YamlDotNet, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.3.7.0\lib\net35\YamlDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
@@ -147,6 +151,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Anne.Model\Anne.Model.csproj">
+      <Project>{4f0c4980-8c8f-43cb-8540-01a07fa5b3fa}</Project>
+      <Name>Anne.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Livet2\src\Livet2\Livet2.csproj">
       <Project>{a6fefddc-d4d9-4bb9-adee-8afc6f008e53}</Project>
       <Name>Livet2</Name>
