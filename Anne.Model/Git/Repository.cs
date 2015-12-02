@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System.Linq;
+using System.Reactive.Linq;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -9,8 +10,8 @@ namespace Anne.Model.Git
     {
         public ReactiveProperty<string> Path { get; } = new ReactiveProperty<string>();
 
-        public ReadOnlyReactiveCollection<Branch> LocalBranches { get; private set; }
-        public ReadOnlyReactiveCollection<Branch> RemoteBranches { get; private set; }
+        public ReadOnlyReactiveCollection<Branch> LocalBranches { get; }
+        public ReadOnlyReactiveCollection<Branch> RemoteBranches { get; }
 
         public Repository()
         {
@@ -31,16 +32,23 @@ namespace Anne.Model.Git
             LocalBranches =
                 branches
                     .Where(b => !b.IsRemote)
-                    .Select(x => new Branch(x))
+                    .Select(x => new Branch(x, repositry.Value))
                     .ToReadOnlyReactiveCollection()
                     .AddTo(MultipleDisposable);
 
             RemoteBranches =
                 branches
                     .Where(b => b.IsRemote)
-                    .Select(x => new Branch(x))
+                    .Select(x => new Branch(x, repositry.Value))
                     .ToReadOnlyReactiveCollection()
                     .AddTo(MultipleDisposable);
+        }
+
+        public void CheckoutTest()
+        {
+            var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
+
+            srcBranch?.Checkout();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System.Diagnostics;
+using System.Reactive.Linq;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 using Reactive.Bindings;
@@ -21,12 +22,15 @@ namespace Anne.MainWindow
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            Test();
+            //
+            Repository.Path.Value = @"C:\Users\yoi\Documents\Wox";
         }
 
-        private void Test()
+        public void TestCheckout()
         {
-            Repository.Path.Value = @"C:\Users\yoi\Documents\Wox";
+            Debug.WriteLine("TestCheckout()");
+
+            Repository.CheckoutTest();
         }
     }
 }

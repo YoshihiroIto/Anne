@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:git="clr-namespace:Anne.Model.Git;assembly=Anne.Model"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mainWindow="clr-namespace:Anne.MainWindow"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:git="clr-namespace:Anne.Model.Git;assembly=Anne.Model"
         Title="{Binding Title.Value,
                         Mode=OneWay}"
         Width="525"
@@ -25,29 +25,43 @@
     </Window.DataContext>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
-        <Grid.Resources>
-            <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
-                <TextBlock Text="{Binding Name.Value, Mode=OneWay}" />
-            </DataTemplate>
-        </Grid.Resources>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <ListView Grid.Row="0"
-                  ItemTemplate="{StaticResource BranchTemplate}"
-                  ItemsSource="{Binding Repository.LocalBranches,
-                                        Mode=OneWay}" />
+            <Grid.Resources>
+                <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
+                    <TextBlock Text="{Binding Name.Value, Mode=OneWay}" />
+                </DataTemplate>
+            </Grid.Resources>
 
-        <ListView Grid.Row="1"
-                  ItemTemplate="{StaticResource BranchTemplate}"
-                  ItemsSource="{Binding Repository.RemoteBranches,
-                                        Mode=OneWay}" />
+            <ListView Grid.Row="0"
+                      ItemTemplate="{StaticResource BranchTemplate}"
+                      ItemsSource="{Binding Repository.LocalBranches,
+                                            Mode=OneWay}" />
+
+            <ListView Grid.Row="1"
+                      ItemTemplate="{StaticResource BranchTemplate}"
+                      ItemsSource="{Binding Repository.RemoteBranches,
+                                            Mode=OneWay}" />
+        </Grid>
+
+        <StackPanel Grid.Column="1">
+            <Button Content="Checkout">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="TestCheckout" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>
 
