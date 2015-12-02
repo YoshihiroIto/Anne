@@ -1,3 +1,6 @@
 [submodule "Livet2"]
     path =  Livet2
     url=https://github.com/YoshihiroIto/Livet2.git
+[submodule "libgit2sharp"]
+	path = libgit2sharp
+	url = https://github.com/YoshihiroIto/libgit2sharp

@@ -26,7 +26,7 @@ namespace Anne.Model.Git
             Name.AddTo(MultipleDisposable);
             IsRemote.AddTo(MultipleDisposable);
 
-            Name.Value = src.Name;
+            Name.Value = src.FriendlyName;
             IsRemote.Value = src.IsRemote;
         }
 
