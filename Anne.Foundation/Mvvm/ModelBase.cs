@@ -1,9 +1,10 @@
 ﻿using System;
+using Livet;
 using StatefulModel;
 
 namespace Anne.Foundation.Mvvm
 {
-    public class ModelBase : IDisposable
+    public class ModelBase : NotificationObject, IDisposable
     {
         public MultipleDisposable MultipleDisposable { get; set; } = new MultipleDisposable();
 

@@ -22,7 +22,6 @@ namespace Anne.MainWindow
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            //
             Repository.Path.Value = @"C:\Users\yoi\Documents\Wox";
         }
 

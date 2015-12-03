@@ -5,6 +5,7 @@ using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Reactive.Bindings.Helpers;
 
 namespace Anne.Model.Git
 {
@@ -12,8 +13,10 @@ namespace Anne.Model.Git
     {
         public ReactiveProperty<string> Path { get; } = new ReactiveProperty<string>();
 
-        public ReadOnlyReactiveCollection<Branch> LocalBranches { get; private set; }
-        public ReadOnlyReactiveCollection<Branch> RemoteBranches { get; private set; }
+        public ReadOnlyReactiveCollection<Branch> AllBranches { get; private set; }
+
+        public IFilteredReadOnlyObservableCollection<Branch> LocalBranches { get; private set; }
+        public IFilteredReadOnlyObservableCollection<Branch> RemoteBranches { get; private set; }
 
         private readonly ReadOnlyReactiveProperty<LibGit2Sharp.Repository> _repos;
 
@@ -33,22 +36,16 @@ namespace Anne.Model.Git
                 .Select(r => r.Branches)
                 .Subscribe(branches =>
                 {
-                    MultipleDisposable.RemoveAndDispose(LocalBranches);
-                    MultipleDisposable.RemoveAndDispose(RemoteBranches);
+                    MultipleDisposable.RemoveAndDispose(AllBranches);
 
-                    LocalBranches = branches
-                        .Where(x => !x.IsRemote)
+                    AllBranches = branches
                         .ToReadOnlyReactiveCollection(
                             branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
                             x => new Branch(x, _repos.Value)
                         ).AddTo(MultipleDisposable);
 
-                    RemoteBranches = branches
-                        .Where(x => x.IsRemote)
-                        .ToReadOnlyReactiveCollection(
-                            branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
-                            x => new Branch(x, _repos.Value)
-                        ).AddTo(MultipleDisposable);
+                    LocalBranches = AllBranches.ToFilteredReadOnlyObservableCollection(x => ! x.IsRemote.Value);
+                    RemoteBranches = AllBranches.ToFilteredReadOnlyObservableCollection(x => x.IsRemote.Value);
                 }).AddTo(MultipleDisposable);
         }
 

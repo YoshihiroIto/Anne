@@ -68,7 +68,7 @@
         </Grid>
 
         <StackPanel Grid.Column="1">
-            <Button Content="CheckoutTest">
+            <Button Content="Checkout Test">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <behaviors:LivetCallMethodAction MethodName="CheckoutTest" MethodTarget="{Binding}" />
@@ -76,7 +76,7 @@
                 </i:Interaction.Triggers>
             </Button>
 
-            <Button Content="RemoveTest">
+            <Button Content="Remove Test">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <behaviors:LivetCallMethodAction MethodName="RemoveTest" MethodTarget="{Binding}" />
