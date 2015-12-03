@@ -83,6 +83,22 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
+
+            <Button Content="Switch Test (master)" Margin="0,8,0,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="SwitchTest" MethodTarget="{Binding}" MethodParameter="master"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+
+            <Button Content="Switch Test (refactor)">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="SwitchTest" MethodTarget="{Binding}" MethodParameter="refactoring"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

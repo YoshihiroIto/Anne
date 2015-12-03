@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 using Reactive.Bindings;
@@ -25,18 +24,19 @@ namespace Anne.MainWindow
             Repository.Path.Value = @"C:\Users\yoi\Documents\Wox";
         }
 
-        public void CheckoutTest()
+        public async void CheckoutTest()
         {
-            Debug.WriteLine("CheckoutTest()");
-
-            Repository.CheckoutTest();
+            await Repository.CheckoutTest();
         }
 
-        public void RemoveTest()
+        public async void RemoveTest()
         {
-            Debug.WriteLine("RemoveTest()");
-            
-            Repository.RemoveTest();
+            await Repository.RemoveTest();
+        }
+
+        public async void SwitchTest(string branchName)
+        {
+            await Repository.SwitchTest(branchName);
         }
     }
 }

@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisposableChecker.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="MultipleDisposableExtensions.cs" />
     <Compile Include="Mvvm\ModelBase.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />

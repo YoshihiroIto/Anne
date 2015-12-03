@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 using Reactive.Bindings;
@@ -16,6 +17,15 @@ namespace Anne.Model.Git
         private readonly LibGit2Sharp.Branch _internal;
         private readonly LibGit2Sharp.Repository _repos;
 
+        private string LocalName
+        {
+            get
+            {
+                var m = Regex.Match(Name.Value, @"origin/(.*)");
+                return m.Groups[1].Value;
+            }
+        }
+
         public Branch(LibGit2Sharp.Branch src, LibGit2Sharp.Repository repos)
         {
             Debug.Assert(src != null);
@@ -28,35 +38,39 @@ namespace Anne.Model.Git
             IsRemote.AddTo(MultipleDisposable);
             IsCurrent.AddTo(MultipleDisposable);
 
-            Name.Value = src.FriendlyName;
-            IsRemote.Value = src.IsRemote;
-            IsCurrent.Value = src.IsCurrentRepositoryHead;
+            UpdateProps();
         }
 
-        private string LocalName
+        public void UpdateProps()
         {
-            get
+            Name.Value = _internal.FriendlyName;
+            IsRemote.Value = _internal.IsRemote;
+            IsCurrent.Value = _internal.IsCurrentRepositoryHead;
+        }
+
+        public async Task CheckoutAsync()
+        {
+            await Task.Run(() =>
             {
-                var m = Regex.Match(Name.Value, @"origin/(.*)");
-                return m.Groups[1].Value;
-            }
+                // ブランチを作る
+                var newBranch = _repos.CreateBranch(LocalName, _internal.Tip);
+
+                // 追跡する
+                _repos.Branches.Update(newBranch, b => b.TrackedBranch = _internal.CanonicalName);
+
+                // チェックアウト
+                _repos.Checkout(newBranch);
+            });
         }
 
-        public void Checkout()
+        public async Task RemoveAsync()
         {
-            // ブランチを作る
-            var newBranch = _repos.CreateBranch(LocalName, _internal.Tip);
-
-            // 追跡する
-            _repos.Branches.Update(newBranch, b => b.TrackedBranch = _internal.CanonicalName);
-
-            // チェックアウト
-//            _repos.Checkout(newBranch);
+            await Task.Run(() => _repos.Branches.Remove(_internal));
         }
 
-        public void Remove()
+        public async Task SwitchAsync()
         {
-            _repos.Branches.Remove(_internal);
+            await Task.Run(() => _repos.Checkout(_internal));
         }
-    } 
+    }
 }

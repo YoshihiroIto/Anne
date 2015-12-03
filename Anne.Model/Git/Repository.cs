@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -37,6 +38,8 @@ namespace Anne.Model.Git
                 .Subscribe(branches =>
                 {
                     MultipleDisposable.RemoveAndDispose(AllBranches);
+                    MultipleDisposable.RemoveAndDispose(LocalBranches);
+                    MultipleDisposable.RemoveAndDispose(RemoteBranches);
 
                     AllBranches = branches
                         .ToReadOnlyReactiveCollection(
@@ -44,23 +47,45 @@ namespace Anne.Model.Git
                             x => new Branch(x, _repos.Value)
                         ).AddTo(MultipleDisposable);
 
+
+                    AllBranches
+                        .ObserveAddChanged()
+                        .Subscribe(b => b.UpdateProps())
+                        .AddTo(MultipleDisposable);
+
                     LocalBranches = AllBranches.ToFilteredReadOnlyObservableCollection(x => ! x.IsRemote.Value);
                     RemoteBranches = AllBranches.ToFilteredReadOnlyObservableCollection(x => x.IsRemote.Value);
                 }).AddTo(MultipleDisposable);
         }
 
-        public void CheckoutTest()
+        public async Task CheckoutTest()
         {
             var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
 
-            srcBranch?.Checkout();
+            if (srcBranch != null)
+                await srcBranch.CheckoutAsync();
+
+            AllBranches.ForEach(x => x.UpdateProps());
         }
 
-        public void RemoveTest()
+        public async Task RemoveTest()
         {
             var srcBranch = LocalBranches.FirstOrDefault(b => b.Name.Value == "refactoring");
 
-            srcBranch?.Remove();
+            if (srcBranch != null)
+                await srcBranch.RemoveAsync();
+
+            AllBranches.ForEach(x => x.UpdateProps());
+        }
+
+        public async Task SwitchTest(string branchName)
+        {
+            var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
+            
+            if (branch != null)
+                await branch.SwitchAsync();
+
+            AllBranches.ForEach(x => x.UpdateProps());
         }
     }
 }
