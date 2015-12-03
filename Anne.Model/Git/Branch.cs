@@ -11,6 +11,7 @@ namespace Anne.Model.Git
     {
         public ReactiveProperty<string> Name { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<bool> IsRemote { get; } = new ReactiveProperty<bool>();
+        public ReactiveProperty<bool> IsCurrent { get; } = new ReactiveProperty<bool>();
 
         private readonly LibGit2Sharp.Branch _internal;
         private readonly LibGit2Sharp.Repository _repos;
@@ -25,9 +26,11 @@ namespace Anne.Model.Git
 
             Name.AddTo(MultipleDisposable);
             IsRemote.AddTo(MultipleDisposable);
+            IsCurrent.AddTo(MultipleDisposable);
 
             Name.Value = src.FriendlyName;
             IsRemote.Value = src.IsRemote;
+            IsCurrent.Value = src.IsCurrentRepositoryHead;
         }
 
         private string LocalName
@@ -48,8 +51,12 @@ namespace Anne.Model.Git
             _repos.Branches.Update(newBranch, b => b.TrackedBranch = _internal.CanonicalName);
 
             // チェックアウト
-            _repos.Checkout(newBranch);
+//            _repos.Checkout(newBranch);
         }
 
+        public void Remove()
+        {
+            _repos.Branches.Remove(_internal);
+        }
     } 
 }

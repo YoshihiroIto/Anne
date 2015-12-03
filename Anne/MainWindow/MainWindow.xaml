@@ -37,8 +37,22 @@
             </Grid.RowDefinitions>
 
             <Grid.Resources>
+                <Style x:Key="CurrentMarkStyle" TargetType="{x:Type TextBlock}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCurrent.Value, Mode=OneWay}" Value="True">
+                            <Setter Property="Text" Value="* " />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsCurrent.Value, Mode=OneWay}" Value="False">
+                            <Setter Property="Text" Value="  " />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+
                 <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
-                    <TextBlock Text="{Binding Name.Value, Mode=OneWay}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource CurrentMarkStyle}" />
+                        <TextBlock Text="{Binding Name.Value, Mode=OneWay}" />
+                    </StackPanel>
                 </DataTemplate>
             </Grid.Resources>
 
@@ -54,10 +68,18 @@
         </Grid>
 
         <StackPanel Grid.Column="1">
-            <Button Content="Checkout">
+            <Button Content="CheckoutTest">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="TestCheckout" MethodTarget="{Binding}" />
+                        <behaviors:LivetCallMethodAction MethodName="CheckoutTest" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+
+            <Button Content="RemoveTest">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="RemoveTest" MethodTarget="{Binding}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>

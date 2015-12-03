@@ -26,11 +26,18 @@ namespace Anne.MainWindow
             Repository.Path.Value = @"C:\Users\yoi\Documents\Wox";
         }
 
-        public void TestCheckout()
+        public void CheckoutTest()
         {
-            Debug.WriteLine("TestCheckout()");
+            Debug.WriteLine("CheckoutTest()");
 
             Repository.CheckoutTest();
+        }
+
+        public void RemoveTest()
+        {
+            Debug.WriteLine("RemoveTest()");
+            
+            Repository.RemoveTest();
         }
     }
 }
