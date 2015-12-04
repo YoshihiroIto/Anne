@@ -19,20 +19,18 @@ namespace Anne.Model.Git
         public IFilteredReadOnlyObservableCollection<Branch> LocalBranches { get; private set; }
         public IFilteredReadOnlyObservableCollection<Branch> RemoteBranches { get; private set; }
 
-        private readonly ReadOnlyReactiveProperty<LibGit2Sharp.Repository> _repos;
-
         public Repository()
         {
             Path
                 .AddTo(MultipleDisposable);
 
-            _repos = Path
+            var repos = Path
                 .Where(path => !string.IsNullOrEmpty(path))
                 .Select(path => new LibGit2Sharp.Repository(path))
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            _repos
+            repos
                 .Where(r => r != null)
                 .Select(r => r.Branches)
                 .Subscribe(branches =>
@@ -44,7 +42,7 @@ namespace Anne.Model.Git
                     AllBranches = branches
                         .ToReadOnlyReactiveCollection(
                             branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
-                            x => new Branch(x, _repos.Value)
+                            x => new Branch(x, repos.Value)
                         ).AddTo(MultipleDisposable);
 
 
@@ -65,7 +63,7 @@ namespace Anne.Model.Git
             if (srcBranch != null)
                 await srcBranch.CheckoutAsync();
 
-            AllBranches.ForEach(x => x.UpdateProps());
+            UpdateBranchProps();
         }
 
         public async Task RemoveTest()
@@ -75,7 +73,7 @@ namespace Anne.Model.Git
             if (srcBranch != null)
                 await srcBranch.RemoveAsync();
 
-            AllBranches.ForEach(x => x.UpdateProps());
+            UpdateBranchProps();
         }
 
         public async Task SwitchTest(string branchName)
@@ -85,6 +83,11 @@ namespace Anne.Model.Git
             if (branch != null)
                 await branch.SwitchAsync();
 
+            UpdateBranchProps();
+        }
+
+        private void UpdateBranchProps()
+        {
             AllBranches.ForEach(x => x.UpdateProps());
         }
     }
