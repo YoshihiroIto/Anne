@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 using Reactive.Bindings;

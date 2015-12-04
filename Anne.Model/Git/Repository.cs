@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using Anne.Foundation;
@@ -6,6 +7,7 @@ using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
+using StatefulModel;
 
 namespace Anne.Model.Git
 {
@@ -13,10 +15,13 @@ namespace Anne.Model.Git
     {
         public ReactiveProperty<string> Path { get; } = new ReactiveProperty<string>();
 
-        public ReadOnlyReactiveCollection<Branch> AllBranches { get; private set; }
-
+        // ブランチ
+        public ReadOnlyReactiveCollection<Branch> Branches { get; private set; }
         public IFilteredReadOnlyObservableCollection<Branch> LocalBranches { get; private set; }
         public IFilteredReadOnlyObservableCollection<Branch> RemoteBranches { get; private set; }
+
+        // コミット
+        public ObservableCollection<Commit> Commits { get; private set; }
 
         public Repository()
         {
@@ -29,30 +34,46 @@ namespace Anne.Model.Git
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
+            // ブランチ
             repos
                 .Where(r => r != null)
                 .Select(r => r.Branches)
                 .Subscribe(branches =>
                 {
-                    MultipleDisposable.RemoveAndDispose(AllBranches);
+                    MultipleDisposable.RemoveAndDispose(Branches);
                     MultipleDisposable.RemoveAndDispose(LocalBranches);
                     MultipleDisposable.RemoveAndDispose(RemoteBranches);
 
-                    AllBranches = branches
+                    Branches = branches
                         .ToReadOnlyReactiveCollection(
                             branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
                             x => new Branch(x, repos.Value)
                         ).AddTo(MultipleDisposable);
 
-
-                    AllBranches
+                    Branches
                         .ObserveAddChanged()
                         .Subscribe(b => b.UpdateProps())
                         .AddTo(MultipleDisposable);
 
-                    LocalBranches = AllBranches.ToFilteredReadOnlyObservableCollection(x => ! x.IsRemote.Value);
-                    RemoteBranches = AllBranches.ToFilteredReadOnlyObservableCollection(x => x.IsRemote.Value);
+                    LocalBranches = Branches.ToFilteredReadOnlyObservableCollection(x => !x.IsRemote.Value);
+                    RemoteBranches = Branches.ToFilteredReadOnlyObservableCollection(x => x.IsRemote.Value);
                 }).AddTo(MultipleDisposable);
+
+            // コミット
+            repos
+                .Where(r => r != null)
+                .Select(r => r.Commits)
+                .Subscribe(commits =>
+                {
+                    Commits?.ForEach(x => x.Dispose());
+
+                    Commits = new ObservableCollection<Commit>(commits.Select(x => new Commit(x)));
+                }).AddTo(MultipleDisposable);
+
+            MultipleDisposable.Add(
+                new AnonymousDisposable(
+                    () => Commits?.ForEach(x => x.Dispose()))
+                );
         }
 
         public void CheckoutTest()
@@ -82,7 +103,7 @@ namespace Anne.Model.Git
 
         private void UpdateBranchProps()
         {
-            AllBranches.ForEach(x => x.UpdateProps());
+            Branches.ForEach(x => x.UpdateProps());
         }
     }
 }
