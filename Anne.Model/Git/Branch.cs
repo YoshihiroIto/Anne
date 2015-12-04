@@ -48,29 +48,26 @@ namespace Anne.Model.Git
             IsCurrent.Value = _internal.IsCurrentRepositoryHead;
         }
 
-        public async Task CheckoutAsync()
+        public void Checkout()
         {
-            await Task.Run(() =>
-            {
-                // ブランチを作る
-                var newBranch = _repos.CreateBranch(LocalName, _internal.Tip);
+            // ブランチを作る
+            var newBranch = _repos.CreateBranch(LocalName, _internal.Tip);
 
-                // 追跡する
-                _repos.Branches.Update(newBranch, b => b.TrackedBranch = _internal.CanonicalName);
+            // 追跡する
+            _repos.Branches.Update(newBranch, b => b.TrackedBranch = _internal.CanonicalName);
 
-                // チェックアウト
-                _repos.Checkout(newBranch);
-            });
+            // チェックアウト
+            _repos.Checkout(newBranch);
         }
 
-        public async Task RemoveAsync()
+        public void Remove()
         {
-            await Task.Run(() => _repos.Branches.Remove(_internal));
+            _repos.Branches.Remove(_internal);
         }
 
-        public async Task SwitchAsync()
+        public void Switch()
         {
-            await Task.Run(() => _repos.Checkout(_internal));
+            _repos.Checkout(_internal);
         }
     }
 }

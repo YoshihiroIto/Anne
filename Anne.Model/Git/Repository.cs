@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -56,32 +55,27 @@ namespace Anne.Model.Git
                 }).AddTo(MultipleDisposable);
         }
 
-        public async Task CheckoutTest()
+        public void CheckoutTest()
         {
             var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
 
-            if (srcBranch != null)
-                await srcBranch.CheckoutAsync();
+            srcBranch?.Checkout();
 
             UpdateBranchProps();
         }
 
-        public async Task RemoveTest()
+        public void RemoveTest()
         {
             var srcBranch = LocalBranches.FirstOrDefault(b => b.Name.Value == "refactoring");
 
-            if (srcBranch != null)
-                await srcBranch.RemoveAsync();
-
-            UpdateBranchProps();
+            srcBranch?.Remove();
         }
 
-        public async Task SwitchTest(string branchName)
+        public void SwitchTest(string branchName)
         {
             var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
-            
-            if (branch != null)
-                await branch.SwitchAsync();
+
+            branch?.Switch();
 
             UpdateBranchProps();
         }
