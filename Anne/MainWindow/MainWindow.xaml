@@ -47,7 +47,7 @@
 
             <DataTemplate x:Key="CommitTemplate" DataType="{x:Type git:Commit}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding MessageShort, Mode=OneWay}" />
+                    <TextBlock Text="{Binding MessageShort, Mode=OneTime}" />
                 </StackPanel>
             </DataTemplate>
         </Grid.Resources>
@@ -114,7 +114,7 @@
 
         <ListView Grid.Column="2"
                   ItemTemplate="{StaticResource CommitTemplate}"
-                  ItemsSource="{Binding Repository.Commits,
+                  ItemsSource="{Binding Repository.Commits.Value,
                                         Mode=OneWay}" />
     </Grid>
 </Window>

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Anne.Foundation;
@@ -21,10 +21,15 @@ namespace Anne.Model.Git
         public IFilteredReadOnlyObservableCollection<Branch> RemoteBranches { get; private set; }
 
         // コミット
-        public ObservableCollection<Commit> Commits { get; private set; }
+        public ReactiveProperty<List<Commit>> Commits { get; } = new ReactiveProperty<List<Commit>>();
+
+        // 
+        private readonly RepositoryJob _reposJob = new RepositoryJob();
 
         public Repository()
         {
+            MultipleDisposable.Add(_reposJob);
+
             Path
                 .AddTo(MultipleDisposable);
 
@@ -65,45 +70,51 @@ namespace Anne.Model.Git
                 .Select(r => r.Commits)
                 .Subscribe(commits =>
                 {
-                    Commits?.ForEach(x => x.Dispose());
-
-                    Commits = new ObservableCollection<Commit>(commits.Select(x => new Commit(x)));
+                    Commits.Value?.ForEach(x => x.Dispose());
+                    Commits.Value = commits.Select(x => new Commit(x)).ToList();
                 }).AddTo(MultipleDisposable);
 
-            MultipleDisposable.Add(
-                new AnonymousDisposable(
-                    () => Commits?.ForEach(x => x.Dispose()))
-                );
-        }
-
-        public void CheckoutTest()
-        {
-            var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
-
-            srcBranch?.Checkout();
-
-            UpdateBranchProps();
-        }
-
-        public void RemoveTest()
-        {
-            var srcBranch = LocalBranches.FirstOrDefault(b => b.Name.Value == "refactoring");
-
-            srcBranch?.Remove();
-        }
-
-        public void SwitchTest(string branchName)
-        {
-            var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
-
-            branch?.Switch();
-
-            UpdateBranchProps();
+            MultipleDisposable.Add(new AnonymousDisposable(() =>
+                Commits.Value?.ForEach(x => x.Dispose())
+                ));
         }
 
         private void UpdateBranchProps()
         {
             Branches.ForEach(x => x.UpdateProps());
         }
+
+        #region Test
+
+        public void CheckoutTest()
+        {
+            _reposJob.AddJob(() =>
+            {
+                var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
+                srcBranch?.Checkout();
+                UpdateBranchProps();
+            });
+        }
+
+        public void RemoveTest()
+        {
+            _reposJob.AddJob(() =>
+            {
+                var srcBranch = LocalBranches.FirstOrDefault(b => b.Name.Value == "refactoring");
+                srcBranch?.Remove();
+            });
+        }
+
+        public void SwitchTest(string branchName)
+        {
+            _reposJob.AddJob(() =>
+            {
+                var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
+                branch?.Switch();
+                UpdateBranchProps();
+            });
+        }
+
+        #endregion
     }
 }
