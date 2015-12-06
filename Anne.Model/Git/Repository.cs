@@ -24,11 +24,11 @@ namespace Anne.Model.Git
         public ReactiveProperty<List<Commit>> Commits { get; } = new ReactiveProperty<List<Commit>>();
 
         // 
-        private readonly RepositoryJob _reposJob = new RepositoryJob();
+        private readonly JobQueue _reposJobQueue = new JobQueue();
 
         public Repository()
         {
-            MultipleDisposable.Add(_reposJob);
+            MultipleDisposable.Add(_reposJobQueue);
 
             Path
                 .AddTo(MultipleDisposable);
@@ -88,7 +88,7 @@ namespace Anne.Model.Git
 
         public void CheckoutTest()
         {
-            _reposJob.AddJob(() =>
+            _reposJobQueue.AddJob(() =>
             {
                 var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
                 srcBranch?.Checkout();
@@ -98,7 +98,7 @@ namespace Anne.Model.Git
 
         public void RemoveTest()
         {
-            _reposJob.AddJob(() =>
+            _reposJobQueue.AddJob(() =>
             {
                 var srcBranch = LocalBranches.FirstOrDefault(b => b.Name.Value == "refactoring");
                 srcBranch?.Remove();
@@ -107,7 +107,7 @@ namespace Anne.Model.Git
 
         public void SwitchTest(string branchName)
         {
-            _reposJob.AddJob(() =>
+            _reposJobQueue.AddJob(() =>
             {
                 var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
                 branch?.Switch();

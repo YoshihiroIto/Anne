@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Anne.Model.Git
+namespace Anne.Foundation
 {
-    public class RepositoryJob : IDisposable
+    public class JobQueue : IDisposable
     {
         private readonly ConcurrentQueue<Action> _jobs = new ConcurrentQueue<Action>();
 
@@ -33,7 +33,7 @@ namespace Anne.Model.Git
             _task.Dispose();
         }
 
-        public RepositoryJob()
+        public JobQueue()
         {
             _task = Task.Run(() =>
             {
