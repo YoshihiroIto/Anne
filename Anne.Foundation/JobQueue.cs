@@ -8,11 +8,17 @@ namespace Anne.Foundation
 {
     public class JobQueue : IDisposable
     {
-        private readonly ConcurrentQueue<Action> _jobs = new ConcurrentQueue<Action>();
+        private readonly ConcurrentQueue<Job> _jobs = new ConcurrentQueue<Job>();
 
         private readonly Task _task;
         private readonly SemaphoreSlim _sema = new SemaphoreSlim(1);
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
+
+        private class Job
+        {
+            public string Summry { get; set; }
+            public Action Action { get; set; }
+        }
 
         public void Dispose()
         {
@@ -24,7 +30,7 @@ namespace Anne.Foundation
             }
             catch (AggregateException)
             {
-                Debug.WriteLine("Task is cancelled."); 
+                Debug.WriteLine("Task is cancelled.");
             }
 
             _cancellationToken.Dispose();
@@ -43,16 +49,15 @@ namespace Anne.Foundation
 
                     _sema.Wait();
 
-                    Action job;
+                    Job job;
 
                     while (_jobs.TryDequeue(out job))
                     {
                         _cancellationToken.Token.ThrowIfCancellationRequested();
 
-                        Debug.WriteLine("---------------------------------");
-                        Debug.WriteLine($"job executed. : {_jobs.Count}");
+                        Debug.WriteLine($"job:{job.Summry}, rest:{_jobs.Count}");
 
-                        job();
+                        job.Action();
                     }
                 }
 
@@ -60,10 +65,20 @@ namespace Anne.Foundation
             }, _cancellationToken.Token);
         }
 
+        public void AddJob(string summary, Action action)
+        {
+            _jobs.Enqueue(new Job
+            {
+                Summry = summary,
+                Action = action
+            });
+
+            _sema.Release();
+        }
+
         public void AddJob(Action job)
         {
-            _jobs.Enqueue(job);
-            _sema.Release();
+            AddJob(string.Empty, job);
         }
     }
 }

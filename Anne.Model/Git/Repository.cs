@@ -88,31 +88,37 @@ namespace Anne.Model.Git
 
         public void CheckoutTest()
         {
-            _reposJobQueue.AddJob(() =>
-            {
-                var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
-                srcBranch?.Checkout();
-                UpdateBranchProps();
-            });
+            _reposJobQueue.AddJob(
+                "Checkout",
+                () =>
+                {
+                    var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
+                    srcBranch?.Checkout();
+                    UpdateBranchProps();
+                });
         }
 
         public void RemoveTest()
         {
-            _reposJobQueue.AddJob(() =>
-            {
-                var srcBranch = LocalBranches.FirstOrDefault(b => b.Name.Value == "refactoring");
-                srcBranch?.Remove();
-            });
+            _reposJobQueue.AddJob(
+                "Remove",
+                () =>
+                {
+                    var srcBranch = LocalBranches.FirstOrDefault(b => b.Name.Value == "refactoring");
+                    srcBranch?.Remove();
+                });
         }
 
         public void SwitchTest(string branchName)
         {
-            _reposJobQueue.AddJob(() =>
-            {
-                var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
-                branch?.Switch();
-                UpdateBranchProps();
-            });
+            _reposJobQueue.AddJob(
+                $"Switch: {branchName}",
+                () =>
+                {
+                    var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
+                    branch?.Switch();
+                    UpdateBranchProps();
+                });
         }
 
         #endregion
