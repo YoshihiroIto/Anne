@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Reactive.Bindings;
@@ -10,6 +11,7 @@ namespace Anne.Foundation
     public class JobQueue : IDisposable
     {
         public ReadOnlyReactiveCollection<string> JobSummries { get; }
+        public ReactiveProperty<string> WorkingJob { get; } = new ReactiveProperty<string>();
 
         private readonly ObservableSynchronizedCollection<Job> _jobs = new ObservableSynchronizedCollection<Job>();
 
@@ -63,9 +65,11 @@ namespace Anne.Foundation
                         var job = _jobs[0];
                         _jobs.RemoveAt(0);
 
-                        Debug.WriteLine($"job:{job.Summry}, rest:{_jobs.Count}");
-
-                        job.Action();
+                        using (new AnonymousDisposable(() => WorkingJob.Value = string.Empty))
+                        {
+                            WorkingJob.Value = job.Summry;
+                            job.Action();
+                        }
                     }
                 }
 
