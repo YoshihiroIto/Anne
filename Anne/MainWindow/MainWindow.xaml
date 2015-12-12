@@ -122,10 +122,15 @@
             </Button>
         </StackPanel>
 
-        <ListView Grid.Column="2"
-                  ItemTemplate="{StaticResource CommitTemplate}"
-                  ItemsSource="{Binding Repository.Commits.Value,
-                                        Mode=OneWay}" />
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <ListView Grid.Row="0" ItemTemplate="{StaticResource CommitTemplate}" ItemsSource="{Binding Repository.Commits.Value, Mode=OneWay}" />
+            <ListView Grid.Row="1" ItemsSource="{Binding Repository.JobSummries, Mode=OneWay}"/>
+        </Grid>
     </Grid>
 </Window>
 

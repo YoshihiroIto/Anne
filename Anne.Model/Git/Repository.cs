@@ -24,6 +24,9 @@ namespace Anne.Model.Git
         // コミット
         public ReactiveProperty<List<Commit>> Commits { get; } = new ReactiveProperty<List<Commit>>();
 
+        // 処理キュー
+        public ReadOnlyReactiveCollection<string>  JobSummries { get; private set; }
+
         // 
         private readonly ReadOnlyReactiveProperty<LibGit2Sharp.Repository> _internal;
         private readonly JobQueue _reposJobQueue = new JobQueue();
@@ -31,6 +34,7 @@ namespace Anne.Model.Git
         public Repository()
         {
             MultipleDisposable.Add(_reposJobQueue);
+            JobSummries = _reposJobQueue.JobSummries;
 
             Path
                 .AddTo(MultipleDisposable);

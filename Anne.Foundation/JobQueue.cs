@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Reactive.Bindings;
+using StatefulModel;
 
 namespace Anne.Foundation
 {
     public class JobQueue : IDisposable
     {
-        private readonly ConcurrentQueue<Job> _jobs = new ConcurrentQueue<Job>();
+        public ReadOnlyReactiveCollection<string> JobSummries { get; }
+
+        private readonly ObservableSynchronizedCollection<Job> _jobs = new ObservableSynchronizedCollection<Job>();
 
         private readonly Task _task;
         private readonly SemaphoreSlim _sema = new SemaphoreSlim(1);
@@ -37,25 +40,28 @@ namespace Anne.Foundation
             _sema.Dispose();
 
             _task.Dispose();
+
+            JobSummries.Dispose();
         }
 
         public JobQueue()
         {
+            JobSummries = _jobs
+                .ToReadOnlyReactiveCollection(_jobs.ToCollectionChanged<Job>(), x => x.Summry);
+
             _task = Task.Run(() =>
             {
                 while (true)
                 {
-#if !DEBUG
                     _cancellationToken.Token.ThrowIfCancellationRequested();
-#endif
-
                     _sema.Wait();
 
-                    Job job;
-
-                    while (_jobs.TryDequeue(out job))
+                    while (_jobs.Count > 0)
                     {
                         _cancellationToken.Token.ThrowIfCancellationRequested();
+
+                        var job = _jobs[0];
+                        _jobs.RemoveAt(0);
 
                         Debug.WriteLine($"job:{job.Summry}, rest:{_jobs.Count}");
 
@@ -69,18 +75,13 @@ namespace Anne.Foundation
 
         public void AddJob(string summary, Action action)
         {
-            _jobs.Enqueue(new Job
+            _jobs.Add(new Job
             {
                 Summry = summary,
                 Action = action
             });
 
             _sema.Release();
-        }
-
-        public void AddJob(Action job)
-        {
-            AddJob(string.Empty, job);
         }
     }
 }
