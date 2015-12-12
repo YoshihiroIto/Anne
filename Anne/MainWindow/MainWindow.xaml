@@ -7,8 +7,6 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mainWindow="clr-namespace:Anne.MainWindow"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="{Binding Title.Value,
-                        Mode=OneWay}"
         Width="900"
         Height="600"
         ResizeMode="CanResizeWithGrip"

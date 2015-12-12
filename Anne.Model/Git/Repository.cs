@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
+﻿using System.Linq;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -13,77 +10,51 @@ namespace Anne.Model.Git
 {
     public class Repository : ModelBase
     {
-        // リポジトリパス
-        public ReactiveProperty<string> Path { get; } = new ReactiveProperty<string>();
-
         // ブランチ
-        public ReadOnlyReactiveCollection<Branch> Branches { get; private set; }
-        public IFilteredReadOnlyObservableCollection<Branch> LocalBranches { get; private set; }
-        public IFilteredReadOnlyObservableCollection<Branch> RemoteBranches { get; private set; }
+        public ReadOnlyReactiveCollection<Branch> Branches { get; }
+        public IFilteredReadOnlyObservableCollection<Branch> LocalBranches { get; }
+        public IFilteredReadOnlyObservableCollection<Branch> RemoteBranches { get; }
 
         // コミット
-        public ReactiveProperty<List<Commit>> Commits { get; } = new ReactiveProperty<List<Commit>>();
+        public ReactiveProperty<Commit[]> Commits { get; }
 
         // 処理キュー
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
-        public ReactiveProperty<string> WorkingJob { get; private set; } 
+        public ReactiveProperty<string> WorkingJob { get; private set; }
 
         // 
-        private readonly ReadOnlyReactiveProperty<LibGit2Sharp.Repository> _internal;
+        private readonly LibGit2Sharp.Repository _internal;
         private readonly JobQueue _reposJobQueue = new JobQueue();
 
-        public Repository()
+        public Repository(string path)
         {
             MultipleDisposable.Add(_reposJobQueue);
             JobSummries = _reposJobQueue.JobSummries;
             WorkingJob = _reposJobQueue.WorkingJob;
 
-            Path
+            _internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
+
+            Branches = _internal.Branches
+                .ToReadOnlyReactiveCollection(
+                    _internal.Branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
+                    x => new Branch(x, _internal))
                 .AddTo(MultipleDisposable);
 
-            _internal = Path
-                .Where(path => !string.IsNullOrEmpty(path))
-                .Select(path => new LibGit2Sharp.Repository(path))
-                .ToReadOnlyReactiveProperty()
+            LocalBranches = Branches
+                .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote.Value)
                 .AddTo(MultipleDisposable);
 
-            // ブランチ
-            _internal
-                .Where(r => r != null)
-                .Select(r => r.Branches)
-                .Subscribe(branches =>
-                {
-                    MultipleDisposable.RemoveAndDispose(Branches);
-                    MultipleDisposable.RemoveAndDispose(LocalBranches);
-                    MultipleDisposable.RemoveAndDispose(RemoteBranches);
-
-                    Branches = branches
-                        .ToReadOnlyReactiveCollection(
-                            branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
-                            x => new Branch(x, _internal.Value)
-                        ).AddTo(MultipleDisposable);
-
-                    Branches
-                        .ObserveAddChanged()
-                        .Subscribe(b => b.UpdateProps())
-                        .AddTo(MultipleDisposable);
-
-                    LocalBranches = Branches.ToFilteredReadOnlyObservableCollection(x => !x.IsRemote.Value);
-                    RemoteBranches = Branches.ToFilteredReadOnlyObservableCollection(x => x.IsRemote.Value);
-                }).AddTo(MultipleDisposable);
+            RemoteBranches = Branches
+                .ToFilteredReadOnlyObservableCollection(x => x.IsRemote.Value)
+                .AddTo(MultipleDisposable);
 
             // コミット
-            _internal
-                .Where(r => r != null)
-                .Select(r => r.Commits)
-                .Subscribe(commits =>
-                {
-                    Commits.Value?.ForEach(x => x.Dispose());
-                    Commits.Value = commits.Select(x => new Commit(x)).ToList();
-                }).AddTo(MultipleDisposable);
+            Commits = new ReactiveProperty<Commit[]>(_internal.Commits
+                .Select(x => new Commit(x)).ToArray())
+                .AddTo(MultipleDisposable);
 
             MultipleDisposable.Add(new AnonymousDisposable(() =>
-                Commits.Value?.ForEach(x => x.Dispose())
+                Commits.Value.ForEach(x => x.Dispose())
                 ));
         }
 
@@ -135,8 +106,8 @@ namespace Anne.Model.Git
                 $"Fetch: {remoteName}",
                 () =>
                 {
-                    var remote = _internal.Value.Network.Remotes[remoteName];
-                    _internal.Value.Network.Fetch(remote);
+                    var remote = _internal.Network.Remotes[remoteName];
+                    _internal.Network.Fetch(remote);
                 });
         }
 
