@@ -45,7 +45,9 @@ namespace Anne.Foundation
             {
                 while (true)
                 {
+#if !DEBUG
                     _cancellationToken.Token.ThrowIfCancellationRequested();
+#endif
 
                     _sema.Wait();
 

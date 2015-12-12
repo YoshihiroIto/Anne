@@ -13,6 +13,7 @@ namespace Anne.Model.Git
 {
     public class Repository : ModelBase
     {
+        // リポジトリパス
         public ReactiveProperty<string> Path { get; } = new ReactiveProperty<string>();
 
         // ブランチ
@@ -24,6 +25,7 @@ namespace Anne.Model.Git
         public ReactiveProperty<List<Commit>> Commits { get; } = new ReactiveProperty<List<Commit>>();
 
         // 
+        private readonly ReadOnlyReactiveProperty<LibGit2Sharp.Repository> _internal;
         private readonly JobQueue _reposJobQueue = new JobQueue();
 
         public Repository()
@@ -33,14 +35,14 @@ namespace Anne.Model.Git
             Path
                 .AddTo(MultipleDisposable);
 
-            var repos = Path
+            _internal = Path
                 .Where(path => !string.IsNullOrEmpty(path))
                 .Select(path => new LibGit2Sharp.Repository(path))
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             // ブランチ
-            repos
+            _internal
                 .Where(r => r != null)
                 .Select(r => r.Branches)
                 .Subscribe(branches =>
@@ -52,7 +54,7 @@ namespace Anne.Model.Git
                     Branches = branches
                         .ToReadOnlyReactiveCollection(
                             branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
-                            x => new Branch(x, repos.Value)
+                            x => new Branch(x, _internal.Value)
                         ).AddTo(MultipleDisposable);
 
                     Branches
@@ -65,7 +67,7 @@ namespace Anne.Model.Git
                 }).AddTo(MultipleDisposable);
 
             // コミット
-            repos
+            _internal
                 .Where(r => r != null)
                 .Select(r => r.Commits)
                 .Subscribe(commits =>
@@ -118,6 +120,17 @@ namespace Anne.Model.Git
                     var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
                     branch?.Switch();
                     UpdateBranchProps();
+                });
+        }
+
+        public void FetchTest(string remoteName)
+        {
+            _reposJobQueue.AddJob(
+                $"Fetch: {remoteName}",
+                () =>
+                {
+                    var remote = _internal.Value.Network.Remotes[remoteName];
+                    _internal.Value.Network.Fetch(remote);
                 });
         }
 

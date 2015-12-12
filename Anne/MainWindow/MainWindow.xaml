@@ -110,6 +110,16 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
+
+            <Button Margin="0,8,0,0" Content="Fetch Test (origin)">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="FetchTest"
+                                                         MethodParameter="origin"
+                                                         MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
         </StackPanel>
 
         <ListView Grid.Column="2"

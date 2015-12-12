@@ -39,5 +39,10 @@ namespace Anne.MainWindow
         {
             Task.Run(() => Repository.SwitchTest(branchName));
         }
+
+        public void FetchTest(string remoteName)
+        {
+            Task.Run(() => Repository.FetchTest(remoteName));
+        }
     }
 }
