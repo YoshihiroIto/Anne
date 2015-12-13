@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
@@ -14,7 +15,7 @@ namespace Anne.Model.Git
         public ReadOnlyReactiveCollection<Branch> Branches { get; }
 
         // コミット
-        public ReactiveProperty<Commit[]> Commits { get; }
+        public ReactiveProperty<IEnumerable<Commit>> Commits { get; }
 
         // 処理キュー
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
@@ -39,9 +40,9 @@ namespace Anne.Model.Git
                     Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
-            Commits = new ReactiveProperty<Commit[]>(
+            Commits = new ReactiveProperty<IEnumerable<Commit>>(
                         Scheduler.Immediate,
-                        _internal.Commits.Select(x => new Commit(x)).ToArray()
+                        _internal.Commits.Select(x => new Commit(x)).Memoize()
                     )
                     .AddTo(MultipleDisposable);
 
@@ -62,7 +63,7 @@ namespace Anne.Model.Git
                 "Checkout",
                 () =>
                 {
-                    var srcBranch = Branches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
+                    var srcBranch = Branches.FirstOrDefault(b => b.Name == "origin/refactoring");
                     srcBranch?.Checkout();
                     UpdateBranchProps();
                 });
@@ -74,7 +75,7 @@ namespace Anne.Model.Git
                 "Remove",
                 () =>
                 {
-                    var srcBranch = Branches.FirstOrDefault(b => b.Name.Value == "refactoring");
+                    var srcBranch = Branches.FirstOrDefault(b => b.Name == "refactoring");
                     srcBranch?.Remove();
                 });
         }
@@ -85,7 +86,7 @@ namespace Anne.Model.Git
                 $"Switch: {branchName}",
                 () =>
                 {
-                    var branch = Branches.FirstOrDefault(b => b.Name.Value == branchName);
+                    var branch = Branches.FirstOrDefault(b => b.Name == branchName);
                     branch?.Switch();
                     UpdateBranchProps();
                 });

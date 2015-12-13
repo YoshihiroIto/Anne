@@ -1,18 +1,32 @@
 ﻿using System.Diagnostics;
-using System.Reactive.Concurrency;
 using System.Text.RegularExpressions;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
-using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 
 namespace Anne.Model.Git
 {
     public class Branch : ModelBase
     {
-        public ReactiveProperty<string> Name { get; } = new ReactiveProperty<string>(Scheduler.Immediate);
-        public ReactiveProperty<bool> IsRemote { get; } = new ReactiveProperty<bool>(Scheduler.Immediate);
-        public ReactiveProperty<bool> IsCurrent { get; } = new ReactiveProperty<bool>(Scheduler.Immediate);
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { SetProperty(ref _name, value); } 
+        }
+
+        private bool _isRemote;
+        public bool IsRemote
+        {
+            get { return _isRemote; }
+            set { SetProperty(ref _isRemote, value); } 
+        }
+
+        private bool _isCurrent;
+        public bool IsCurrent
+        {
+            get { return _isCurrent; }
+            set { SetProperty(ref _isCurrent, value); } 
+        }
 
         private readonly LibGit2Sharp.Branch _internal;
         private readonly LibGit2Sharp.Repository _repos;
@@ -21,7 +35,7 @@ namespace Anne.Model.Git
         {
             get
             {
-                var m = Regex.Match(Name.Value, @"origin/(.*)");
+                var m = Regex.Match(Name, @"origin/(.*)");
                 return m.Groups[1].Value;
             }
         }
@@ -34,18 +48,14 @@ namespace Anne.Model.Git
             _internal = src;
             _repos = repos;
 
-            Name.AddTo(MultipleDisposable);
-            IsRemote.AddTo(MultipleDisposable);
-            IsCurrent.AddTo(MultipleDisposable);
-
             UpdateProps();
         }
 
         public void UpdateProps()
         {
-            Name.Value = _internal.FriendlyName;
-            IsRemote.Value = _internal.IsRemote;
-            IsCurrent.Value = _internal.IsCurrentRepositoryHead;
+            Name = _internal.FriendlyName;
+            IsRemote = _internal.IsRemote;
+            IsCurrent = _internal.IsCurrentRepositoryHead;
         }
 
         public void Checkout()

@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Anne.Branch;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 using Reactive.Bindings;
@@ -15,7 +17,7 @@ namespace Anne.MainWindow
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
-        public ReadOnlyReactiveProperty<Commit[]> Commits { get; private set; }
+        public ReadOnlyReactiveProperty<IEnumerable<Commit>> Commits { get; private set; }
 
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
@@ -39,13 +41,13 @@ namespace Anne.MainWindow
 
             LocalBranches = Repository.Branches
                 .ToReadOnlyReactiveCollection()
-                .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote.Value)
+                .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
 
             RemoteBranches = Repository.Branches
                 .ToReadOnlyReactiveCollection()
-                .ToFilteredReadOnlyObservableCollection(x => x.IsRemote.Value)
+                .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
         }

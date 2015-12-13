@@ -1,4 +1,5 @@
-﻿using Anne.Foundation.Mvvm;
+﻿using System.Diagnostics;
+using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -12,9 +13,22 @@ namespace Anne.Branch
 
         public BranchVm(Model.Git.Branch model)
         {
-            Name = model.Name.ToReadOnlyReactiveProperty().AddTo(MultipleDisposable);
-            IsRemote = model.IsRemote.ToReadOnlyReactiveProperty().AddTo(MultipleDisposable);
-            IsCurrent = model.IsCurrent.ToReadOnlyReactiveProperty().AddTo(MultipleDisposable);
+            Debug.Assert(model != null);
+
+            Name = model
+                .ObserveProperty(x => x.Name)
+                .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
+            IsRemote = model
+                .ObserveProperty(x => x.IsRemote)
+                .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
+            IsCurrent = model
+                .ObserveProperty(x => x.IsCurrent)
+                .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
         }
     }
 }
