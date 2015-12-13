@@ -11,7 +11,8 @@ namespace Anne.Foundation.Mvvm
 
         protected override void Dispose(bool disposing)
         {
-            DisposableChecker.Remove(this);
+            if (disposing)
+                DisposableChecker.Remove(this);
 
             base.Dispose(disposing);
         }
