@@ -7,7 +7,7 @@ namespace Anne.Foundation
 {
     public static class DisposableChecker
     {
-        private static readonly List<IDisposable> Disposables = new List<IDisposable>();
+        private static readonly HashSet<IDisposable> Disposables = new HashSet<IDisposable>();
 
         public static void Start()
         {
