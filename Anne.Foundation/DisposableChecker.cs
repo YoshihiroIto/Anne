@@ -16,7 +16,9 @@ namespace Anne.Foundation
         public static void End()
         {
             if (Disposables.Any())
+            {
                 MessageBox.Show("Found undispose object.");
+            }
         }
 
         public static void Add(IDisposable disposable)
@@ -26,8 +28,12 @@ namespace Anne.Foundation
 
         public static void Remove(IDisposable disposable)
         {
+#if false
             if (Disposables.Contains(disposable) == false)
+            {
                 MessageBox.Show("Found multiple diposing.");
+            }
+#endif
               
             Disposables.Remove(disposable);
         }

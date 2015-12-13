@@ -13,11 +13,26 @@ namespace Anne.Foundation.Mvvm
             DisposableChecker.Add(this);
         }
 
+        private bool _disposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                MultipleDisposable?.Dispose();
+                DisposableChecker.Remove(this);
+            }
+
+            _disposed = true;
+        }
+
         public void Dispose()
         {
-            MultipleDisposable.Dispose();
-
-            DisposableChecker.Remove(this);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

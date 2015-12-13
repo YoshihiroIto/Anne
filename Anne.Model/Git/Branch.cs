@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reactive.Concurrency;
 using System.Text.RegularExpressions;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
@@ -9,9 +10,9 @@ namespace Anne.Model.Git
 {
     public class Branch : ModelBase
     {
-        public ReactiveProperty<string> Name { get; } = new ReactiveProperty<string>();
-        public ReactiveProperty<bool> IsRemote { get; } = new ReactiveProperty<bool>();
-        public ReactiveProperty<bool> IsCurrent { get; } = new ReactiveProperty<bool>();
+        public ReactiveProperty<string> Name { get; } = new ReactiveProperty<string>(Scheduler.Immediate);
+        public ReactiveProperty<bool> IsRemote { get; } = new ReactiveProperty<bool>(Scheduler.Immediate);
+        public ReactiveProperty<bool> IsCurrent { get; } = new ReactiveProperty<bool>(Scheduler.Immediate);
 
         private readonly LibGit2Sharp.Branch _internal;
         private readonly LibGit2Sharp.Repository _repos;

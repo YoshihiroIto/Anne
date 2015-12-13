@@ -64,12 +64,12 @@
 
             <ListView Grid.Row="0"
                       ItemTemplate="{StaticResource BranchTemplate}"
-                      ItemsSource="{Binding Repository.LocalBranches,
+                      ItemsSource="{Binding LocalBranches,
                                             Mode=OneWay}" />
 
             <ListView Grid.Row="1"
                       ItemTemplate="{StaticResource BranchTemplate}"
-                      ItemsSource="{Binding Repository.RemoteBranches,
+                      ItemsSource="{Binding RemoteBranches,
                                             Mode=OneWay}" />
         </Grid>
         <StackPanel Grid.Column="1">
@@ -128,12 +128,12 @@
 
             <ListView Grid.Row="0"
                       ItemTemplate="{StaticResource CommitTemplate}"
-                      ItemsSource="{Binding Repository.Commits.Value,
+                      ItemsSource="{Binding Commits.Value,
                                             Mode=OneWay}" />
 
             <DockPanel Grid.Row="1" LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Repository.WorkingJob.Value}" />
-                <ListView  ItemsSource="{Binding Repository.JobSummries, Mode=OneWay}" />
+                <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
+                <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
             </DockPanel>
         </Grid>
     </Grid>

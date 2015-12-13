@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
 using Reactive.Bindings;
@@ -10,7 +11,7 @@ namespace Anne.Foundation
     public class JobQueue : IDisposable
     {
         public ReadOnlyReactiveCollection<string> JobSummries { get; }
-        public ReactiveProperty<string> WorkingJob { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<string> WorkingJob { get; } = new ReactiveProperty<string>(Scheduler.Immediate);
 
         private readonly ObservableSynchronizedCollection<Job> _jobs = new ObservableSynchronizedCollection<Job>();
 
@@ -48,7 +49,9 @@ namespace Anne.Foundation
         public JobQueue()
         {
             JobSummries = _jobs
-                .ToReadOnlyReactiveCollection(_jobs.ToCollectionChanged<Job>(), x => x.Summry);
+                .ToReadOnlyReactiveCollection(
+                    _jobs.ToCollectionChanged<Job>(), x => x.Summry,
+                    Scheduler.Immediate);
 
             _task = Task.Run(() =>
             {

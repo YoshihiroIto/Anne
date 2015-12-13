@@ -1,9 +1,9 @@
 ﻿using System.Linq;
+using System.Reactive.Concurrency;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.Helpers;
 using StatefulModel;
 
 namespace Anne.Model.Git
@@ -12,15 +12,13 @@ namespace Anne.Model.Git
     {
         // ブランチ
         public ReadOnlyReactiveCollection<Branch> Branches { get; }
-        public IFilteredReadOnlyObservableCollection<Branch> LocalBranches { get; }
-        public IFilteredReadOnlyObservableCollection<Branch> RemoteBranches { get; }
 
         // コミット
         public ReactiveProperty<Commit[]> Commits { get; }
 
         // 処理キュー
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
-        public ReactiveProperty<string> WorkingJob { get; private set; }
+        public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
         // 
         private readonly LibGit2Sharp.Repository _internal;
@@ -30,32 +28,25 @@ namespace Anne.Model.Git
         {
             MultipleDisposable.Add(_reposJobQueue);
             JobSummries = _reposJobQueue.JobSummries;
-            WorkingJob = _reposJobQueue.WorkingJob;
+            WorkingJob = _reposJobQueue.WorkingJob.ToReadOnlyReactiveProperty().AddTo(MultipleDisposable);
 
             _internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
 
             Branches = _internal.Branches
                 .ToReadOnlyReactiveCollection(
                     _internal.Branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
-                    x => new Branch(x, _internal))
+                    x => new Branch(x, _internal),
+                    Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
-            LocalBranches = Branches
-                .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote.Value)
-                .AddTo(MultipleDisposable);
+            Commits = new ReactiveProperty<Commit[]>(
+                        Scheduler.Immediate,
+                        _internal.Commits.Select(x => new Commit(x)).ToArray()
+                    )
+                    .AddTo(MultipleDisposable);
 
-            RemoteBranches = Branches
-                .ToFilteredReadOnlyObservableCollection(x => x.IsRemote.Value)
+            new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
-
-            // コミット
-            Commits = new ReactiveProperty<Commit[]>(_internal.Commits
-                .Select(x => new Commit(x)).ToArray())
-                .AddTo(MultipleDisposable);
-
-            MultipleDisposable.Add(new AnonymousDisposable(() =>
-                Commits.Value.ForEach(x => x.Dispose())
-                ));
         }
 
         private void UpdateBranchProps()
@@ -63,7 +54,7 @@ namespace Anne.Model.Git
             Branches.ForEach(x => x.UpdateProps());
         }
 
-        #region Test
+#region Test
 
         public void CheckoutTest()
         {
@@ -71,7 +62,7 @@ namespace Anne.Model.Git
                 "Checkout",
                 () =>
                 {
-                    var srcBranch = RemoteBranches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
+                    var srcBranch = Branches.FirstOrDefault(b => b.Name.Value == "origin/refactoring");
                     srcBranch?.Checkout();
                     UpdateBranchProps();
                 });
@@ -83,7 +74,7 @@ namespace Anne.Model.Git
                 "Remove",
                 () =>
                 {
-                    var srcBranch = LocalBranches.FirstOrDefault(b => b.Name.Value == "refactoring");
+                    var srcBranch = Branches.FirstOrDefault(b => b.Name.Value == "refactoring");
                     srcBranch?.Remove();
                 });
         }
@@ -94,7 +85,7 @@ namespace Anne.Model.Git
                 $"Switch: {branchName}",
                 () =>
                 {
-                    var branch = LocalBranches.FirstOrDefault(b => b.Name.Value == branchName);
+                    var branch = Branches.FirstOrDefault(b => b.Name.Value == branchName);
                     branch?.Switch();
                     UpdateBranchProps();
                 });
@@ -111,6 +102,6 @@ namespace Anne.Model.Git
                 });
         }
 
-        #endregion
+#endregion
     }
 }
