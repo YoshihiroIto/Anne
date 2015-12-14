@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisposableChecker.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="JobQueue.cs" />
     <Compile Include="MultipleDisposableExtensions.cs" />
     <Compile Include="Mvvm\ModelBase.cs" />

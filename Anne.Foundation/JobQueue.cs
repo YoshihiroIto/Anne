@@ -13,6 +13,8 @@ namespace Anne.Foundation
         public ReadOnlyReactiveCollection<string> JobSummries { get; }
         public ReactiveProperty<string> WorkingJob { get; } = new ReactiveProperty<string>(Scheduler.Immediate);
 
+        public event EventHandler<ExceptionEventArgs> JobExecutingException;
+            
         private readonly ObservableSynchronizedCollection<Job> _jobs = new ObservableSynchronizedCollection<Job>();
 
         private readonly Task _task;
@@ -70,7 +72,20 @@ namespace Anne.Foundation
                         using (new AnonymousDisposable(() => WorkingJob.Value = string.Empty))
                         {
                             WorkingJob.Value = job.Summry;
-                            job.Action();
+
+                            try
+                            {
+                                job.Action();
+                            }
+                            catch(Exception e)
+                            {
+                                var args = new ExceptionEventArgs { Exception = e };
+
+                                JobExecutingException?.Invoke(this, args);
+
+                                // 例外が起きたので以降のジョブは実行しない
+                                _jobs.Clear();
+                            }
                         }
                     }
                 }

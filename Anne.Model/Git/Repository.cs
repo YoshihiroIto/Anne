@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Windows.Input;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -17,21 +20,28 @@ namespace Anne.Model.Git
         // コミット
         public ReactiveProperty<IEnumerable<Commit>> Commits { get; }
 
-        // 処理キュー
+        // ジョブキュー
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
+        public event EventHandler<ExceptionEventArgs> JobExecutingException;
 
-        // 
+        // 内部状態
         private readonly LibGit2Sharp.Repository _internal;
-        private readonly JobQueue _reposJobQueue = new JobQueue();
+        private readonly JobQueue _jobQueue = new JobQueue();
 
         public Repository(string path)
         {
-            MultipleDisposable.Add(_reposJobQueue);
-            JobSummries = _reposJobQueue.JobSummries;
-            WorkingJob = _reposJobQueue.WorkingJob.ToReadOnlyReactiveProperty().AddTo(MultipleDisposable);
-
             _internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
+
+            // ジョブキュー
+            MultipleDisposable.Add(_jobQueue);
+            JobSummries = _jobQueue.JobSummries;
+            WorkingJob = _jobQueue.WorkingJob.ToReadOnlyReactiveProperty().AddTo(MultipleDisposable);
+
+            Observable.FromEventPattern<ExceptionEventArgs>(_jobQueue, nameof(JobQueue.JobExecutingException))
+                .Select(x => x.EventArgs)
+                .Subscribe(e => JobExecutingException?.Invoke(this, e))
+                .AddTo(MultipleDisposable);
 
             Branches = _internal.Branches
                 .ToReadOnlyReactiveCollection(
@@ -59,7 +69,7 @@ namespace Anne.Model.Git
 
         public void CheckoutTest()
         {
-            _reposJobQueue.AddJob(
+            _jobQueue.AddJob(
                 "Checkout",
                 () =>
                 {
@@ -71,7 +81,7 @@ namespace Anne.Model.Git
 
         public void RemoveTest()
         {
-            _reposJobQueue.AddJob(
+            _jobQueue.AddJob(
                 "Remove",
                 () =>
                 {
@@ -82,7 +92,7 @@ namespace Anne.Model.Git
 
         public void SwitchTest(string branchName)
         {
-            _reposJobQueue.AddJob(
+            _jobQueue.AddJob(
                 $"Switch: {branchName}",
                 () =>
                 {
@@ -94,7 +104,7 @@ namespace Anne.Model.Git
 
         public void FetchTest(string remoteName)
         {
-            _reposJobQueue.AddJob(
+            _jobQueue.AddJob(
                 $"Fetch: {remoteName}",
                 () =>
                 {

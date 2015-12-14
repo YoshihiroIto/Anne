@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Anne.Branch;
+using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
+using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
@@ -50,6 +55,19 @@ namespace Anne.MainWindow
                 .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
+
+            Observable.FromEventPattern<ExceptionEventArgs>(Repository, nameof(Repository.JobExecutingException))
+                .Select(x => x.EventArgs)
+                .ObserveOnUIDispatcher()
+                .Subscribe(e => ShowDialog(e.Exception))
+                .AddTo(MultipleDisposable);
+        }
+
+        private void ShowDialog(Exception e)
+        {
+            Debug.Assert(e != null);
+
+            Messenger.Raise(new InformationMessage(e.Message, "Information", "Info"));
         }
 
         public void CheckoutTest()

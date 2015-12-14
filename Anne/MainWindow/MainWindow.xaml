@@ -7,6 +7,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mainWindow="clr-namespace:Anne.MainWindow"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
         Width="900"
         Height="600"
         ResizeMode="CanResizeWithGrip"
@@ -17,6 +18,10 @@
         <i:EventTrigger EventName="Closed">
             <behaviors:DataContextDisposeAction />
         </i:EventTrigger>
+
+        <messaging:InteractionMessageTrigger MessageKey="Info" Messenger="{Binding Messenger, Mode=OneTime}" >
+            <messaging:InformationDialogInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False" />
+        </messaging:InteractionMessageTrigger>
     </i:Interaction.Triggers>
 
     <Window.DataContext>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Livet;
 using StatefulModel;
@@ -16,7 +17,7 @@ namespace Anne.Foundation.Mvvm
 
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
-            if (Equals(storage, value))
+            if (EqualityComparer<T>.Default.Equals(storage, value))
                 return false;
  
             storage = value;

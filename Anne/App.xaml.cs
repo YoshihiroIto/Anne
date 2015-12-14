@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime;
+using System.Windows;
 using Anne.Foundation;
 
 namespace Anne
@@ -25,6 +26,12 @@ namespace Anne
             }
 
             DisposableChecker.End();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            Livet.DispatcherHelper.UIDispatcher = Dispatcher;
         }
     }
 }
