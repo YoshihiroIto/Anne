@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:git="clr-namespace:Anne.Model.Git;assembly=Anne.Model"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mainWindow="clr-namespace:Anne.MainWindow"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
+        xmlns:features="clr-namespace:Anne.Features"
         Width="900"
         Height="600"
         ResizeMode="CanResizeWithGrip"
@@ -28,119 +28,7 @@
         <mainWindow:MainWindowVm />
     </Window.DataContext>
 
-    <Grid>
-        <Grid.Resources>
-            <Style x:Key="CurrentMarkStyle" TargetType="{x:Type TextBlock}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsCurrent.Value, Mode=OneWay}" Value="True">
-                        <Setter Property="Text" Value="* " />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding IsCurrent.Value, Mode=OneWay}" Value="False">
-                        <Setter Property="Text" Value="  " />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
+    <features:RepositoryView />
 
-            <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource CurrentMarkStyle}" />
-                    <TextBlock Text="{Binding Name.Value, Mode=OneWay}" />
-                </StackPanel>
-            </DataTemplate>
-
-            <DataTemplate x:Key="CommitTemplate" DataType="{x:Type git:Commit}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding MessageShort, Mode=OneTime}" />
-                </StackPanel>
-            </DataTemplate>
-        </Grid.Resources>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <ListView Grid.Row="0"
-                      ItemTemplate="{StaticResource BranchTemplate}"
-                      ItemsSource="{Binding LocalBranches,
-                                            Mode=OneWay}" />
-
-            <ListView Grid.Row="1"
-                      ItemTemplate="{StaticResource BranchTemplate}"
-                      ItemsSource="{Binding RemoteBranches,
-                                            Mode=OneWay}" />
-        </Grid>
-        <StackPanel Grid.Column="1">
-            <Button Content="Checkout Test">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="CheckoutTest" MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
-            <Button Content="Remove Test">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="RemoveTest" MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
-            <Button Margin="0,8,0,0" Content="Switch Test (master)">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="SwitchTest"
-                                                         MethodParameter="master"
-                                                         MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
-            <Button Content="Switch Test (refactor)">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="SwitchTest"
-                                                         MethodParameter="refactoring"
-                                                         MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
-            <Button Margin="0,8,0,0" Content="Fetch Test (origin)">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="FetchTest"
-                                                         MethodParameter="origin"
-                                                         MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-        </StackPanel>
-
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <ListView Grid.Row="0"
-                      ItemTemplate="{StaticResource CommitTemplate}"
-                      ItemsSource="{Binding Commits.Value,
-                                            Mode=OneWay}" />
-
-            <DockPanel Grid.Row="1" LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
-                <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
-            </DockPanel>
-        </Grid>
-    </Grid>
 </Window>
 
