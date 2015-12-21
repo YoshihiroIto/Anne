@@ -21,9 +21,13 @@ namespace Anne.Features
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
         public ReadOnlyReactiveProperty<IEnumerable<Commit>> Commits { get; private set; }
+        public ReactiveProperty<Commit> SelectedCommit { get; }
 
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
+        public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
+
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
+        public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
         private readonly Repository _model;
 
@@ -40,10 +44,7 @@ namespace Anne.Features
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            Commits = _model.Commits
-                .ToReadOnlyReactiveProperty()
-                .AddTo(MultipleDisposable);
-
+            // ブランチ
             LocalBranches = _model.Branches
                 .ToReadOnlyReactiveCollection()
                 .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote)
@@ -55,6 +56,31 @@ namespace Anne.Features
                 .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
+
+            // コミット
+            Commits = _model.Commits
+                .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
+            // 選択アイテム
+            SelectedCommit = new ReactiveProperty<Commit>().AddTo(MultipleDisposable);
+            SelectedLocalBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
+            SelectedRemoteBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
+
+            // test
+            {
+                SelectedCommit.Where(x => x != null)
+                    .Subscribe(x => Debug.WriteLine(x.MessageShort))
+                    .AddTo(MultipleDisposable);
+
+                SelectedLocalBranch.Where(x => x != null)
+                    .Subscribe(x => Debug.WriteLine(x.Name.Value))
+                    .AddTo(MultipleDisposable);
+
+                SelectedRemoteBranch.Where(x => x != null)
+                    .Subscribe(x => Debug.WriteLine(x.Name.Value))
+                    .AddTo(MultipleDisposable);
+            }
 
             Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
                 .Select(x => x.EventArgs)
@@ -87,7 +113,12 @@ namespace Anne.Features
 
         public void FetchTest(string remoteName)
         {
-            Task.Run(() => _model.FetchTest(remoteName));
+            Task.Run(() => _model.Fetch(remoteName));
+        }
+
+        public void FetchAllTest()
+        {
+            Task.Run(() => _model.FetchAll());
         }
     }
 }

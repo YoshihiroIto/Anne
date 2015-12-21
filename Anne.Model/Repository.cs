@@ -101,8 +101,9 @@ namespace Anne.Model
                     UpdateBranchProps();
                 });
         }
+#endregion
 
-        public void FetchTest(string remoteName)
+        public void Fetch(string remoteName)
         {
             _jobQueue.AddJob(
                 $"Fetch: {remoteName}",
@@ -113,6 +114,22 @@ namespace Anne.Model
                 });
         }
 
-#endregion
+        public void FetchAll()
+        {
+            _internal.Network.Remotes.ToArray().ForEach(r => Fetch(r.Name));
+
+#if false
+            _jobQueue.AddJob(
+                $"FetchAll",
+                () =>
+                {
+                    _internal.Network.Remotes.ForEach(r =>
+                    {
+                        var remote = _internal.Network.Remotes[r.Name];
+                        _internal.Network.Fetch(remote);
+                    });
+                });
+#endif
+        }
     }
 }

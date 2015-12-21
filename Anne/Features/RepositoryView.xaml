@@ -12,7 +12,7 @@
       mc:Ignorable="d">
 
     <i:Interaction.Triggers>
-        <messaging:InteractionMessageTrigger MessageKey="Info" Messenger="{Binding Messenger, Mode=OneTime}" >
+        <messaging:InteractionMessageTrigger MessageKey="Info" Messenger="{Binding Messenger, Mode=OneTime}">
             <messaging:InformationDialogInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False" />
         </messaging:InteractionMessageTrigger>
     </i:Interaction.Triggers>
@@ -58,12 +58,14 @@
         <ListView Grid.Row="0"
                   ItemTemplate="{StaticResource BranchTemplate}"
                   ItemsSource="{Binding LocalBranches,
-                                        Mode=OneWay}" />
+                                        Mode=OneWay}"
+                  SelectedItem="{Binding SelectedLocalBranch.Value}" />
 
         <ListView Grid.Row="1"
                   ItemTemplate="{StaticResource BranchTemplate}"
                   ItemsSource="{Binding RemoteBranches,
-                                        Mode=OneWay}" />
+                                        Mode=OneWay}"
+                  SelectedItem="{Binding SelectedRemoteBranch.Value}" />
     </Grid>
     <StackPanel Grid.Column="1">
         <Button Content="Checkout Test">
@@ -111,6 +113,15 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Button>
+
+        <Button Content="FetchAll Test">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <behaviors:LivetCallMethodAction MethodName="FetchAllTest"
+                                                     MethodTarget="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
     </StackPanel>
 
     <Grid Grid.Column="2">
@@ -122,7 +133,8 @@
         <ListView Grid.Row="0"
                   ItemTemplate="{StaticResource CommitTemplate}"
                   ItemsSource="{Binding Commits.Value,
-                                        Mode=OneWay}" />
+                                        Mode=OneWay}"
+                  SelectedItem="{Binding SelectedCommit.Value}" />
 
         <DockPanel Grid.Row="1" LastChildFill="True">
             <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
