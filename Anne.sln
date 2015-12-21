@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anne.Foundation", "Anne.Fou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibGit2Sharp", "libgit2sharp\LibGit2Sharp\LibGit2Sharp.csproj", "{EE6ED99F-CB12-4683-B055-D28FC7357A34}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{A741E9AF-5C80-4E03-B519-086E333A50F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A6FEFDDC-D4D9-4BB9-ADEE-8AFC6F008E53} = {A741E9AF-5C80-4E03-B519-086E333A50F2}
+		{EE6ED99F-CB12-4683-B055-D28FC7357A34} = {A741E9AF-5C80-4E03-B519-086E333A50F2}
 	EndGlobalSection
 EndGlobal
