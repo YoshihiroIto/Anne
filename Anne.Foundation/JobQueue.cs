@@ -11,11 +11,13 @@ namespace Anne.Foundation
     public class JobQueue : IDisposable
     {
         public ReadOnlyReactiveCollection<string> JobSummries { get; }
-        public ReactiveProperty<string> WorkingJob { get; } = new ReactiveProperty<string>(Scheduler.Immediate);
+        public ReactiveProperty<string> WorkingJob { get; } =
+            new ReactiveProperty<string>(Scheduler.Immediate);
 
         public event EventHandler<ExceptionEventArgs> JobExecutingException;
-            
-        private readonly ObservableSynchronizedCollection<Job> _jobs = new ObservableSynchronizedCollection<Job>();
+
+        private readonly ObservableSynchronizedCollection<Job> _jobs =
+            new ObservableSynchronizedCollection<Job>();
 
         private readonly Task _task;
         private readonly SemaphoreSlim _sema = new SemaphoreSlim(1);

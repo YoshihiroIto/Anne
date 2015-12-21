@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Anne.Model;
@@ -37,29 +36,29 @@ namespace Anne.Features
             _model = model;
 
             JobSummries = _model.JobSummries
-                .ToReadOnlyReactiveCollection()
+                .ToReadOnlyReactiveCollection(UIDispatcherScheduler.Default)
                 .AddTo(MultipleDisposable);
 
             WorkingJob = _model.WorkingJob
-                .ToReadOnlyReactiveProperty()
+                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
                 .AddTo(MultipleDisposable);
 
             // ブランチ
             LocalBranches = _model.Branches
-                .ToReadOnlyReactiveCollection()
+                .ToReadOnlyReactiveCollection(UIDispatcherScheduler.Default)
                 .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
 
             RemoteBranches = _model.Branches
-                .ToReadOnlyReactiveCollection()
+                .ToReadOnlyReactiveCollection(UIDispatcherScheduler.Default)
                 .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
 
             // コミット
             Commits = _model.Commits
-                .ToReadOnlyReactiveProperty()
+                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
                 .AddTo(MultipleDisposable);
 
             // 選択アイテム
@@ -69,15 +68,18 @@ namespace Anne.Features
 
             // test
             {
-                SelectedCommit.Where(x => x != null)
+                SelectedCommit
+                    .Where(x => x != null)
                     .Subscribe(x => Debug.WriteLine(x.MessageShort))
                     .AddTo(MultipleDisposable);
 
-                SelectedLocalBranch.Where(x => x != null)
+                SelectedLocalBranch
+                    .Where(x => x != null)
                     .Subscribe(x => Debug.WriteLine(x.Name.Value))
                     .AddTo(MultipleDisposable);
 
-                SelectedRemoteBranch.Where(x => x != null)
+                SelectedRemoteBranch
+                    .Where(x => x != null)
                     .Subscribe(x => Debug.WriteLine(x.Name.Value))
                     .AddTo(MultipleDisposable);
             }
@@ -98,27 +100,27 @@ namespace Anne.Features
 
         public void CheckoutTest()
         {
-            Task.Run(() => _model.CheckoutTest());
+            _model.CheckoutTest();
         }
 
         public void RemoveTest()
         {
-            Task.Run(() => _model.RemoveTest());
+            _model.RemoveTest();
         }
 
         public void SwitchTest(string branchName)
         {
-            Task.Run(() => _model.SwitchTest(branchName));
+            _model.SwitchTest(branchName);
         }
 
         public void FetchTest(string remoteName)
         {
-            Task.Run(() => _model.Fetch(remoteName));
+            _model.Fetch(remoteName);
         }
 
         public void FetchAllTest()
         {
-            Task.Run(() => _model.FetchAll());
+            _model.FetchAll();
         }
     }
 }

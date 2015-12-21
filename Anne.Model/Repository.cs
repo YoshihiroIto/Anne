@@ -51,10 +51,10 @@ namespace Anne.Model
                 .AddTo(MultipleDisposable);
 
             Commits = new ReactiveProperty<IEnumerable<Commit>>(
-                        Scheduler.Immediate,
-                        _internal.Commits.Select(x => new Commit(x)).Memoize()
-                    )
-                    .AddTo(MultipleDisposable);
+                Scheduler.Immediate,
+                _internal.Commits.Select(x => new Commit(x)).Memoize()
+                )
+                .AddTo(MultipleDisposable);
 
             new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
@@ -65,7 +65,7 @@ namespace Anne.Model
             Branches.ForEach(x => x.UpdateProps());
         }
 
-#region Test
+        #region Test
 
         public void CheckoutTest()
         {
@@ -101,7 +101,8 @@ namespace Anne.Model
                     UpdateBranchProps();
                 });
         }
-#endregion
+
+        #endregion
 
         public void Fetch(string remoteName)
         {
@@ -116,20 +117,7 @@ namespace Anne.Model
 
         public void FetchAll()
         {
-            _internal.Network.Remotes.ToArray().ForEach(r => Fetch(r.Name));
-
-#if false
-            _jobQueue.AddJob(
-                $"FetchAll",
-                () =>
-                {
-                    _internal.Network.Remotes.ForEach(r =>
-                    {
-                        var remote = _internal.Network.Remotes[r.Name];
-                        _internal.Network.Fetch(remote);
-                    });
-                });
-#endif
+            _internal.Network.Remotes.Select(r => r.Name).ForEach(Fetch);
         }
     }
 }

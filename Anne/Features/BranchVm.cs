@@ -17,17 +17,17 @@ namespace Anne.Features
 
             Name = model
                 .ObserveProperty(x => x.Name)
-                .ToReadOnlyReactiveProperty()
+                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
                 .AddTo(MultipleDisposable);
 
             IsRemote = model
                 .ObserveProperty(x => x.IsRemote)
-                .ToReadOnlyReactiveProperty()
+                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
                 .AddTo(MultipleDisposable);
 
             IsCurrent = model
                 .ObserveProperty(x => x.IsCurrent)
-                .ToReadOnlyReactiveProperty()
+                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
                 .AddTo(MultipleDisposable);
         }
     }
