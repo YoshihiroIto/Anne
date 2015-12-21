@@ -3,7 +3,7 @@ using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-namespace Anne.Branch
+namespace Anne.Features
 {
     public class BranchVm : ViewModelBase
     {

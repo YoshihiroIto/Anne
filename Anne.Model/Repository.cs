@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Windows.Input;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
+using Anne.Model.Git;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using StatefulModel;
 
-namespace Anne.Model.Git
+namespace Anne.Model
 {
     public class Repository : ModelBase
     {

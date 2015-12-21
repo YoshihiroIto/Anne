@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Anne.Branch;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
+using Anne.Model;
 using Anne.Model.Git;
 using Livet.Messaging;
 using Reactive.Bindings;
@@ -17,8 +17,6 @@ namespace Anne.Features
 {
     public class RepositoryVm : ViewModelBase
     {
-        public Repository Repository { get; }
-
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
@@ -27,36 +25,38 @@ namespace Anne.Features
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
 
-        public RepositoryVm()
-        {
-            Repository = new Repository(@"C:\Users\yoi\Documents\Wox")
-                .AddTo(MultipleDisposable);
+        private readonly Repository _model;
 
-            JobSummries = Repository.JobSummries
+        public RepositoryVm(Repository model)
+        {
+            Debug.Assert(model != null);
+            _model = model;
+
+            JobSummries = _model.JobSummries
                 .ToReadOnlyReactiveCollection()
                 .AddTo(MultipleDisposable);
 
-            WorkingJob = Repository.WorkingJob
+            WorkingJob = _model.WorkingJob
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            Commits = Repository.Commits
+            Commits = _model.Commits
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            LocalBranches = Repository.Branches
+            LocalBranches = _model.Branches
                 .ToReadOnlyReactiveCollection()
                 .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
 
-            RemoteBranches = Repository.Branches
+            RemoteBranches = _model.Branches
                 .ToReadOnlyReactiveCollection()
                 .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
 
-            Observable.FromEventPattern<ExceptionEventArgs>(Repository, nameof(Repository.JobExecutingException))
+            Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
                 .Select(x => x.EventArgs)
                 .ObserveOnUIDispatcher()
                 .Subscribe(e => ShowDialog(e.Exception))
@@ -72,22 +72,22 @@ namespace Anne.Features
 
         public void CheckoutTest()
         {
-            Task.Run(() => Repository.CheckoutTest());
+            Task.Run(() => _model.CheckoutTest());
         }
 
         public void RemoveTest()
         {
-            Task.Run(() => Repository.RemoveTest());
+            Task.Run(() => _model.RemoveTest());
         }
 
         public void SwitchTest(string branchName)
         {
-            Task.Run(() => Repository.SwitchTest(branchName));
+            Task.Run(() => _model.SwitchTest(branchName));
         }
 
         public void FetchTest(string remoteName)
         {
-            Task.Run(() => Repository.FetchTest(remoteName));
+            Task.Run(() => _model.FetchTest(remoteName));
         }
     }
 }

@@ -28,7 +28,6 @@
         <mainWindow:MainWindowVm />
     </Window.DataContext>
 
-    <features:RepositoryView />
-
+    <features:RepositoryView DataContext="{Binding Repository.Value, Mode=OneTime}"/>
 </Window>
 

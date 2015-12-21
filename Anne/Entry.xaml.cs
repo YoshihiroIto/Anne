@@ -23,15 +23,19 @@ namespace Anne
                 var e = new Entry();
                 e.InitializeComponent();
                 e.Run();
-            }
 
+                Model.App.Destory();
+            }
             DisposableChecker.End();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
             Livet.DispatcherHelper.UIDispatcher = Dispatcher;
+
+            Model.App.Initialize();
         }
     }
 }

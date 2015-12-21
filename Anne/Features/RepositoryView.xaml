@@ -6,9 +6,16 @@
       xmlns:git="clr-namespace:Anne.Model.Git;assembly=Anne.Model"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
       d:DesignHeight="300"
       d:DesignWidth="600"
       mc:Ignorable="d">
+
+    <i:Interaction.Triggers>
+        <messaging:InteractionMessageTrigger MessageKey="Info" Messenger="{Binding Messenger, Mode=OneTime}" >
+            <messaging:InformationDialogInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False" />
+        </messaging:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
 
     <Grid.Resources>
         <Style x:Key="CurrentMarkStyle" TargetType="{x:Type TextBlock}">

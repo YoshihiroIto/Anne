@@ -109,7 +109,7 @@
       <DependentUpon>Entry.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Branch\BranchVm.cs" />
+    <Compile Include="Features\BranchVm.cs" />
     <Compile Include="Features\RepositoryVm.cs" />
     <Compile Include="MainWindow\MainWindowVm.cs" />
     <Compile Include="MainWindow\MainWindow.xaml.cs">
