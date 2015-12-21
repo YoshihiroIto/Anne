@@ -34,7 +34,7 @@ namespace Anne.Model
             _internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
 
             // ジョブキュー
-            MultipleDisposable.Add(_jobQueue);
+            _jobQueue.AddTo(MultipleDisposable);
             JobSummries = _jobQueue.JobSummries;
             WorkingJob = _jobQueue.WorkingJob
                 .ToReadOnlyReactiveProperty(eventScheduler:Scheduler.Immediate)

@@ -13,7 +13,8 @@ namespace Anne.MainWindow
 
         public MainWindowVm()
         {
-            MultipleDisposable.Add(Repository);
+            Repository
+                .AddTo(MultipleDisposable);
 
             var reposVm = new RepositoryVm(App.Instance.Repositories.First())
                 .AddTo(MultipleDisposable);
