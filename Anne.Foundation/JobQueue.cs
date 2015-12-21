@@ -10,11 +10,11 @@ namespace Anne.Foundation
 {
     public class JobQueue : IDisposable
     {
+        public event EventHandler<ExceptionEventArgs> JobExecutingException;
+
         public ReadOnlyReactiveCollection<string> JobSummries { get; }
         public ReactiveProperty<string> WorkingJob { get; } =
             new ReactiveProperty<string>(Scheduler.Immediate);
-
-        public event EventHandler<ExceptionEventArgs> JobExecutingException;
 
         private readonly ObservableSynchronizedCollection<Job> _jobs =
             new ObservableSynchronizedCollection<Job>();

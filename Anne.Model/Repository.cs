@@ -36,7 +36,9 @@ namespace Anne.Model
             // ジョブキュー
             MultipleDisposable.Add(_jobQueue);
             JobSummries = _jobQueue.JobSummries;
-            WorkingJob = _jobQueue.WorkingJob.ToReadOnlyReactiveProperty().AddTo(MultipleDisposable);
+            WorkingJob = _jobQueue.WorkingJob
+                .ToReadOnlyReactiveProperty(eventScheduler:Scheduler.Immediate)
+                .AddTo(MultipleDisposable);
 
             Observable.FromEventPattern<ExceptionEventArgs>(_jobQueue, nameof(JobQueue.JobExecutingException))
                 .Select(x => x.EventArgs)
@@ -52,8 +54,7 @@ namespace Anne.Model
 
             Commits = new ReactiveProperty<IEnumerable<Commit>>(
                 Scheduler.Immediate,
-                _internal.Commits.Select(x => new Commit(x)).Memoize()
-                )
+                _internal.Commits.Select(x => new Commit(x)).Memoize())
                 .AddTo(MultipleDisposable);
 
             new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
@@ -63,6 +64,22 @@ namespace Anne.Model
         private void UpdateBranchProps()
         {
             Branches.ForEach(x => x.UpdateProps());
+        }
+
+        public void Fetch(string remoteName)
+        {
+            _jobQueue.AddJob(
+                $"Fetch: {remoteName}",
+                () =>
+                {
+                    var remote = _internal.Network.Remotes[remoteName];
+                    _internal.Network.Fetch(remote);
+                });
+        }
+
+        public void FetchAll()
+        {
+            _internal.Network.Remotes.Select(r => r.Name).ForEach(Fetch);
         }
 
         #region Test
@@ -103,21 +120,5 @@ namespace Anne.Model
         }
 
         #endregion
-
-        public void Fetch(string remoteName)
-        {
-            _jobQueue.AddJob(
-                $"Fetch: {remoteName}",
-                () =>
-                {
-                    var remote = _internal.Network.Remotes[remoteName];
-                    _internal.Network.Fetch(remote);
-                });
-        }
-
-        public void FetchAll()
-        {
-            _internal.Network.Remotes.Select(r => r.Name).ForEach(Fetch);
-        }
     }
 }

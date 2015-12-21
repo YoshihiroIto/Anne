@@ -20,12 +20,11 @@ namespace Anne.Features
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
         public ReadOnlyReactiveProperty<IEnumerable<Commit>> Commits { get; private set; }
-        public ReactiveProperty<Commit> SelectedCommit { get; }
-
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
-        public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
-
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
+
+        public ReactiveProperty<Commit> SelectedCommit { get; }
+        public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
         private readonly Repository _model;
