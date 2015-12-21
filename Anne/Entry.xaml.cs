@@ -8,9 +8,9 @@ using Anne.Foundation;
 namespace Anne
 {
     /// <summary>
-    ///     App.xaml の相互作用ロジック
+    ///     Entry.xaml の相互作用ロジック
     /// </summary>
-    public partial class App
+    public partial class Entry
     {
         [STAThread]
         public static void Main(string[] args)
@@ -20,9 +20,9 @@ namespace Anne
 
             DisposableChecker.Start();
             {
-                var app = new App();
-                app.InitializeComponent();
-                app.Run();
+                var e = new Entry();
+                e.InitializeComponent();
+                e.Run();
             }
 
             DisposableChecker.End();
