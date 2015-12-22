@@ -7,6 +7,7 @@
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
+      xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       d:DesignHeight="300"
       d:DesignWidth="600"
       mc:Ignorable="d">
@@ -41,6 +42,18 @@
                 <TextBlock Text="{Binding MessageShort, Mode=OneTime}" />
             </StackPanel>
         </DataTemplate>
+
+        <CollectionViewSource x:Key="SortedLocalBranches" Source="{Binding LocalBranches, Mode=OneWay}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name.Value" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+
+        <CollectionViewSource x:Key="SortedRemoteBranches" Source="{Binding RemoteBranches, Mode=OneWay}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name.Value" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
     </Grid.Resources>
 
     <Grid.ColumnDefinitions>
@@ -57,14 +70,12 @@
 
         <ListView Grid.Row="0"
                   ItemTemplate="{StaticResource BranchTemplate}"
-                  ItemsSource="{Binding LocalBranches,
-                                        Mode=OneWay}"
+                  ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
                   SelectedItem="{Binding SelectedLocalBranch.Value}" />
 
         <ListView Grid.Row="1"
                   ItemTemplate="{StaticResource BranchTemplate}"
-                  ItemsSource="{Binding RemoteBranches,
-                                        Mode=OneWay}"
+                  ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
                   SelectedItem="{Binding SelectedRemoteBranch.Value}" />
     </Grid>
     <StackPanel Grid.Column="1">
@@ -117,8 +128,7 @@
         <Button Content="FetchAll Test">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
-                    <behaviors:LivetCallMethodAction MethodName="FetchAllTest"
-                                                     MethodTarget="{Binding}" />
+                    <behaviors:LivetCallMethodAction MethodName="FetchAllTest" MethodTarget="{Binding}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Button>

@@ -9,7 +9,7 @@
         xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
         xmlns:features="clr-namespace:Anne.Features"
         Width="900"
-        Height="600"
+        Height="800"
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
