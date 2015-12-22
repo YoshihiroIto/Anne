@@ -1,4 +1,4 @@
-﻿namespace Anne.MainWindow
+﻿namespace Anne.Windows
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック

@@ -1,13 +1,13 @@
-﻿<Window x:Class="Anne.MainWindow.MainWindow"
+﻿<Window x:Class="Anne.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:mainWindow="clr-namespace:Anne.MainWindow"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
         xmlns:features="clr-namespace:Anne.Features"
+        xmlns:windows="clr-namespace:Anne.Windows"
         Width="1400"
         Height="800"
         ResizeMode="CanResizeWithGrip"
@@ -25,7 +25,7 @@
     </i:Interaction.Triggers>
 
     <Window.DataContext>
-        <mainWindow:MainWindowVm />
+        <windows:MainWindowVm />
     </Window.DataContext>
 
     <features:RepositoryView DataContext="{Binding Repository.Value, Mode=OneTime}"/>

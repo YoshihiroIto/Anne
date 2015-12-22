@@ -101,7 +101,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow\MainWindow.xaml">
+    <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -111,8 +111,8 @@
     </Compile>
     <Compile Include="Features\BranchVm.cs" />
     <Compile Include="Features\RepositoryVm.cs" />
-    <Compile Include="MainWindow\MainWindowVm.cs" />
-    <Compile Include="MainWindow\MainWindow.xaml.cs">
+    <Compile Include="Windows\MainWindowVm.cs" />
+    <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

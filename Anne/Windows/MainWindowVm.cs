@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using Anne.Features;
-using Anne.Model;
 using Anne.Foundation.Mvvm;
+using Anne.Model;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-namespace Anne.MainWindow
+namespace Anne.Windows
 {
     public class MainWindowVm : ViewModelBase
     {
