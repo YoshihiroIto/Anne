@@ -34,6 +34,7 @@ namespace Anne
             base.OnStartup(e);
 
             Livet.DispatcherHelper.UIDispatcher = Dispatcher;
+            Reactive.Bindings.UIDispatcherScheduler.Initialize();
 
             Model.App.Initialize();
         }
