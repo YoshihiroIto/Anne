@@ -3,13 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:features="clr-namespace:Anne.Features"
       xmlns:git="clr-namespace:Anne.Model.Git;assembly=Anne.Model"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       d:DesignHeight="300"
-      d:DesignWidth="600"
+      d:DesignWidth="800"
       mc:Ignorable="d">
 
     <i:Interaction.Triggers>
@@ -73,43 +74,42 @@
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="140" />
         <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
         <ColumnDefinition Width="140" />
     </Grid.ColumnDefinitions>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <ListView Grid.Row="0"
+    <DockPanel LastChildFill="True">
+        <ListView DockPanel.Dock="Top"
                   ItemTemplate="{StaticResource BranchTemplate}"
                   ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
                   SelectedItem="{Binding SelectedLocalBranch.Value}" />
 
-        <ListView Grid.Row="1"
-                  ItemTemplate="{StaticResource BranchTemplate}"
+        <ListView ItemTemplate="{StaticResource BranchTemplate}"
                   ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
                   SelectedItem="{Binding SelectedRemoteBranch.Value}">
             <ListView.GroupStyle>
                 <GroupStyle HeaderTemplate="{StaticResource RemoteBranchesListViewGroupTemplate}" />
             </ListView.GroupStyle>
         </ListView>
-    </Grid>
+    </DockPanel>
 
-    <Grid Grid.Column="1">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <ListView Grid.Column="1"
+              ItemTemplate="{StaticResource CommitTemplate}"
+              ItemsSource="{Binding Commits, Mode=OneWay}"
+              SelectedItem="{Binding SelectedCommit.Value}"
+              VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.VirtualizationMode="Recycling">
+        <ListView.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+            </ItemsPanelTemplate>
+        </ListView.ItemsPanel>
+    </ListView>
 
-        <ListView Grid.Row="0"
-                  ItemTemplate="{StaticResource CommitTemplate}"
-                  ItemsSource="{Binding Commits.Value,
-                                        Mode=OneWay}"
-                  SelectedItem="{Binding SelectedCommit.Value}" />
-    </Grid>
+    <features:CommitLogView Grid.Column="2" DataContext="{Binding SelectedCommit.Value, Mode=OneWay}" />
 
-    <DockPanel Grid.Column="2" LastChildFill="True">
+    <!--  テスト用  -->
+    <DockPanel Grid.Column="3" LastChildFill="True">
         <Button Content="Checkout Test" DockPanel.Dock="Top">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">

@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
-using Anne.Model;
-using Anne.Model.Git;
 using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
+using StatefulModel;
+using Repository = Anne.Model.Repository;
 
 namespace Anne.Features
 {
@@ -19,11 +19,11 @@ namespace Anne.Features
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
-        public ReadOnlyReactiveProperty<IEnumerable<Commit>> Commits { get; private set; }
+        public ObservableCollection<CommitVm> Commits { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
 
-        public ReactiveProperty<Commit> SelectedCommit { get; }
+        public ReactiveProperty<CommitVm> SelectedCommit { get; }
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
@@ -56,32 +56,19 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             // コミット
-            Commits = _model.Commits
-                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+            _model.Commits.Subscribe(src =>
+            {
+                Commits?.ForEach(x => x.Dispose());
+                Commits = new ObservableCollection<CommitVm>(src.Select(x => new CommitVm(x)));
+            }).AddTo(MultipleDisposable);
+
+            new AnonymousDisposable(() => Commits?.ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
 
             // 選択アイテム
-            SelectedCommit = new ReactiveProperty<Commit>().AddTo(MultipleDisposable);
+            SelectedCommit = new ReactiveProperty<CommitVm>().AddTo(MultipleDisposable);
             SelectedLocalBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
             SelectedRemoteBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
-
-            // test
-            {
-                SelectedCommit
-                    .Where(x => x != null)
-                    .Subscribe(x => Debug.WriteLine(x.MessageShort))
-                    .AddTo(MultipleDisposable);
-
-                SelectedLocalBranch
-                    .Where(x => x != null)
-                    .Subscribe(x => Debug.WriteLine(x.Name.Value))
-                    .AddTo(MultipleDisposable);
-
-                SelectedRemoteBranch
-                    .Where(x => x != null)
-                    .Subscribe(x => Debug.WriteLine(x.Name.Value))
-                    .AddTo(MultipleDisposable);
-            }
 
             Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
                 .Select(x => x.EventArgs)
@@ -93,33 +80,14 @@ namespace Anne.Features
         private void ShowDialog(Exception e)
         {
             Debug.Assert(e != null);
-
             Messenger.Raise(new InformationMessage(e.Message, "Information", "Info"));
         }
 
-        public void CheckoutTest()
-        {
-            _model.CheckoutTest();
-        }
-
-        public void RemoveTest()
-        {
-            _model.RemoveTest();
-        }
-
-        public void SwitchTest(string branchName)
-        {
-            _model.SwitchTest(branchName);
-        }
-
-        public void FetchTest(string remoteName)
-        {
-            _model.Fetch(remoteName);
-        }
-
-        public void FetchAllTest()
-        {
-            _model.FetchAll();
-        }
+        // test
+        public void CheckoutTest() => _model.CheckoutTest();
+        public void RemoveTest() => _model.RemoveTest();
+        public void SwitchTest(string branchName) => _model.SwitchTest(branchName);
+        public void FetchTest(string remoteName) => _model.Fetch(remoteName);
+        public void FetchAllTest() => _model.FetchAll();
     }
 }
