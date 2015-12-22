@@ -88,7 +88,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Git\Branch.cs" />
     <Compile Include="Git\Commit.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="Git\Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

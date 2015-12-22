@@ -5,12 +5,11 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
-using Anne.Model.Git;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using StatefulModel;
 
-namespace Anne.Model
+namespace Anne.Model.Git
 {
     public class Repository : ModelBase
     {

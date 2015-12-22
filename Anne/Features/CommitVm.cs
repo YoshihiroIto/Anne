@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 using Anne.Foundation.Mvvm;
-using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 
 namespace Anne.Features
 {

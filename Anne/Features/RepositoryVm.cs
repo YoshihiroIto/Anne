@@ -10,7 +10,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 using StatefulModel;
-using Repository = Anne.Model.Repository;
+using Repository = Anne.Model.Git.Repository;
 
 namespace Anne.Features
 {

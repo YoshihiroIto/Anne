@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Anne.Foundation.Mvvm;
+using Anne.Model.Git;
 using Reactive.Bindings.Extensions;
 using StatefulModel;
 
