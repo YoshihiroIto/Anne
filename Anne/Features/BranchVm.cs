@@ -8,6 +8,8 @@ namespace Anne.Features
     public class BranchVm : ViewModelBase
     {
         public ReadOnlyReactiveProperty<string> Name { get; }
+        public ReadOnlyReactiveProperty<string> LocalName { get; }
+        public ReadOnlyReactiveProperty<string> RemoteName { get; }
         public ReadOnlyReactiveProperty<bool> IsRemote { get; }
         public ReadOnlyReactiveProperty<bool> IsCurrent { get; }
 
@@ -17,6 +19,16 @@ namespace Anne.Features
 
             Name = model
                 .ObserveProperty(x => x.Name)
+                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+                .AddTo(MultipleDisposable);
+
+            LocalName = model
+                .ObserveProperty(x => x.LocalName)
+                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+                .AddTo(MultipleDisposable);
+
+            RemoteName = model
+                .ObserveProperty(x => x.RemoteName)
                 .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
                 .AddTo(MultipleDisposable);
 

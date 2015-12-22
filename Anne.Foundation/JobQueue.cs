@@ -54,7 +54,8 @@ namespace Anne.Foundation
         {
             JobSummries = _jobs
                 .ToReadOnlyReactiveCollection(
-                    _jobs.ToCollectionChanged<Job>(), x => x.Summry,
+                    _jobs.ToCollectionChanged<Job>(),
+                    x => x.Summry,
                     Scheduler.Immediate);
 
             _task = Task.Run(() =>

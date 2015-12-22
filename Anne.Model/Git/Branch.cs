@@ -11,7 +11,14 @@ namespace Anne.Model.Git
         public string Name
         {
             get { return _name; }
-            set { SetProperty(ref _name, value); } 
+            set
+            {
+                if (SetProperty(ref _name, value))
+                {
+                    RaisePropertyChanged(nameof(LocalName));
+                    RaisePropertyChanged(nameof(RemoteName));
+                }
+            }
         }
 
         private bool _isRemote;
@@ -31,11 +38,26 @@ namespace Anne.Model.Git
         private readonly LibGit2Sharp.Branch _internal;
         private readonly LibGit2Sharp.Repository _repos;
 
-        private string LocalName
+        public string LocalName
         {
             get
             {
-                var m = Regex.Match(Name, @"origin/(.*)");
+                if (IsRemote == false)
+                    return Name;
+
+                var m = Regex.Match(Name, @"([0-9a-zA-Z]*)/(.*)");
+                return m.Groups[2].Value;
+            }
+        }
+
+        public string RemoteName
+        {
+            get
+            {
+                if (IsRemote == false)
+                    return string.Empty;
+
+                var m = Regex.Match(Name, @"([0-9a-zA-Z]*)/(.*)");
                 return m.Groups[1].Value;
             }
         }

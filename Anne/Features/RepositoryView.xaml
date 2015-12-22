@@ -33,7 +33,7 @@
         <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Style="{StaticResource CurrentMarkStyle}" />
-                <TextBlock Text="{Binding Name.Value, Mode=OneWay}" />
+                <TextBlock Text="{Binding LocalName.Value, Mode=OneWay}" />
             </StackPanel>
         </DataTemplate>
 
@@ -45,15 +45,26 @@
 
         <CollectionViewSource x:Key="SortedLocalBranches" Source="{Binding LocalBranches, Mode=OneWay}">
             <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="Name.Value" />
+                <scm:SortDescription PropertyName="LocalName.Value" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
 
         <CollectionViewSource x:Key="SortedRemoteBranches" Source="{Binding RemoteBranches, Mode=OneWay}">
             <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="Name.Value" />
+                <scm:SortDescription PropertyName="LocalName.Value" />
             </CollectionViewSource.SortDescriptions>
+
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="RemoteName.Value" />
+            </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
+
+        <DataTemplate x:Key="RemoteBranchesListViewGroupTemplate">
+            <StackPanel Margin="0,8,0,0">
+                <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                <Rectangle Height="1" Fill="LightSlateGray"/>
+            </StackPanel>
+        </DataTemplate>
     </Grid.Resources>
 
     <Grid.ColumnDefinitions>
@@ -76,7 +87,11 @@
         <ListView Grid.Row="1"
                   ItemTemplate="{StaticResource BranchTemplate}"
                   ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
-                  SelectedItem="{Binding SelectedRemoteBranch.Value}" />
+                  SelectedItem="{Binding SelectedRemoteBranch.Value}">
+            <ListView.GroupStyle>
+                <GroupStyle HeaderTemplate="{StaticResource RemoteBranchesListViewGroupTemplate}" />
+            </ListView.GroupStyle>
+        </ListView>
     </Grid>
     <StackPanel Grid.Column="1">
         <Button Content="Checkout Test">
