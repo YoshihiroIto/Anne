@@ -82,22 +82,45 @@
         <ListView DockPanel.Dock="Top"
                   ItemTemplate="{StaticResource BranchTemplate}"
                   ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
-                  SelectedItem="{Binding SelectedLocalBranch.Value}" />
+                  ScrollViewer.CanContentScroll="True"
+                  SelectedItem="{Binding SelectedLocalBranch.Value}"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.ScrollUnit="Pixel"
+                  VirtualizingPanel.VirtualizationMode="Recycling">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
 
         <ListView ItemTemplate="{StaticResource BranchTemplate}"
                   ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
-                  SelectedItem="{Binding SelectedRemoteBranch.Value}">
+                  ScrollViewer.CanContentScroll="True"
+                  SelectedItem="{Binding SelectedRemoteBranch.Value}"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                  VirtualizingPanel.ScrollUnit="Pixel"
+                  VirtualizingPanel.VirtualizationMode="Recycling">
             <ListView.GroupStyle>
                 <GroupStyle HeaderTemplate="{StaticResource RemoteBranchesListViewGroupTemplate}" />
             </ListView.GroupStyle>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
         </ListView>
     </DockPanel>
 
     <ListView Grid.Column="1"
               ItemTemplate="{StaticResource CommitTemplate}"
-              ItemsSource="{Binding Commits, Mode=OneWay}"
+              ItemsSource="{Binding Commits,
+                                    Mode=OneWay}"
+              ScrollViewer.CanContentScroll="True"
               SelectedItem="{Binding SelectedCommit.Value}"
               VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.VirtualizationMode="Recycling">
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
