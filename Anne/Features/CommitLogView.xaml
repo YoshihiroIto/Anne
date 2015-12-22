@@ -41,7 +41,7 @@
                 BorderBrush="{StaticResource {x:Static SystemColors.ControlLightBrushKey}}"
                 BorderThickness="1"
                 SnapsToDevicePixels="True">
-            <Image Source="{Binding AutherImage, Mode=OneWay}" />
+            <Image RenderOptions.BitmapScalingMode="Fant" Source="{Binding AutherImage, Mode=OneWay}" />
         </Border>
 
         <!--  Hash  -->
