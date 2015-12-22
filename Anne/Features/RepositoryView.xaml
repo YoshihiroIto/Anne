@@ -61,7 +61,7 @@
 
         <DataTemplate x:Key="RemoteBranchesListViewGroupTemplate">
             <StackPanel Margin="0,8,0,0">
-                <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
+                <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
                 <TextBlock FontWeight="Bold" Text="{Binding Name}" />
                 <Rectangle Height="1"
                            Fill="LightSlateGray"
@@ -71,9 +71,9 @@
     </Grid.Resources>
 
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="200" />
-        <ColumnDefinition Width="200" />
+        <ColumnDefinition Width="140" />
         <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="140" />
     </Grid.ColumnDefinitions>
 
     <Grid>
@@ -96,8 +96,21 @@
             </ListView.GroupStyle>
         </ListView>
     </Grid>
-    <StackPanel Grid.Column="1">
-        <Button Content="Checkout Test">
+
+    <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ListView Grid.Row="0"
+                  ItemTemplate="{StaticResource CommitTemplate}"
+                  ItemsSource="{Binding Commits.Value,
+                                        Mode=OneWay}"
+                  SelectedItem="{Binding SelectedCommit.Value}" />
+    </Grid>
+
+    <DockPanel Grid.Column="2" LastChildFill="True">
+        <Button Content="Checkout Test" DockPanel.Dock="Top">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <behaviors:LivetCallMethodAction MethodName="CheckoutTest" MethodTarget="{Binding}" />
@@ -105,7 +118,7 @@
             </i:Interaction.Triggers>
         </Button>
 
-        <Button Content="Remove Test">
+        <Button Content="Remove Test" DockPanel.Dock="Top">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <behaviors:LivetCallMethodAction MethodName="RemoveTest" MethodTarget="{Binding}" />
@@ -113,7 +126,9 @@
             </i:Interaction.Triggers>
         </Button>
 
-        <Button Margin="0,8,0,0" Content="Switch Test (master)">
+        <Button Margin="0,8,0,0"
+                Content="Switch Test (master)"
+                DockPanel.Dock="Top">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <behaviors:LivetCallMethodAction MethodName="SwitchTest"
@@ -123,7 +138,7 @@
             </i:Interaction.Triggers>
         </Button>
 
-        <Button Content="Switch Test (refactor)">
+        <Button Content="Switch Test (refactor)" DockPanel.Dock="Top">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <behaviors:LivetCallMethodAction MethodName="SwitchTest"
@@ -133,7 +148,9 @@
             </i:Interaction.Triggers>
         </Button>
 
-        <Button Margin="0,8,0,0" Content="Fetch Test (origin)">
+        <Button Margin="0,8,0,0"
+                Content="Fetch Test (origin)"
+                DockPanel.Dock="Top">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <behaviors:LivetCallMethodAction MethodName="FetchTest"
@@ -143,30 +160,15 @@
             </i:Interaction.Triggers>
         </Button>
 
-        <Button Content="FetchAll Test">
+        <Button Content="FetchAll Test" DockPanel.Dock="Top">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <behaviors:LivetCallMethodAction MethodName="FetchAllTest" MethodTarget="{Binding}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Button>
-    </StackPanel>
 
-    <Grid Grid.Column="2">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <ListView Grid.Row="0"
-                  ItemTemplate="{StaticResource CommitTemplate}"
-                  ItemsSource="{Binding Commits.Value,
-                                        Mode=OneWay}"
-                  SelectedItem="{Binding SelectedCommit.Value}" />
-
-        <DockPanel Grid.Row="1" LastChildFill="True">
-            <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
-            <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
-        </DockPanel>
-    </Grid>
+        <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
+        <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
+    </DockPanel>
 </Grid>
