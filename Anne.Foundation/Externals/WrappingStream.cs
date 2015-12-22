@@ -1,4 +1,5 @@
 ﻿// https://github.com/pierre3/ReactiveBingViewer
+// http://pierre3.hatenablog.com/entry/2015/10/25/001207
 // ReSharper disable All
 using System;
 using System.Collections.Generic;
