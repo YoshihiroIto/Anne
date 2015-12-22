@@ -61,8 +61,11 @@
 
         <DataTemplate x:Key="RemoteBranchesListViewGroupTemplate">
             <StackPanel Margin="0,8,0,0">
-                <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                <Rectangle Height="1" Fill="LightSlateGray"/>
+                <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
+                <TextBlock FontWeight="Bold" Text="{Binding Name}" />
+                <Rectangle Height="1"
+                           Fill="LightSlateGray"
+                           SnapsToDevicePixels="True" />
             </StackPanel>
         </DataTemplate>
     </Grid.Resources>

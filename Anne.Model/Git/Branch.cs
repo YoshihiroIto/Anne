@@ -15,7 +15,9 @@ namespace Anne.Model.Git
             {
                 if (SetProperty(ref _name, value))
                 {
+                    // ReSharper disable once ExplicitCallerInfoArgument
                     RaisePropertyChanged(nameof(LocalName));
+                    // ReSharper disable once ExplicitCallerInfoArgument
                     RaisePropertyChanged(nameof(RemoteName));
                 }
             }
@@ -38,6 +40,8 @@ namespace Anne.Model.Git
         private readonly LibGit2Sharp.Branch _internal;
         private readonly LibGit2Sharp.Repository _repos;
 
+        private static Regex BranchRegex { get; } = new Regex(@"(?<Remote>[0-9a-zA-Z\-]*)/(?<Local>.*)", RegexOptions.Compiled);
+
         public string LocalName
         {
             get
@@ -45,8 +49,8 @@ namespace Anne.Model.Git
                 if (IsRemote == false)
                     return Name;
 
-                var m = Regex.Match(Name, @"([0-9a-zA-Z]*)/(.*)");
-                return m.Groups[2].Value;
+                var m = BranchRegex.Match(Name);
+                return m.Groups["Local"].Value;
             }
         }
 
@@ -57,8 +61,8 @@ namespace Anne.Model.Git
                 if (IsRemote == false)
                     return string.Empty;
 
-                var m = Regex.Match(Name, @"([0-9a-zA-Z]*)/(.*)");
-                return m.Groups[1].Value;
+                var m = BranchRegex.Match(Name);
+                return m.Groups["Remote"].Value;
             }
         }
 
