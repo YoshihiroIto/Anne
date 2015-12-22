@@ -7,65 +7,85 @@
       d:DesignWidth="300"
       mc:Ignorable="d">
 
-    <Grid>
-        <Grid.Resources>
-            <Style x:Key="CommitMetaCaptionStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="HorizontalAlignment" Value="Right" />
-                <Setter Property="Margin" Value="4,0" />
-                <Setter Property="FontWeight" Value="Bold" />
-            </Style>
-            <Style x:Key="CommitMetaValueStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Margin" Value="4,0" />
-            </Style>
-        </Grid.Resources>
+    <StackPanel>
+        <Grid>
+            <Grid.Resources>
+                <Style x:Key="CommitMetaCaptionStyle" TargetType="{x:Type TextBlock}">
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="Margin" Value="4,0" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </Style>
+                <Style x:Key="CommitMetaValueStyle" TargetType="{x:Type TextBlock}">
+                    <Setter Property="Margin" Value="4,0" />
+                </Style>
+            </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="0"
-                   Style="{StaticResource CommitMetaCaptionStyle}"
-                   Text="Commit:" />
-        <TextBlock Grid.Row="1"
-                   Grid.Column="0"
-                   Style="{StaticResource CommitMetaCaptionStyle}"
-                   Text="Parents:" />
-        <TextBlock Grid.Row="2"
-                   Grid.Column="0"
-                   Style="{StaticResource CommitMetaCaptionStyle}"
-                   Text="Auther:" />
-        <TextBlock Grid.Row="3"
-                   Grid.Column="0"
-                   Style="{StaticResource CommitMetaCaptionStyle}"
-                   Text="Date:" />
+            <!--  Hash  -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Style="{StaticResource CommitMetaCaptionStyle}"
+                       Text="Commit:" />
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Style="{StaticResource CommitMetaValueStyle}"
+                       Text="{Binding Hash,
+                                      Mode=OneTime}" />
 
+            <!--  Parents  -->
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       Style="{StaticResource CommitMetaCaptionStyle}"
+                       Text="Parents:" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       Style="{StaticResource CommitMetaValueStyle}"
+                       Text="{Binding Parents,
+                                      Mode=OneTime}" />
 
+            <!--  Auther  -->
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Style="{StaticResource CommitMetaCaptionStyle}"
+                       Text="Auther:" />
+            <TextBlock Grid.Row="2"
+                       Grid.Column="1"
+                       Style="{StaticResource CommitMetaValueStyle}"
+                       Text="{Binding Auther,
+                                      Mode=OneTime}" />
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="1"
-                   Style="{StaticResource CommitMetaValueStyle}"
-                   Text="{Binding Hash, Mode=OneTime}" />
-        <TextBlock Grid.Row="1"
-                   Grid.Column="1"
-                   Style="{StaticResource CommitMetaValueStyle}"
-                   Text="{Binding Parents, Mode=OneTime}" />
-        <TextBlock Grid.Row="2"
-                   Grid.Column="1"
-                   Style="{StaticResource CommitMetaValueStyle}"
-                   Text="{Binding Auther, Mode=OneTime}" />
-        <TextBlock Grid.Row="3"
-                   Grid.Column="1"
-                   Style="{StaticResource CommitMetaValueStyle}"
-                   Text="{Binding Date, Mode=OneTime}" />
+            <!--  Date  -->
+            <TextBlock Grid.Row="3"
+                       Grid.Column="0"
+                       Style="{StaticResource CommitMetaCaptionStyle}"
+                       Text="Date:" />
+            <TextBlock Grid.Row="3"
+                       Grid.Column="1"
+                       Style="{StaticResource CommitMetaValueStyle}"
+                       Text="{Binding Date,
+                                      Mode=OneTime}" />
 
-    </Grid>
+        </Grid>
+
+        <TextBox Margin="0,8,0,0"
+                 Background="{x:Null}"
+                 BorderBrush="LightGray"
+                 BorderThickness="0,1"
+                 IsReadOnly="True"
+                 SnapsToDevicePixels="True"
+                 Text="{Binding Message,
+                                Mode=OneTime}"
+                 TextWrapping="Wrap" />
+    </StackPanel>
 </Grid>
