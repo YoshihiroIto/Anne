@@ -40,7 +40,7 @@ namespace Anne.Model.Git
         private readonly LibGit2Sharp.Branch _internal;
         private readonly LibGit2Sharp.Repository _repos;
 
-        private static Regex BranchRegex { get; } = new Regex(@"(?<Remote>[0-9a-zA-Z\-]*)/(?<Local>.*)", RegexOptions.Compiled);
+        private static Regex BranchRegex { get; } = new Regex(@"(?<Remote>[0-9a-zA-Z_\-\.]*)/(?<Local>.*)", RegexOptions.Compiled);
 
         public string LocalName
         {
