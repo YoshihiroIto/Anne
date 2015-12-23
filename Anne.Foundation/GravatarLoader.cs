@@ -33,7 +33,7 @@ namespace Anne.Foundation
                 foreach (var h in hash)
                     sb.Append(h.ToString("x2"));
 
-                return string.Format($"http://www.gravatar.com/avatar/{sb}&size=256&d=mm");
+                return $"http://www.gravatar.com/avatar/{sb}&size=256&d=mm";
             }
         }
     }

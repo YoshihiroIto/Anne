@@ -13,8 +13,8 @@ namespace Anne.Features
         public string MessageShort => _model.MessageShort;
 
         public string Parents => string.Join(", ", _model.ParentShaShorts);
-        public string Hash => string.Format($"{_model.Sha} [{_model.ShaShort}]");
-        public string Auther => string.Format($"{_model.AutherName} <{_model.AutherEmail}>");
+        public string Hash => $"{_model.Sha} [{_model.ShaShort}]";
+        public string Auther => $"{_model.AutherName} <{_model.AutherEmail}>";
         public string Date => _model.When.ToString("F");
 
         private BitmapImage _autherImage;
