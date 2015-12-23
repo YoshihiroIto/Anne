@@ -18,20 +18,28 @@ namespace Anne.Features
         public string Date => _model.When.ToString("F");
 
         private BitmapImage _autherImage;
+
         public BitmapImage AutherImage
         {
             get
             {
+                if (_autherImage == null)
+                    _autherImage = GravatarLoader.GetFromCache(_model.AutherEmail);
+
                 if (_autherImage != null)
                     return _autherImage;
 
                 if (_isDownloading)
                     return null;
 
-                using (new AnonymousDisposable(() => _isDownloading = false))
                 {
                     _isDownloading = true;
-                    Task.Run(LoadAutherImage);
+                    Task.Run(
+                        () =>
+                        {
+                            AutherImage = GravatarLoader.Get(_model.AutherEmail);
+                            _isDownloading = false;
+                        });
                 }
 
                 return null;
@@ -47,15 +55,6 @@ namespace Anne.Features
         {
             Debug.Assert(model != null);
             _model = model;
-        }
-
-        private async Task LoadAutherImage()
-        {
-            BitmapImage bi;
-            if (GravatarLoader.Cache.TryGetValue(_model.AutherEmail, out bi))
-                AutherImage = bi;
-            else
-                AutherImage = await GravatarLoader.LoadImage(_model.AutherEmail);
         }
     }
 }

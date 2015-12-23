@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,16 +10,31 @@ namespace Anne.Foundation
 {
     public static class GravatarLoader
     {
-        public static ConcurrentDictionary<string, BitmapImage> Cache { get; } =
+        private static readonly ConcurrentDictionary<string, BitmapImage> Cache =
             new ConcurrentDictionary<string, BitmapImage>();
 
-        public static async Task<BitmapImage> LoadImage(string email)
+        public static BitmapImage GetFromCache(string email)
         {
+            email = email.ToLower();
+
+            BitmapImage bi;
+            Cache.TryGetValue(email, out bi);
+            return bi;
+        }
+
+        public static BitmapImage Get(string email)
+        {
+            email = email.ToLower();
+
+            return Cache.GetOrAdd(email, LoadImage);
+        }
+
+        private static BitmapImage LoadImage(string email)
+        {
+            Debug.WriteLine("LoadImage: " + email);
+
             var url = GenerateUrlFromEmail(email);
-
-            var bi = await BitmapImageHelper.DownloadImageAsync(url, Livet.DispatcherHelper.UIDispatcher);
-
-            Cache[email] = bi;
+            var bi = BitmapImageHelper.DownloadImageAsync(url, Livet.DispatcherHelper.UIDispatcher).Result;
 
             return bi;
         }
