@@ -3,22 +3,19 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
-using StatefulModel;
 
 namespace Anne.Features
 {
     public class CommitVm : ViewModelBase
     {
-        public string Message => _model.Message;
+        public string Message      => _model.Message;
         public string MessageShort => _model.MessageShort;
-
-        public string Parents => string.Join(", ", _model.ParentShaShorts);
-        public string Hash => $"{_model.Sha} [{_model.ShaShort}]";
-        public string Auther => $"{_model.AutherName} <{_model.AutherEmail}>";
-        public string Date => _model.When.ToString("F");
+        public string Parents      => string.Join(", ", _model.ParentShaShorts);
+        public string Hash         => $"{_model.Sha} [{_model.ShaShort}]";
+        public string Auther       => $"{_model.AutherName} <{_model.AutherEmail}>";
+        public string Date         => _model.When.ToString("F");
 
         private BitmapImage _autherImage;
-
         public BitmapImage AutherImage
         {
             get
