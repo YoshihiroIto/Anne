@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Text;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
+using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using StatefulModel;
@@ -25,12 +28,12 @@ namespace Anne.Model.Git
         public event EventHandler<ExceptionEventArgs> JobExecutingException;
 
         // 内部状態
-        private readonly LibGit2Sharp.Repository _internal;
+        internal LibGit2Sharp.Repository Internal { get; }
         private readonly JobQueue _jobQueue = new JobQueue();
 
         public Repository(string path)
         {
-            _internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
+            Internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
 
             // ジョブキュー
             _jobQueue.AddTo(MultipleDisposable);
@@ -44,16 +47,16 @@ namespace Anne.Model.Git
                 .Subscribe(e => JobExecutingException?.Invoke(this, e))
                 .AddTo(MultipleDisposable);
 
-            Branches = _internal.Branches
+            Branches = Internal.Branches
                 .ToReadOnlyReactiveCollection(
-                    _internal.Branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
-                    x => new Branch(x, _internal),
+                    Internal.Branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
+                    x => new Branch(x, Internal),
                     Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
             Commits = new ReactiveProperty<IEnumerable<Commit>>(
                 Scheduler.Immediate,
-                _internal.Commits.Select(x => new Commit(x)).Memoize())
+                Internal.Commits.Select(x => new Commit(this, x)).Memoize())
                 .AddTo(MultipleDisposable);
 
             new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
@@ -71,14 +74,14 @@ namespace Anne.Model.Git
                 $"Fetch: {remoteName}",
                 () =>
                 {
-                    var remote = _internal.Network.Remotes[remoteName];
-                    _internal.Network.Fetch(remote);
+                    var remote = Internal.Network.Remotes[remoteName];
+                    Internal.Network.Fetch(remote);
                 });
         }
 
         public void FetchAll()
         {
-            _internal.Network.Remotes.Select(r => r.Name).ForEach(Fetch);
+            Internal.Network.Remotes.Select(r => r.Name).ForEach(Fetch);
         }
 
         #region Test
