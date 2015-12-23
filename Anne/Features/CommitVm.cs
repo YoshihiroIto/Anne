@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Anne.Foundation;
@@ -50,20 +49,22 @@ namespace Anne.Features
             set { SetProperty(ref _autherImage, value); }
         }
 
+        private volatile bool _isDownloading;
+
         #endregion
 
-        private ReadOnlyReactiveCollection<string> _diff;
-        public ReadOnlyReactiveCollection<string> Diff
+        private ReadOnlyReactiveCollection<FilePatchVm> _filePatches;
+
+        public ReadOnlyReactiveCollection<FilePatchVm> FilePatches
         {
             get
             {
-                return _diff ?? (_diff = _model.FilePatches
-                    .ToReadOnlyReactiveCollection(x => x.Path)
-                    .AddTo(MultipleDisposable));
+                return _filePatches ?? (
+                    _filePatches = _model.FilePatches
+                        .ToReadOnlyReactiveCollection(x => new FilePatchVm(x))
+                        .AddTo(MultipleDisposable));
             }
         }
-
-        private volatile bool _isDownloading;
 
         private readonly Model.Git.Commit _model;
 

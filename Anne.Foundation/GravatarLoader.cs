@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using ReactiveBingViewer.Models;
 
@@ -34,7 +33,7 @@ namespace Anne.Foundation
             Debug.WriteLine("LoadImage: " + email);
 
 // ネットアクセスしたくない時用
-#if false
+#if true
             var url = GenerateUrlFromEmail(email);
             var bi = BitmapImageHelper.DownloadImageAsync(url, Livet.DispatcherHelper.UIDispatcher).Result;
             return bi;

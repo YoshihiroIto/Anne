@@ -102,6 +102,10 @@
     <Compile Include="Features\CommitLogView.xaml.cs">
       <DependentUpon>CommitLogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Features\FilePatchView.xaml.cs">
+      <DependentUpon>FilePatchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\FilePatchVm.cs" />
     <Compile Include="Features\RepositoryView.xaml.cs">
       <DependentUpon>RepositoryView.xaml</DependentUpon>
     </Compile>
@@ -110,6 +114,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Features\CommitLogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\FilePatchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
