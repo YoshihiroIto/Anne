@@ -9,7 +9,7 @@ namespace Anne.Features
     public class FilePatchVm : ViewModelBase
     {
         public string Path => _model.Path;
-        public string Patch => _model.Patch;
+        public string Diff => _model.Diff;
 
         public ReactiveProperty<bool> IsExpanded { get; } = new ReactiveProperty<bool>(false);
 

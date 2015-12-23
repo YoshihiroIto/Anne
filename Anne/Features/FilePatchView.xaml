@@ -1,6 +1,7 @@
 ﻿<Expander x:Class="Anne.Features.FilePatchView"
           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:controls="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           IsExpanded="{Binding IsExpanded.Value}"
@@ -16,9 +17,12 @@
                    Fill="LightGray"
                    SnapsToDevicePixels="True" />
 
-        <TextBlock FontFamily="Consolas"
-                   FontSize="14"
-                   Text="{Binding Patch,
-                                  Mode=OneTime}" />
+        <controls:TextEditor FontFamily="Consolas"
+                             FontSize="14"
+                             HorizontalScrollBarVisibility="Auto"
+                             IsReadOnly="True"
+                             Text="{Binding Diff,
+                                            Mode=OneTime}"
+                             VerticalScrollBarVisibility="Hidden" />
     </StackPanel>
 </Expander>
