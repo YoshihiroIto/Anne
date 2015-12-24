@@ -1,11 +1,11 @@
 ﻿namespace Anne.Features
 {
     /// <summary>
-    /// FilePatchView.xaml の相互作用ロジック
+    /// FileDiffView.xaml の相互作用ロジック
     /// </summary>
-    public partial class FilePatchView
+    public partial class FileDiffView
     {
-        public FilePatchView()
+        public FileDiffView()
         {
             InitializeComponent();
         }

@@ -53,20 +53,20 @@ namespace Anne.Features
 
         #endregion
 
-        private ReadOnlyReactiveCollection<FilePatchVm> _filePatches;
+        private ReadOnlyReactiveCollection<FileDiffVm> _filePatches;
 
-        public ReadOnlyReactiveCollection<FilePatchVm> FilePatches
+        public ReadOnlyReactiveCollection<FileDiffVm> FilePatches
         {
             get
             {
                 return _filePatches ?? (
                     _filePatches = _model.FilePatches
-                        .ToReadOnlyReactiveCollection(x => new FilePatchVm(x))
+                        .ToReadOnlyReactiveCollection(x => new FileDiffVm(x))
                         .AddTo(MultipleDisposable));
             }
         }
 
-        public ReactiveProperty<FilePatchVm> SelectedFilePatch { get; } = new ReactiveProperty<FilePatchVm>();
+        public ReactiveProperty<FileDiffVm> SelectedFilePatch { get; } = new ReactiveProperty<FileDiffVm>();
 
         private readonly Model.Git.Commit _model;
 

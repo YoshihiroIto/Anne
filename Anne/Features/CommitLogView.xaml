@@ -132,6 +132,6 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <features:FilePatchView Grid.Row="1" DataContext="{Binding SelectedFilePatch.Value, Mode=OneWay}" />
+        <features:FileDiffView Grid.Row="1" DataContext="{Binding SelectedFilePatch.Value, Mode=OneWay}" />
     </Grid>
 </DockPanel>

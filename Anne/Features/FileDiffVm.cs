@@ -9,7 +9,7 @@ using Reactive.Bindings.Extensions;
 
 namespace Anne.Features
 {
-    public class FilePatchVm : ViewModelBase
+    public class FileDiffVm : ViewModelBase
     {
         public string Path => _model.Path;
         public string Diff { get; private set; }
@@ -37,7 +37,7 @@ namespace Anne.Features
         // ReSharper disable once NotAccessedField.Local
         private DiffLine[] _diffLines;
 
-        public FilePatchVm(FilePatch model)
+        public FileDiffVm(FilePatch model)
         {
             Debug.Assert(model != null);
 
