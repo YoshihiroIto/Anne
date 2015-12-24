@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Windows;
 using System.Windows.Media;
-using Anne.Foundation;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace Anne.Features
@@ -20,9 +18,9 @@ namespace Anne.Features
             _editor = editor;
         }
 
-        public void Draw(TextView textView, DrawingContext drawingContext)
+        public void Draw(TextView textView, DrawingContext dc)
         {
-            FileDiffTextEditorHelper.DrawBackground(textView, drawingContext, textView.ActualWidth, DiffLines);
+            FileDiffTextEditorHelper.DrawBackground(textView, dc, textView.ActualWidth, DiffLines);
         }
     }
 }

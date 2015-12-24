@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
+using ParseDiff;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -22,9 +23,9 @@ namespace Anne.Features
         {
             public enum LineTypes
             {
-                Normal = ParseDiff.LineChangeType.Normal,
-                Add = ParseDiff.LineChangeType.Add,
-                Delete = ParseDiff.LineChangeType.Delete,
+                Normal = LineChangeType.Normal,
+                Add = LineChangeType.Add,
+                Delete = LineChangeType.Delete,
                 //
                 ChunckTag = -1
             }
@@ -63,15 +64,35 @@ namespace Anne.Features
                             sb.AppendLine(chunck.Content);
                             diffLinesTemp.Add(new DiffLine { LineType = DiffLine.LineTypes.ChunckTag });
 
+                            var first = chunck.Changes.First();
+                            var oldIndex = first.OldIndex - 1;
+                            var newIndex = first.OldIndex - 1;
+
                             foreach (var l in chunck.Changes)
                             {
+                                switch (l.Type)
+                                {
+                                    case LineChangeType.Normal:
+                                        ++oldIndex;
+                                        ++newIndex;
+                                        break;
+
+                                    case LineChangeType.Add:
+                                        ++newIndex;
+                                        break;
+
+                                    case LineChangeType.Delete:
+                                        ++oldIndex;
+                                        break;
+                                }
+
                                 sb.AppendLine(l.Content.Substring(1));
                                 
                                 diffLinesTemp.Add(
                                     new DiffLine
                                     {
-                                        OldIndex = l.OldIndex,
-                                        NewIndex = l.NewIndex,
+                                        OldIndex = oldIndex,
+                                        NewIndex = newIndex,
                                         LineType = (DiffLine.LineTypes)l.Type
                                     });
                             }
@@ -87,6 +108,9 @@ namespace Anne.Features
             }
 
             Diff = sb.ToString();
+
+            if ((Diff.Length >= 2) && (Diff.Last() == '\n'))
+                Diff = Diff.Substring(0, Diff.Length - 2);
         }
     }
 }
