@@ -110,10 +110,14 @@
     <Compile Include="Features\CommitLogView.xaml.cs">
       <DependentUpon>CommitLogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Features\FileDiffTextEditor.cs" />
+    <Compile Include="Features\FileDiffTextEditorHelper.cs" />
+    <Compile Include="Features\FileDiffTextEditorLeftMargin.cs" />
     <Compile Include="Features\FileDiffView.xaml.cs">
       <DependentUpon>FileDiffView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\FileDiffVm.cs" />
+    <Compile Include="Features\FileDiffTextEditorBackgroundRenderer.cs" />
     <Compile Include="Features\RepositoryView.xaml.cs">
       <DependentUpon>RepositoryView.xaml</DependentUpon>
     </Compile>

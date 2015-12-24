@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace Anne.Foundation.Controls
 {
-    public sealed class TextEditor : ICSharpCode.AvalonEdit.TextEditor, INotifyPropertyChanged
+    public class TextEditor : ICSharpCode.AvalonEdit.TextEditor, INotifyPropertyChanged
     {
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(nameof(Text), typeof (string), typeof (TextEditor),

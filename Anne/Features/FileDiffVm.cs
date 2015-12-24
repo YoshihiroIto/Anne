@@ -35,7 +35,7 @@ namespace Anne.Features
         }
 
         // ReSharper disable once NotAccessedField.Local
-        private DiffLine[] _diffLines;
+        public DiffLine[] DiffLines { get; private set;  }
 
         public FileDiffVm(FilePatch model)
         {
@@ -83,7 +83,7 @@ namespace Anne.Features
                     diffLinesTemp.Clear();
                 }
 
-                _diffLines = diffLinesTemp.ToArray();
+                DiffLines = diffLinesTemp.ToArray();
             }
 
             Diff = sb.ToString();
