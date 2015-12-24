@@ -20,7 +20,7 @@ namespace Anne.Features
 
         public void Draw(TextView textView, DrawingContext dc)
         {
-            FileDiffTextEditorHelper.DrawBackground(textView, dc, textView.ActualWidth, DiffLines);
+            FileDiffTextEditorHelper.DrawBackground(textView, dc, 0, textView.ActualWidth, DiffLines, true);
         }
     }
 }

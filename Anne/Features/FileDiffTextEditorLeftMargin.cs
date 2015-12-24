@@ -68,7 +68,20 @@ namespace Anne.Features
 
         protected override void OnRender(DrawingContext dc)
         {
-            FileDiffTextEditorHelper.DrawBackground(TextView, dc, MarginWidth, DiffLines, DrawForeground);
+            const double x0 = 0;
+            const double w0 = MarginWidth - LineTypeWidth;
+            FileDiffTextEditorHelper.DrawBackground(TextView, dc, x0, w0, DiffLines, false, DrawForegroundLeft);
+
+            const double x1 = IndexWidth*2;
+            const double w1 = LineTypeWidth;
+            FileDiffTextEditorHelper.DrawBackground(TextView, dc, x1, w1, DiffLines, true, DrawForeground);
+        }
+
+        private static void DrawForegroundLeft(TextView textView, DrawingContext dc, Rect rect,
+            FileDiffVm.DiffLine diffLine, int index)
+        {
+            if (index == 0)
+                DrawIndex(dc, rect, diffLine);
         }
 
         private static void DrawForeground(TextView textView, DrawingContext dc, Rect rect,
@@ -90,10 +103,7 @@ namespace Anne.Features
                 new Point(LineTypeIndexOffset, rect.Bottom));
 
             if (index == 0)
-            {
-                DrawIndex(dc, rect, diffLine);
                 DrawFileTypeMark(dc, rect, diffLine);
-            }
         }
 
         private static void DrawIndex(DrawingContext dc, Rect rect, FileDiffVm.DiffLine diffLine)
@@ -145,7 +155,7 @@ namespace Anne.Features
                     new Typeface("Consolas"),
                     14,
                     brush),
-                new Point(rect.Left + LineTypeIndexOffset + 4, rect.Top));
+                new Point(rect.Left + 4, rect.Top));
         }
 
         private static void DrawIndexText(DrawingContext dc, Rect rect, string text, double x, TextAlignment align)
