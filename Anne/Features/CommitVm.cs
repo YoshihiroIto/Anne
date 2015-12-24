@@ -66,12 +66,16 @@ namespace Anne.Features
             }
         }
 
+        public ReactiveProperty<FilePatchVm> SelectedFilePatch { get; } = new ReactiveProperty<FilePatchVm>();
+
         private readonly Model.Git.Commit _model;
 
         public CommitVm(Model.Git.Commit model)
         {
             Debug.Assert(model != null);
             _model = model;
+
+            SelectedFilePatch.AddTo(MultipleDisposable);
         }
     }
 }

@@ -119,6 +119,7 @@
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
               SelectedItem="{Binding SelectedCommit.Value}"
+              SelectionMode="Single"
               VirtualizingPanel.IsVirtualizing="True"
               VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.VirtualizationMode="Recycling">

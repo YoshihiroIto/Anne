@@ -102,30 +102,36 @@
                             Mode=OneTime}"
              TextWrapping="Wrap" />
 
-    <!--  差分  -->
-    <ScrollViewer>
-        <ItemsControl ItemsSource="{Binding FilePatches,
-                                            Mode=OneWay}"
-                      ScrollViewer.CanContentScroll="True"
-                      VirtualizingPanel.IsVirtualizing="True"
-                      VirtualizingPanel.ScrollUnit="Pixel"
-                      VirtualizingPanel.VirtualizationMode="Recycling">
-            <ItemsControl.ItemsPanel>
+    <!--  変更ファイル  -->
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ListView Grid.Row="0"
+                  ItemsSource="{Binding FilePatches,
+                                        Mode=OneWay}"
+                  ScrollViewer.CanContentScroll="True"
+                  SelectedItem="{Binding SelectedFilePatch.Value}"
+                  SelectionMode="Single"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.ScrollUnit="Pixel"
+                  VirtualizingPanel.VirtualizationMode="Recycling">
+            <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
                 </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.ItemTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <features:FilePatchView />
-                        <Rectangle Height="1"
-                                   Fill="LightGray"
-                                   SnapsToDevicePixels="True" />
-                    </StackPanel>
+                    <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                    <TextBlock Text="{Binding Path, Mode=OneTime}" />
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <features:FilePatchView Grid.Row="1" DataContext="{Binding SelectedFilePatch.Value, Mode=OneWay}" />
+    </Grid>
 </DockPanel>

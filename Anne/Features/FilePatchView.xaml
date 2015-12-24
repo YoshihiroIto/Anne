@@ -1,28 +1,24 @@
-﻿<Expander x:Class="Anne.Features.FilePatchView"
-          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-          xmlns:controls="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
-          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          IsExpanded="{Binding IsExpanded.Value}"
-          d:DesignHeight="300"
-          d:DesignWidth="300"
-          mc:Ignorable="d">
-    <Expander.Header>
-        <TextBlock Text="{Binding Path, Mode=OneTime}" />
-    </Expander.Header>
+﻿<DockPanel x:Class="Anne.Features.FilePatchView"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:controls="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           LastChildFill="True"
+           d:DesignHeight="300"
+           d:DesignWidth="300"
+           mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical">
-        <Rectangle Height="1"
-                   Fill="LightGray"
-                   SnapsToDevicePixels="True" />
+    <Rectangle Height="1"
+               DockPanel.Dock="Top"
+               Fill="LightGray"
+               SnapsToDevicePixels="True" />
 
-        <controls:TextEditor FontFamily="Consolas"
-                             FontSize="14"
-                             HorizontalScrollBarVisibility="Auto"
-                             IsReadOnly="True"
-                             Text="{Binding Diff,
-                                            Mode=OneTime}"
-                             VerticalScrollBarVisibility="Hidden" />
-    </StackPanel>
-</Expander>
+    <controls:TextEditor FontFamily="Consolas"
+                         FontSize="14"
+                         HorizontalScrollBarVisibility="Auto"
+                         IsReadOnly="True"
+                         Text="{Binding Diff,
+                                        Mode=OneTime}"
+                         VerticalScrollBarVisibility="Auto" />
+</DockPanel>
