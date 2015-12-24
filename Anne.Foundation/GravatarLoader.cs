@@ -33,7 +33,7 @@ namespace Anne.Foundation
             Debug.WriteLine("LoadImage: " + email);
 
 // ネットアクセスしたくない時用
-#if true
+#if false
             var url = GenerateUrlFromEmail(email);
             var bi = BitmapImageHelper.DownloadImageAsync(url, Livet.DispatcherHelper.UIDispatcher).Result;
             return bi;
