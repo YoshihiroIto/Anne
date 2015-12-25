@@ -77,9 +77,8 @@ namespace Anne.Features
                             sb.AppendLine(chunck.Content);
                             diffLinesTemp.Add(new DiffLine { LineType = DiffLine.LineTypes.ChunckTag });
 
-                            var first = chunck.Changes.First();
-                            var oldIndex = first.OldIndex - 1;
-                            var newIndex = first.OldIndex - 1;
+                            var oldIndex = chunck.OldStart - 1;
+                            var newIndex = chunck.NewStart - 1;
 
                             var addDeletePairs = new Dictionary<int, DiffLine[]>();
 
