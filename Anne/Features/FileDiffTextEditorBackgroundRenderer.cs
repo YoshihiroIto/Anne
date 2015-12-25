@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Windows.Media;
+using Anne.Foundation;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace Anne.Features
@@ -20,7 +22,27 @@ namespace Anne.Features
 
         public void Draw(TextView textView, DrawingContext dc)
         {
-            FileDiffTextEditorHelper.DrawBackground(textView, dc, 0, textView.ActualWidth, DiffLines, true);
+            FileDiffTextEditorHelper.DrawBackground(textView, dc, 0, textView.ActualWidth, DiffLines, true,
+                DrawContentDiff);
+        }
+
+        private static void DrawContentDiff(FileDiffTextEditorHelper.PerLineDrawArgs args)
+        {
+            if (args.DiffLine.ContentDiffs == null)
+                return;
+
+            var brush = args.DiffLine.LineType == FileDiffVm.DiffLine.LineTypes.Add
+                ? Constants.HighlightAddBackground
+                : Constants.HighlightRemoveBackground;
+
+            args.DiffLine.ContentDiffs.SelectMany(d =>
+                BackgroundGeometryBuilder.GetRectsFromVisualSegment(
+                    args.TextView,
+                    args.VisualLine,
+                    d.StartIndex,
+                    d.EndIndex)
+                )
+                .ForEach(r => args.DrawingContext.DrawRectangle(brush, null, r));
         }
     }
 }

@@ -24,6 +24,12 @@ namespace Anne.Foundation
         public static readonly SolidColorBrush LightRemoveBackground =
             new SolidColorBrush(Color.FromRgb(0xFF, 0xEE, 0xEE));
 
+        public static readonly SolidColorBrush HighlightAddBackground =
+            new SolidColorBrush(Color.FromRgb(0xBB, 0xFF, 0xBB));
+
+        public static readonly SolidColorBrush HighlightRemoveBackground =
+            new SolidColorBrush(Color.FromRgb(0xFF, 0xBB, 0xBB));
+
         static Constants()
         {
             FramePen.Freeze();
@@ -35,6 +41,9 @@ namespace Anne.Foundation
             LightChunckTagBackground.Freeze();
             LightAddBackground.Freeze();
             LightRemoveBackground.Freeze();
+
+            HighlightAddBackground.Freeze();
+            HighlightRemoveBackground.Freeze();
         }
     }
 }

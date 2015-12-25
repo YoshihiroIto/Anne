@@ -27,12 +27,16 @@ namespace Anne.Foundation
         [Conditional("DEBUG")]
         public static void Add(IDisposable disposable)
         {
+            Debug.Assert(disposable != null);
+
             Disposables.Add(disposable);
         }
 
         [Conditional("DEBUG")]
         public static void Remove(IDisposable disposable)
         {
+            Debug.Assert(disposable != null);
+
 #if false
             if (Disposables.Contains(disposable) == false)
             {

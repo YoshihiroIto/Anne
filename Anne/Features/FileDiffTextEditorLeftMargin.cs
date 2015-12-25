@@ -77,33 +77,31 @@ namespace Anne.Features
             FileDiffTextEditorHelper.DrawBackground(TextView, dc, x1, w1, DiffLines, true, DrawForeground);
         }
 
-        private static void DrawForegroundLeft(TextView textView, DrawingContext dc, Rect rect,
-            FileDiffVm.DiffLine diffLine, int index)
+        private static void DrawForegroundLeft(FileDiffTextEditorHelper.PerLineDrawArgs args)
         {
-            if (index == 0)
-                DrawIndex(dc, rect, diffLine);
+            if (args.Index == 0)
+                DrawIndex(args.DrawingContext, args.Rect, args.DiffLine);
         }
 
-        private static void DrawForeground(TextView textView, DrawingContext dc, Rect rect,
-            FileDiffVm.DiffLine diffLine, int index)
+        private static void DrawForeground(FileDiffTextEditorHelper.PerLineDrawArgs args)
         {
-            dc.DrawLine(
+            args.DrawingContext.DrawLine(
                 Constants.FramePen,
-                new Point(OldIndexOffset, rect.Top),
-                new Point(OldIndexOffset, rect.Bottom));
+                new Point(OldIndexOffset, args.Rect.Top),
+                new Point(OldIndexOffset, args.Rect.Bottom));
 
-            dc.DrawLine(
+            args.DrawingContext.DrawLine(
                 Constants.FramePen,
-                new Point(NewIndexOffset, rect.Top),
-                new Point(NewIndexOffset, rect.Bottom));
+                new Point(NewIndexOffset, args.Rect.Top),
+                new Point(NewIndexOffset, args.Rect.Bottom));
 
-            dc.DrawLine(
+            args.DrawingContext.DrawLine(
                 Constants.FramePen,
-                new Point(LineTypeIndexOffset, rect.Top),
-                new Point(LineTypeIndexOffset, rect.Bottom));
+                new Point(LineTypeIndexOffset, args.Rect.Top),
+                new Point(LineTypeIndexOffset, args.Rect.Bottom));
 
-            if (index == 0)
-                DrawFileTypeMark(dc, rect, diffLine);
+            if (args.Index == 0)
+                DrawFileTypeMark(args.DrawingContext, args.Rect, args.DiffLine);
         }
 
         private static void DrawIndex(DrawingContext dc, Rect rect, FileDiffVm.DiffLine diffLine)
@@ -175,7 +173,7 @@ namespace Anne.Features
                     offset = (IndexWidth - ft.Width) * 0.5;
 
                 else if (align == TextAlignment.Right)
-                    offset = (IndexWidth - ft.Width) - 4;
+                    offset = IndexWidth - ft.Width - 4;
 
                 else
                     throw new NotImplementedException();

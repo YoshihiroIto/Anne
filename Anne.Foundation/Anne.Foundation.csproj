@@ -73,6 +73,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -89,6 +90,7 @@
     <Compile Include="Externals\BitmapImageHelper.cs" />
     <Compile Include="DisposableChecker.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="Externals\DiffMatchPatch.cs" />
     <Compile Include="GravatarLoader.cs" />
     <Compile Include="JobQueue.cs" />
     <Compile Include="MultipleDisposableExtensions.cs" />

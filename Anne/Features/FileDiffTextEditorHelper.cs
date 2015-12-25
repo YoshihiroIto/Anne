@@ -8,17 +8,27 @@ namespace Anne.Features
 {
     public static class FileDiffTextEditorHelper
     {
+        public class PerLineDrawArgs
+        {
+            public TextView TextView { get; set; }
+            public VisualLine VisualLine { get; set; }
+            public DrawingContext DrawingContext { get; set; }
+            public Rect Rect { get; set; }
+            public FileDiffVm.DiffLine DiffLine { get; set; }
+            public int Index { get; set; }
+        }
+
         public static void DrawBackground(
             TextView textView, DrawingContext dc, double x, double width, FileDiffVm.DiffLine[] diffLines,
             bool isLight,
-            Action<TextView, DrawingContext, Rect, FileDiffVm.DiffLine, int> perLineDraw = null)
+            Action<PerLineDrawArgs> perLineDraw = null)
         {
             if (diffLines == null)
                 return;
 
-            foreach (var v in textView.VisualLines)
+            foreach (var visualLine in textView.VisualLines)
             {
-                var linenum = v.FirstDocumentLine.LineNumber - 1;
+                var linenum = visualLine.FirstDocumentLine.LineNumber - 1;
                 if (linenum >= diffLines.Length)
                     continue;
 
@@ -46,8 +56,18 @@ namespace Anne.Features
                         break;
                 }
 
+                var perLineDrawArgs = new PerLineDrawArgs
+                {
+                    TextView = textView,
+                    VisualLine = visualLine,
+                    DrawingContext = dc,
+                    DiffLine = diffLine
+                };
+
                 var index = 0;
-                foreach (var segRect in BackgroundGeometryBuilder.GetRectsFromVisualSegment(textView, v, 0, 1000))
+
+                foreach (
+                    var segRect in BackgroundGeometryBuilder.GetRectsFromVisualSegment(textView, visualLine, 0, 1000))
                 {
                     var rect = new Rect(x, segRect.Top, width, segRect.Height + 1);
 
@@ -55,7 +75,15 @@ namespace Anne.Features
                     if (brush != default(Brush))
                         dc.DrawRectangle(brush, null, rect);
 
-                    perLineDraw?.Invoke(textView, dc, rect, diffLine, index ++);
+                    if (perLineDraw != null)
+                    {
+                        perLineDrawArgs.Rect = rect;
+                        perLineDrawArgs.Index = index;
+
+                        perLineDraw.Invoke(perLineDrawArgs);
+                    }
+
+                    ++index;
                 }
             }
         }
