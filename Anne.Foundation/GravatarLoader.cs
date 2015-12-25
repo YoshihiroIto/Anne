@@ -1,9 +1,11 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Media.Imaging;
-using ReactiveBingViewer.Models;
+using ReactiveBingViewer.IO;
 
 namespace Anne.Foundation
 {
@@ -33,10 +35,35 @@ namespace Anne.Foundation
             Debug.WriteLine("LoadImage: " + email);
 
 // ネットアクセスしたくない時用
-#if false
+#if true
             var url = GenerateUrlFromEmail(email);
-            var bi = BitmapImageHelper.DownloadImageAsync(url, Livet.DispatcherHelper.UIDispatcher).Result;
-            return bi;
+
+            BitmapImage bitmap = null;
+
+            using (var wc = new WebClient())
+            {
+                var data = wc.DownloadData(url);
+
+                Livet.DispatcherHelper.UIDispatcher.Invoke(() =>
+                {
+                    using (var stream = new WrappingStream(new MemoryStream(data)))
+                    {
+                        bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.StreamSource = stream;
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+                        bitmap.StreamSource = null;
+
+                        if (bitmap.CanFreeze)
+                            bitmap.Freeze();
+                    }
+                });
+            }
+
+            Debug.Assert(bitmap != null);
+
+            return bitmap;
 #else
             return null;
 #endif

@@ -174,9 +174,6 @@ namespace Anne.Features
                     var diffs = dmp.diff_main(deleteContent, addContent);
                     dmp.diff_cleanupSemantic(diffs);
 
-                    // var html = dmp.diff_prettyHtml(diffs);
-                    // Debug.WriteLine(html);
-
                     var deleteIndex = 0;
                     var addIndex = 0;
                     var deleteContentDiffs = new List<DiffLine.ContentDiff>();
