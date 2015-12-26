@@ -206,7 +206,6 @@ namespace Anne.Features
                         }
                     });
 
-                    // １つ変更は全て変更ということなので対象としない
                     if (deleteContentDiffs.Any())
                         deleteLine.ContentDiffs = deleteContentDiffs.ToArray();
 

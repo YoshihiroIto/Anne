@@ -22,8 +22,8 @@ namespace Anne.Features
 
         public void Draw(TextView textView, DrawingContext dc)
         {
-            FileDiffTextEditorHelper.DrawBackground(textView, dc, 0, textView.ActualWidth, DiffLines, true,
-                DrawContentDiff);
+            FileDiffTextEditorHelper.DrawBackground(
+                textView, dc, 0, textView.ActualWidth, DiffLines, true, DrawContentDiff);
         }
 
         private static void DrawContentDiff(FileDiffTextEditorHelper.PerLineDrawArgs args)

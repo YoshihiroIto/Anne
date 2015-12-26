@@ -34,15 +34,13 @@ namespace Anne.Features
                 if (_isDownloading)
                     return null;
 
-                {
-                    _isDownloading = true;
-                    Task.Run(
-                        () =>
-                        {
-                            AutherImage = GravatarLoader.Get(_model.AutherEmail);
-                            _isDownloading = false;
-                        });
-                }
+                _isDownloading = true;
+                Task.Run(
+                    () =>
+                    {
+                        AutherImage = GravatarLoader.Get(_model.AutherEmail);
+                        _isDownloading = false;
+                    });
 
                 return null;
             }
