@@ -74,7 +74,7 @@ namespace Anne.Features
                     {
                         foreach (var chunck in fileDiffs.Chunks)
                         {
-                            sb.AppendLine(chunck.Content);
+                            sb.AppendLine(chunck.Content.TrimEnd('\r', '\n'));
                             diffLinesTemp.Add(new DiffLine { LineType = DiffLine.LineTypes.ChunckTag });
 
                             var oldIndex = chunck.OldStart - 1;
@@ -112,7 +112,7 @@ namespace Anne.Features
 
                                 diffLinesTemp.Add(diffLine);
 
-                                sb.AppendLine(diffLine.Content);
+                                sb.AppendLine(diffLine.Content.TrimEnd('\r', '\n'));
 
                                 if (l.Type == LineChangeType.Delete)
                                 {
@@ -146,10 +146,7 @@ namespace Anne.Features
                 DiffLines = diffLinesTemp.ToArray();
             }
 
-            Diff = sb.ToString();
-
-            if ((Diff.Length >= 2) && (Diff.Last() == '\n'))
-                Diff = Diff.Substring(0, Diff.Length - 2);
+            Diff = sb.ToString().TrimEnd('\r', '\n');
         }
 
         private void MakeSyntaxHighlighting()
