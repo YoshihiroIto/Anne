@@ -106,6 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\ChangingFileVm.cs" />
     <Compile Include="Features\CommitVm.cs" />
     <Compile Include="Features\CommitLogView.xaml.cs">
       <DependentUpon>CommitLogView.xaml</DependentUpon>
@@ -118,6 +119,7 @@
     </Compile>
     <Compile Include="Features\FileDiffVm.cs" />
     <Compile Include="Features\FileDiffTextEditorBackgroundRenderer.cs" />
+    <Compile Include="Features\FileStatusVm.cs" />
     <Compile Include="Features\RepositoryView.xaml.cs">
       <DependentUpon>RepositoryView.xaml</DependentUpon>
     </Compile>

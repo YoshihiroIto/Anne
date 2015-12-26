@@ -31,10 +31,9 @@
             </Style.Triggers>
         </Style>
 
-        <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
-            <StackPanel Orientation="Horizontal">
+        <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}"> <StackPanel Orientation="Horizontal">
                 <TextBlock Style="{StaticResource CurrentMarkStyle}" />
-                <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
+                <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
                 <TextBlock Text="{Binding LocalName.Value, Mode=OneWay}" />
             </StackPanel>
         </DataTemplate>
@@ -42,6 +41,14 @@
         <DataTemplate x:Key="CommitTemplate" DataType="{x:Type git:Commit}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding MessageShort, Mode=OneTime}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ChangingFileTemplate"  DataType="{x:Type features:ChangingFileVm}">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding Path, Mode=OneTime}" />
+                <TextBlock Text="{Binding IsInStaging, Mode=OneTime}" />
+                <Rectangle Height="1" Fill="LightGray" />
             </StackPanel>
         </DataTemplate>
 
@@ -76,7 +83,7 @@
         <ColumnDefinition Width="140" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="140" />
+        <ColumnDefinition Width="300" />
     </Grid.ColumnDefinitions>
 
     <DockPanel LastChildFill="True">
@@ -193,7 +200,20 @@
             </i:Interaction.Triggers>
         </Button>
 
+        <Button Margin="0,8,0,0"
+                Content="Status Test"
+                DockPanel.Dock="Top">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <behaviors:LivetCallMethodAction MethodName="StatusTest" MethodTarget="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+
+        <!--  ジョブ  -->
         <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
-        <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
+        <ListView DockPanel.Dock="Top" ItemsSource="{Binding JobSummries, Mode=OneWay}" />
+
+        <ListView ItemTemplate="{StaticResource ChangingFileTemplate}" ItemsSource="{Binding FileStatus.ChangingFiles.Value, Mode=OneWay}" />
     </DockPanel>
 </Grid>

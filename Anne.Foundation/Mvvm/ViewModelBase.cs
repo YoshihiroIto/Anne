@@ -6,9 +6,14 @@ namespace Anne.Foundation.Mvvm
 {
     public class ViewModelBase : ViewModel
     {
-        public ViewModelBase()
+        private readonly bool _disableDisposableChecker;
+
+        public ViewModelBase(bool disableDisposableChecker = false)
         {
-            DisposableChecker.Add(this);
+            _disableDisposableChecker = disableDisposableChecker;
+
+            if (_disableDisposableChecker == false)
+                DisposableChecker.Add(this);
         }
 
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
@@ -27,7 +32,10 @@ namespace Anne.Foundation.Mvvm
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                DisposableChecker.Remove(this);
+            {
+                if (_disableDisposableChecker == false)
+                    DisposableChecker.Remove(this);
+            }
 
             base.Dispose(disposing);
         }

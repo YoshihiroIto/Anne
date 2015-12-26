@@ -28,7 +28,8 @@ namespace Anne.Model
             Repositories.AddTo(MultipleDisposable);
 
             // test
-            Repositories.Add(new Repository(@"C:\Users\yoi\Documents\Wox"));
+            // Repositories.Add(new Repository(@"C:\Users\yoi\Documents\Wox"));
+            Repositories.Add(new Repository(@"C:\Users\yoi\Documents\Anne"));
         }
     }
 }

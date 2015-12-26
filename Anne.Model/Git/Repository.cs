@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Text;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
@@ -27,13 +26,24 @@ namespace Anne.Model.Git
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
         public event EventHandler<ExceptionEventArgs> JobExecutingException;
 
+        // ファイルステータス
+        public FileStatus FileStatus { get; }
+
+        //
+        public string Path { get; }
+
         // 内部状態
         internal LibGit2Sharp.Repository Internal { get; }
         private readonly JobQueue _jobQueue = new JobQueue();
 
         public Repository(string path)
         {
+            Path = path;
             Internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
+
+            // ファイルステータス
+            FileStatus = new FileStatus(this)
+                .AddTo(MultipleDisposable);
 
             // ジョブキュー
             _jobQueue.AddTo(MultipleDisposable);
@@ -118,6 +128,26 @@ namespace Anne.Model.Git
                     var branch = Branches.FirstOrDefault(b => b.Name == branchName);
                     branch?.Switch();
                     UpdateBranchProps();
+                });
+        }
+
+        public void StatusTest()
+        {
+            _jobQueue.AddJob(
+                "Status",
+                () =>
+                {
+                    Debug.WriteLine(string.Empty);
+                    Debug.WriteLine("-------------------------------------------------------");
+                    Debug.WriteLine("---- StatusTest ---------------------------------------");
+                    Debug.WriteLine("-------------------------------------------------------");
+
+                    Internal.RetrieveStatus(new StatusOptions())
+                        .Where(i => i.State != LibGit2Sharp.FileStatus.Ignored)
+                        .ForEach(i =>
+                        {
+                            Debug.WriteLine($"{i.FilePath}, {i.State}");
+                        });
                 });
         }
 

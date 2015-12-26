@@ -9,10 +9,14 @@ namespace Anne.Foundation.Mvvm
     public class ModelBase : NotificationObject, IDisposable
     {
         public MultipleDisposable MultipleDisposable { get; set; } = new MultipleDisposable();
+        private readonly bool _disableDisposableChecker;
 
-        public ModelBase()
+        public ModelBase(bool disableDisposableChecker = false)
         {
-            DisposableChecker.Add(this);
+            _disableDisposableChecker = disableDisposableChecker;
+
+            if (_disableDisposableChecker == false)
+                DisposableChecker.Add(this);
         }
 
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
@@ -38,7 +42,9 @@ namespace Anne.Foundation.Mvvm
             if (disposing)
             {
                 MultipleDisposable?.Dispose();
-                DisposableChecker.Remove(this);
+
+                if (_disableDisposableChecker == false)
+                    DisposableChecker.Remove(this);
             }
 
             _disposed = true;

@@ -27,12 +27,17 @@ namespace Anne.Features
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
+        public FileStatusVm FileStatus { get; }
+
         private readonly Repository _model;
 
         public RepositoryVm(Repository model)
         {
             Debug.Assert(model != null);
             _model = model;
+
+            FileStatus = new FileStatusVm(model.FileStatus)
+                .AddTo(MultipleDisposable);
 
             JobSummries = _model.JobSummries
                 .ToReadOnlyReactiveCollection(UIDispatcherScheduler.Default)
@@ -89,5 +94,6 @@ namespace Anne.Features
         public void SwitchTest(string branchName) => _model.SwitchTest(branchName);
         public void FetchTest(string remoteName) => _model.Fetch(remoteName);
         public void FetchAllTest() => _model.FetchAll();
+        public void StatusTest() => _model.StatusTest();
     }
 }
