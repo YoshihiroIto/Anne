@@ -12,18 +12,12 @@ namespace Anne.Features
     {
         public ReadOnlyReactiveProperty<IEnumerable<ChangingFileVm>> ChangingFiles { get; }
 
-        public FileStatusVm(FileStatus model)
+        public FileStatusVm(Repository repos)
         {
-            Debug.Assert(model != null);
+            Debug.Assert(repos != null);
 
-            ChangingFiles = model.ChangingFiles
-                .Select(x =>
-                    x.Select(y => new ChangingFileVm
-                    {
-                        Path = y.Path,
-                        IsInStaging = y.IsInStaging
-                    })
-                )
+            ChangingFiles = repos.FileStatus.ChangingFiles
+                .Select(x => x.Select(y => new ChangingFileVm(y)))
                 .ToReadOnlyReactiveProperty();
         }
     }

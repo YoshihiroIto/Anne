@@ -49,7 +49,7 @@ namespace Anne.Model.Git
             _jobQueue.AddTo(MultipleDisposable);
             JobSummries = _jobQueue.JobSummries;
             WorkingJob = _jobQueue.WorkingJob
-                .ToReadOnlyReactiveProperty(eventScheduler:Scheduler.Immediate)
+                .ToReadOnlyReactiveProperty(eventScheduler: Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
             Observable.FromEventPattern<ExceptionEventArgs>(_jobQueue, nameof(JobQueue.JobExecutingException))
@@ -92,6 +92,18 @@ namespace Anne.Model.Git
         public void FetchAll()
         {
             Internal.Network.Remotes.Select(r => r.Name).ForEach(Fetch);
+        }
+
+        public void Add(string path)
+        {
+            _jobQueue.AddJob(
+                $"Add: {path}",
+                () => Internal.Index.Add(path));
+        }
+
+        public void AddJob(string summry, Action action)
+        {
+            _jobQueue.AddJob(summry, action);
         }
 
         #region Test
@@ -144,10 +156,7 @@ namespace Anne.Model.Git
 
                     Internal.RetrieveStatus(new StatusOptions())
                         .Where(i => i.State != LibGit2Sharp.FileStatus.Ignored)
-                        .ForEach(i =>
-                        {
-                            Debug.WriteLine($"{i.FilePath}, {i.State}");
-                        });
+                        .ForEach(i => { Debug.WriteLine($"{i.FilePath}, {i.State}"); });
                 });
         }
 

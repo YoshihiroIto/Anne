@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -29,7 +28,7 @@ namespace Anne.Model.Git
             new AnonymousDisposable(() => ChangingFiles.Value.ForEach(c => c.Dispose()))
                 .AddTo(MultipleDisposable);
 
-            Task.Run(() => UpdateChengingFiles());
+            UpdateChengingFiles(null);
 
             var watcher = new FileSystemWatcher(repos.Path)
             {
@@ -47,26 +46,32 @@ namespace Anne.Model.Git
                 watcher.ChangedAsObservable(),
                 watcher.RenamedAsObservable())
                 .Throttle(TimeSpan.FromMilliseconds(500))
-                .Subscribe(_ => UpdateChengingFiles())
+//                .Where(x => x.FullPath != Path.Combine(repos.Path, @".git"))
+//                .Where(x => x.FullPath != Path.Combine(repos.Path, @".git\index.lock"))
+//                .Where(x => x.FullPath != Path.Combine(repos.Path, @".git\index"))
+                .Subscribe(UpdateChengingFiles)
                 .AddTo(MultipleDisposable);
 
             watcher.EnableRaisingEvents = true;
         }
 
-        private void UpdateChengingFiles()
+        private void UpdateChengingFiles(FileSystemEventArgs e)
         {
+            if (e != null)
+                Debug.WriteLine($"UpdateChengingFiles : {e.FullPath}, {e.Name}, {e.ChangeType}");
+
             var old = ChangingFiles.Value;
 
-            ChangingFiles.Value =
-                _repos.Internal.RetrieveStatus(new LibGit2Sharp.StatusOptions())
-                    .Where(i => i.State != LibGit2Sharp.FileStatus.Ignored)
-                    .Select(x => new ChangingFile
-                    {
-                        Path = x.FilePath,
-                        IsInStaging = IsInStaging(x.State)
-                    }).ToObservableCollection();
+            _repos.AddJob("UpdateChengingFiles", () =>
+            {
+                ChangingFiles.Value =
+                    _repos.Internal.RetrieveStatus(new LibGit2Sharp.StatusOptions())
+                        .Where(i => i.State != LibGit2Sharp.FileStatus.Ignored)
+                        .Select(x => new ChangingFile(_repos, x.FilePath, IsInStaging(x.State)))
+                        .ToObservableCollection();
 
-            old.ForEach(c => c.Dispose());
+                old.ForEach(c => c.Dispose());
+            });
         }
 
         private static bool IsInStaging(LibGit2Sharp.FileStatus status)

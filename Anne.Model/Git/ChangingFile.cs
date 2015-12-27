@@ -1,4 +1,5 @@
-﻿using Anne.Foundation.Mvvm;
+﻿using System.Diagnostics;
+using Anne.Foundation.Mvvm;
 
 namespace Anne.Model.Git
 {
@@ -7,16 +8,43 @@ namespace Anne.Model.Git
         public string Path
         {
             get { return _path; }
-            set { SetProperty(ref _path, value); }
+            internal set { SetProperty(ref _path, value); }
         }
 
         public bool IsInStaging
         {
             get { return _isInStaging; }
-            set { SetProperty(ref _isInStaging, value); }
+            internal set { SetProperty(ref _isInStaging, value); }
         }
 
         private bool _isInStaging;
         private string _path;
+
+        private readonly Repository _repos;
+
+        public ChangingFile(Repository repos, string path, bool isInStaging)
+        {
+            Debug.Assert(repos != null);
+            _repos = repos;
+
+            _path = path;
+            _isInStaging = isInStaging;
+        }
+
+        public void Stage()
+        {
+            if (IsInStaging)
+                return;
+
+            _repos.Add(Path);
+        }
+
+        public void Unstage()
+        {
+            if (IsInStaging == false)
+                return;
+
+            ;
+        }
     }
 }

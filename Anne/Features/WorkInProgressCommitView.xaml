@@ -1,8 +1,43 @@
-﻿<DockPanel x:Class="Anne.Features.WorkInProgressCommitView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-</DockPanel>
+﻿<Grid x:Class="Anne.Features.WorkInProgressCommitView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      d:DesignHeight="300"
+      d:DesignWidth="300"
+      mc:Ignorable="d">
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <ListView Grid.Row="1"
+              ItemsSource="{Binding ChangingFiles.Value,
+                                    Mode=OneWay}"
+              ScrollViewer.CanContentScroll="True"
+              SelectedItem="{Binding SelectedChangingFile.Value}"
+              SelectionMode="Single"
+              VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.ScrollUnit="Pixel"
+              VirtualizingPanel.VirtualizationMode="Recycling">
+        <ListView.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+            </ItemsPanelTemplate>
+        </ListView.ItemsPanel>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                    <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                    <CheckBox IsChecked="{Binding IsInStaging.Value}" />
+                    <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                    <TextBlock Margin="4,0,0,0" Text="{Binding Path, Mode=OneTime}" />
+                </StackPanel>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+
+    <!--<features:FileDiffView Grid.Row="2" DataContext="{Binding SelectedChangingFile.Value, Mode=OneWay}" />-->
+</Grid>

@@ -59,7 +59,7 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             // ファイルステータス
-            FileStatus = new FileStatusVm(model.FileStatus)
+            FileStatus = new FileStatusVm(model)
                 .AddTo(MultipleDisposable);
 
             // コミット
@@ -82,7 +82,7 @@ namespace Anne.Features
                 if (changeingFiles.Any())
                 {
                     if (frontItem == null || frontItem is DoneCommitVm)
-                        Commits.InsertOnScheduler(0, new WorkInProgressCommitVm());
+                        Commits.InsertOnScheduler(0, new WorkInProgressCommitVm(FileStatus));
                 }
                 else
                 {

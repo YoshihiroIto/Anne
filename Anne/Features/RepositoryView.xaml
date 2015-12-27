@@ -40,14 +40,6 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="ChangingFileTemplate" DataType="{x:Type features:ChangingFileVm}">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Path, Mode=OneTime}" />
-                <TextBlock Text="{Binding IsInStaging, Mode=OneTime}" />
-                <Rectangle Height="1" Fill="LightGray" />
-            </StackPanel>
-        </DataTemplate>
-
         <CollectionViewSource x:Key="SortedLocalBranches" Source="{Binding LocalBranches, Mode=OneWay}">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="LocalName.Value" />
@@ -241,8 +233,6 @@
 
         <!--  ジョブ  -->
         <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
-        <ListView DockPanel.Dock="Top" ItemsSource="{Binding JobSummries, Mode=OneWay}" />
-
-        <ListView ItemTemplate="{StaticResource ChangingFileTemplate}" ItemsSource="{Binding FileStatus.ChangingFiles.Value, Mode=OneWay}" />
+        <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
     </DockPanel>
 </Grid>
