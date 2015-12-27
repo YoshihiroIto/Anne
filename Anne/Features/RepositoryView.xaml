@@ -221,16 +221,6 @@
             </i:Interaction.Triggers>
         </Button>
 
-        <Button Margin="0,8,0,0"
-                Content="Status Test"
-                DockPanel.Dock="Top">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <behaviors:LivetCallMethodAction MethodName="StatusTest" MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
-
         <!--  ジョブ  -->
         <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
         <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
