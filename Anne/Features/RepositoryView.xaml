@@ -9,6 +9,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+      xmlns:selector="clr-namespace:Anne.Features.Selector"
       d:DesignHeight="300"
       d:DesignWidth="800"
       mc:Ignorable="d">
@@ -31,20 +32,15 @@
             </Style.Triggers>
         </Style>
 
-        <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}"> <StackPanel Orientation="Horizontal">
+        <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Style="{StaticResource CurrentMarkStyle}" />
                 <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
                 <TextBlock Text="{Binding LocalName.Value, Mode=OneWay}" />
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="CommitTemplate" DataType="{x:Type git:Commit}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding MessageShort, Mode=OneTime}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="ChangingFileTemplate"  DataType="{x:Type features:ChangingFileVm}">
+        <DataTemplate x:Key="ChangingFileTemplate" DataType="{x:Type features:ChangingFileVm}">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Path, Mode=OneTime}" />
                 <TextBlock Text="{Binding IsInStaging, Mode=OneTime}" />
@@ -77,6 +73,36 @@
                            SnapsToDevicePixels="True" />
             </StackPanel>
         </DataTemplate>
+
+        <!--  コミットリスト  -->
+        <DataTemplate x:Key="DoneCommitListItemTemplate" DataType="{x:Type features:DoneCommitVm}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Caption, Mode=OneTime}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="WorkInProgressCommitListItemTemplate" DataType="{x:Type features:WorkInProgressCommitVm}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontWeight="Bold" Text="{Binding Caption, Mode=OneTime}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <selector:CommitDataSelector x:Key="CommitListItemDataSelector"
+                                     Done="{StaticResource DoneCommitListItemTemplate}"
+                                     WorkInProgress="{StaticResource WorkInProgressCommitListItemTemplate}" />
+
+        <!--  コミットビュー  -->
+        <DataTemplate x:Key="DoneCommitViewTemplate" DataType="{x:Type features:DoneCommitVm}">
+            <features:DoneCommitView />
+        </DataTemplate>
+
+        <DataTemplate x:Key="WorkInProgressCommitViewTemplate" DataType="{x:Type features:WorkInProgressCommitVm}">
+            <features:WorkInProgressCommitView />
+        </DataTemplate>
+
+        <selector:CommitDataSelector x:Key="CommitViewDataSelector"
+                                     Done="{StaticResource DoneCommitViewTemplate}"
+                                     WorkInProgress="{StaticResource WorkInProgressCommitViewTemplate}" />
     </Grid.Resources>
 
     <Grid.ColumnDefinitions>
@@ -122,7 +148,7 @@
     </DockPanel>
 
     <ListView Grid.Column="1"
-              ItemTemplate="{StaticResource CommitTemplate}"
+              ItemTemplateSelector="{StaticResource CommitListItemDataSelector}"
               ItemsSource="{Binding Commits,
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
@@ -138,7 +164,10 @@
         </ListView.ItemsPanel>
     </ListView>
 
-    <features:DoneCommitView Grid.Column="2" DataContext="{Binding SelectedCommit.Value, Mode=OneWay}" />
+    <ContentControl Grid.Column="2"
+                    Content="{Binding SelectedCommit.Value,
+                                      Mode=OneWay}"
+                    ContentTemplateSelector="{StaticResource CommitViewDataSelector}" />
 
     <!--  テスト用  -->
     <DockPanel Grid.Column="3" LastChildFill="True">

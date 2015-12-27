@@ -11,6 +11,9 @@ namespace Anne.Features
 {
     public class DoneCommitVm : ViewModelBase, ICommitVm
     {
+        // ICommitVm
+        public string Caption => MessageShort;
+
         public string Message => _model.Message;
         public string MessageShort => _model.MessageShort;
         public string Parents => string.Join(", ", _model.ParentShaShorts);

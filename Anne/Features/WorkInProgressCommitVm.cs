@@ -5,6 +5,7 @@ namespace Anne.Features
 {
     public class WorkInProgressCommitVm : ViewModelBase, ICommitVm
     {
-         
+        // ICommitVm
+        public string Caption => "Uncommited changes";
     }
 }
