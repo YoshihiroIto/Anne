@@ -20,7 +20,7 @@ namespace Anne.Features
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
-        public ObservableCollection<ICommitVm> Commits { get; private set; }
+        public ReactiveCollection<ICommitVm> Commits { get; }
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
 
@@ -36,9 +36,6 @@ namespace Anne.Features
         {
             Debug.Assert(model != null);
             _model = model;
-
-            FileStatus = new FileStatusVm(model.FileStatus)
-                .AddTo(MultipleDisposable);
 
             JobSummries = _model.JobSummries
                 .ToReadOnlyReactiveCollection(UIDispatcherScheduler.Default)
@@ -61,15 +58,42 @@ namespace Anne.Features
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
 
+            // ファイルステータス
+            FileStatus = new FileStatusVm(model.FileStatus)
+                .AddTo(MultipleDisposable);
+
             // コミット
+            Commits = new ReactiveCollection<ICommitVm>()
+                .AddTo(MultipleDisposable);
+
             _model.Commits.Subscribe(src =>
             {
-                Commits?.OfType<IDisposable>().ForEach(x => x.Dispose());
-                Commits = new ObservableCollection<ICommitVm>(src.Select(x => new DoneCommitVm(x)));
+                Commits.OfType<IDisposable>().ForEach(x => x.Dispose());
+                Commits.AddRangeOnScheduler(src.Select(x => new DoneCommitVm(x)));
             }).AddTo(MultipleDisposable);
 
             new AnonymousDisposable(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
+
+            FileStatus.ChangingFiles.Subscribe(changeingFiles =>
+            {
+                var frontItem = Commits.FirstOrDefault();
+
+                if (changeingFiles.Any())
+                {
+                    if (frontItem == null || frontItem is DoneCommitVm)
+                        Commits.InsertOnScheduler(0, new WorkInProgressCommitVm());
+                }
+                else
+                {
+                    var vm = frontItem as WorkInProgressCommitVm;
+                    if (vm != null)
+                    {
+                        Commits.RemoveAtOnScheduler(0);
+                        vm.Dispose();
+                    }
+                }
+            });
 
             // 選択アイテム
             SelectedCommit = new ReactiveProperty<ICommitVm>().AddTo(MultipleDisposable);
