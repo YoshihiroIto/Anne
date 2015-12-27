@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
@@ -105,12 +106,32 @@ namespace Anne.Model.Git
         {
             _jobQueue.AddJob(
                 $"CancelAdd: {string.Join(",", paths)}",
-                () => Internal.Index.Replace(Internal.Head.Tip, paths ));
+                () => Internal.Index.Replace(Internal.Head.Tip, paths));
         }
 
         public void AddJob(string summry, Action action)
         {
             _jobQueue.AddJob(summry, action);
+        }
+
+        public void ExecuteJobSync(string summry, Action action)
+        {
+            // todo:Mutexが望む動作をしてくれない。要調査
+
+            // var mutex = new Mutex();
+            var done = false;
+
+            _jobQueue.AddJob(summry, () =>
+            {
+                action();
+
+                // mutex.ReleaseMutex();
+                done = true;
+            });
+
+            // mutex.WaitOne();
+            while (done == false)
+                Thread.Sleep(0);
         }
 
         #region Test

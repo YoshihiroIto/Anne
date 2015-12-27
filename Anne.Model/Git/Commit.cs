@@ -27,6 +27,7 @@ namespace Anne.Model.Git
         public DateTimeOffset When => Internal.Author.When;
 
         private ObservableCollection<FilePatch> _filePatches = new ObservableCollection<FilePatch>();
+
         public ObservableCollection<FilePatch> FilePatches
         {
             set { SetProperty(ref _filePatches, value); }
@@ -57,24 +58,31 @@ namespace Anne.Model.Git
             _repos = repos;
             Internal = src;
 
-            new AnonymousDisposable(() =>
-            {
-                _filePatches?.ForEach(f => f.Dispose());
-            }).AddTo(MultipleDisposable);
+            new AnonymousDisposable(() => _filePatches?.ForEach(f => f.Dispose()))
+                .AddTo(MultipleDisposable);
         }
 
         private IEnumerable<FilePatch> MakeFilePatches()
         {
-            return
-                Internal.Parents
-                    .SelectMany(p => _repos.Internal.Diff.Compare<Patch>(p.Tree, Internal.Tree))
-                    .Select(c =>
-                        new FilePatch
-                        {
-                            Path = c.Path,
-                            Patch = c.Patch
-                        }
-                    );
+            IEnumerable<FilePatch> patches = null;
+
+            _repos.ExecuteJobSync(
+                "MakeFilePatches()",
+                () =>
+                {
+                    patches = Internal.Parents
+                        .SelectMany(p => _repos.Internal.Diff.Compare<Patch>(p.Tree, Internal.Tree))
+                        .Select(c =>
+                            new FilePatch
+                            {
+                                Path = c.Path,
+                                Patch = c.Patch
+                            }
+                        );
+                });
+
+            Debug.Assert(patches != null);
+            return patches;
         }
     }
 }
