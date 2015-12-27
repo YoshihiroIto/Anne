@@ -107,9 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features\ChangingFileVm.cs" />
-    <Compile Include="Features\CommitVm.cs" />
-    <Compile Include="Features\CommitLogView.xaml.cs">
-      <DependentUpon>CommitLogView.xaml</DependentUpon>
+    <Compile Include="Features\DoneCommitVm.cs" />
+    <Compile Include="Features\DoneCommitView.xaml.cs">
+      <DependentUpon>DoneCommitView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\FileDiffTextEditor.cs" />
     <Compile Include="Features\FileDiffTextEditorHelper.cs" />
@@ -120,6 +120,7 @@
     <Compile Include="Features\FileDiffVm.cs" />
     <Compile Include="Features\FileDiffTextEditorBackgroundRenderer.cs" />
     <Compile Include="Features\FileStatusVm.cs" />
+    <Compile Include="Features\Interfaces\ICommitVm.cs" />
     <Compile Include="Features\RepositoryView.xaml.cs">
       <DependentUpon>RepositoryView.xaml</DependentUpon>
     </Compile>
@@ -127,11 +128,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Features\CommitLogView.xaml">
+    <Page Include="Features\DoneCommitView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Features\FileDiffView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\WorkInProgressCommitView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -145,6 +150,9 @@
     </Compile>
     <Compile Include="Features\BranchVm.cs" />
     <Compile Include="Features\RepositoryVm.cs" />
+    <Compile Include="Features\WorkInProgressCommitView.xaml.cs">
+      <DependentUpon>WorkInProgressCommitView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\MainWindowVm.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Livet.Messaging;
@@ -19,11 +20,11 @@ namespace Anne.Features
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
-        public ObservableCollection<CommitVm> Commits { get; private set; }
+        public ObservableCollection<ICommitVm> Commits { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
 
-        public ReactiveProperty<CommitVm> SelectedCommit { get; }
+        public ReactiveProperty<ICommitVm> SelectedCommit { get; }
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
@@ -63,15 +64,15 @@ namespace Anne.Features
             // コミット
             _model.Commits.Subscribe(src =>
             {
-                Commits?.ForEach(x => x.Dispose());
-                Commits = new ObservableCollection<CommitVm>(src.Select(x => new CommitVm(x)));
+                Commits?.OfType<IDisposable>().ForEach(x => x.Dispose());
+                Commits = new ObservableCollection<ICommitVm>(src.Select(x => new DoneCommitVm(x)));
             }).AddTo(MultipleDisposable);
 
-            new AnonymousDisposable(() => Commits?.ForEach(x => x.Dispose()))
+            new AnonymousDisposable(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
 
             // 選択アイテム
-            SelectedCommit = new ReactiveProperty<CommitVm>().AddTo(MultipleDisposable);
+            SelectedCommit = new ReactiveProperty<ICommitVm>().AddTo(MultipleDisposable);
             SelectedLocalBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
             SelectedRemoteBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
 

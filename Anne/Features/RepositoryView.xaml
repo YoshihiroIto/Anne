@@ -138,7 +138,7 @@
         </ListView.ItemsPanel>
     </ListView>
 
-    <features:CommitLogView Grid.Column="2" DataContext="{Binding SelectedCommit.Value, Mode=OneWay}" />
+    <features:DoneCommitView Grid.Column="2" DataContext="{Binding SelectedCommit.Value, Mode=OneWay}" />
 
     <!--  テスト用  -->
     <DockPanel Grid.Column="3" LastChildFill="True">

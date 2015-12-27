@@ -1,11 +1,11 @@
 ﻿namespace Anne.Features
 {
     /// <summary>
-    /// CommitLogView.xaml の相互作用ロジック
+    /// DoneCommitView.xaml の相互作用ロジック
     /// </summary>
-    public partial class CommitLogView
+    public partial class DoneCommitView
     {
-        public CommitLogView()
+        public DoneCommitView()
         {
             InitializeComponent();
         }

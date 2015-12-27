@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -8,7 +9,7 @@ using Reactive.Bindings.Extensions;
 
 namespace Anne.Features
 {
-    public class CommitVm : ViewModelBase
+    public class DoneCommitVm : ViewModelBase, ICommitVm
     {
         public string Message => _model.Message;
         public string MessageShort => _model.MessageShort;
@@ -68,7 +69,7 @@ namespace Anne.Features
 
         private readonly Model.Git.Commit _model;
 
-        public CommitVm(Model.Git.Commit model)
+        public DoneCommitVm(Model.Git.Commit model)
         {
             Debug.Assert(model != null);
             _model = model;
