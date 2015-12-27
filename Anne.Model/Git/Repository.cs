@@ -101,6 +101,13 @@ namespace Anne.Model.Git
                 () => Internal.Index.Add(path));
         }
 
+        public void CancelAdd(params string[] paths)
+        {
+            _jobQueue.AddJob(
+                $"CancelAdd: {string.Join(",", paths)}",
+                () => Internal.Index.Replace(Internal.Head.Tip, paths ));
+        }
+
         public void AddJob(string summry, Action action)
         {
             _jobQueue.AddJob(summry, action);

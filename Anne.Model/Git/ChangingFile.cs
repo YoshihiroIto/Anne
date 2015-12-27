@@ -44,7 +44,7 @@ namespace Anne.Model.Git
             if (IsInStaging == false)
                 return;
 
-            ;
+            _repos.CancelAdd(Path);
         }
     }
 }
