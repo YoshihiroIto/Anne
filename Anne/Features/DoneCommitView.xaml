@@ -111,7 +111,7 @@
         </Grid.RowDefinitions>
 
         <ListView Grid.Row="0"
-                  ItemsSource="{Binding FilePatches,
+                  ItemsSource="{Binding FileDiffs,
                                         Mode=OneWay}"
                   ScrollViewer.CanContentScroll="True"
                   SelectedItem="{Binding SelectedFilePatch.Value}"

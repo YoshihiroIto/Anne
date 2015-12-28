@@ -75,6 +75,7 @@ namespace Anne.Features
             new AnonymousDisposable(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
 
+            // todo:_model.Commits と FileStatus.ChangingFiles をマージする
             FileStatus.ChangingFiles.Subscribe(changeingFiles =>
             {
                 var frontItem = Commits.FirstOrDefault();

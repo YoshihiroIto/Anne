@@ -2,7 +2,7 @@
 
 namespace Anne.Model.Git
 {
-    public class FilePatch : ModelBase
+    public class FileDiff : ModelBase
     {
         private string _path;
         public string Path

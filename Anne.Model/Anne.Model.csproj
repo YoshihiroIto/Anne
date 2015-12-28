@@ -90,7 +90,7 @@
     <Compile Include="Git\FileStatus.cs" />
     <Compile Include="Git\Branch.cs" />
     <Compile Include="Git\Commit.cs" />
-    <Compile Include="Git\FilePatch.cs" />
+    <Compile Include="Git\FileDiff.cs" />
     <Compile Include="Git\Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

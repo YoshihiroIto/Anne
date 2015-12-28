@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Anne.Features.Selector
+namespace Anne.Features.Selectors
 {
     public class CommitDataSelector : DataTemplateSelector
     {

@@ -9,7 +9,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-      xmlns:selector="clr-namespace:Anne.Features.Selector"
+      xmlns:selectors="clr-namespace:Anne.Features.Selectors"
       d:DesignHeight="300"
       d:DesignWidth="800"
       mc:Ignorable="d">
@@ -79,7 +79,7 @@
             </StackPanel>
         </DataTemplate>
 
-        <selector:CommitDataSelector x:Key="CommitListItemDataSelector"
+        <selectors:CommitDataSelector x:Key="CommitListItemDataSelector"
                                      Done="{StaticResource DoneCommitListItemTemplate}"
                                      WorkInProgress="{StaticResource WorkInProgressCommitListItemTemplate}" />
 
@@ -92,7 +92,7 @@
             <features:WorkInProgressCommitView />
         </DataTemplate>
 
-        <selector:CommitDataSelector x:Key="CommitViewDataSelector"
+        <selectors:CommitDataSelector x:Key="CommitViewDataSelector"
                                      Done="{StaticResource DoneCommitViewTemplate}"
                                      WorkInProgress="{StaticResource WorkInProgressCommitViewTemplate}" />
     </Grid.Resources>

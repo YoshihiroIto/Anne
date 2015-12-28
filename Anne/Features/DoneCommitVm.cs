@@ -55,14 +55,14 @@ namespace Anne.Features
 
         #endregion
 
-        private ReadOnlyReactiveCollection<FileDiffVm> _filePatches;
+        private ReadOnlyReactiveCollection<FileDiffVm> _fileDiffs;
 
-        public ReadOnlyReactiveCollection<FileDiffVm> FilePatches
+        public ReadOnlyReactiveCollection<FileDiffVm> FileDiffs
         {
             get
             {
-                return _filePatches ?? (
-                    _filePatches = _model.FilePatches
+                return _fileDiffs ?? (
+                    _fileDiffs = _model.FileDiffs
                         .ToReadOnlyReactiveCollection(x => new FileDiffVm(x))
                         .AddTo(MultipleDisposable));
             }

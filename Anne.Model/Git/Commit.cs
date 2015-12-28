@@ -26,25 +26,25 @@ namespace Anne.Model.Git
         public string AutherEmail => Internal.Author.Email;
         public DateTimeOffset When => Internal.Author.When;
 
-        private ObservableCollection<FilePatch> _filePatches = new ObservableCollection<FilePatch>();
+        private ObservableCollection<FileDiff> _fileDiffs = new ObservableCollection<FileDiff>();
 
-        public ObservableCollection<FilePatch> FilePatches
+        public ObservableCollection<FileDiff> FileDiffs
         {
-            set { SetProperty(ref _filePatches, value); }
+            set { SetProperty(ref _fileDiffs, value); }
 
             get
             {
-                if (_isFilePatchesMakeDone == false)
+                if (_isFileDiffsMakeDone == false)
                 {
-                    _isFilePatchesMakeDone = true;
-                    Task.Run(() => MakeFilePatches().ForEach(x => FilePatches.Add(x)));
+                    _isFileDiffsMakeDone = true;
+                    Task.Run(() => MakeFileDiffs().ForEach(x => FileDiffs.Add(x)));
                 }
 
-                return _filePatches;
+                return _fileDiffs;
             }
         }
 
-        private volatile bool _isFilePatchesMakeDone;
+        private volatile bool _isFileDiffsMakeDone;
 
         internal LibGit2Sharp.Commit Internal { get; }
 
@@ -58,22 +58,22 @@ namespace Anne.Model.Git
             _repos = repos;
             Internal = src;
 
-            new AnonymousDisposable(() => _filePatches?.ForEach(f => f.Dispose()))
+            new AnonymousDisposable(() => _fileDiffs?.ForEach(f => f.Dispose()))
                 .AddTo(MultipleDisposable);
         }
 
-        private IEnumerable<FilePatch> MakeFilePatches()
+        private IEnumerable<FileDiff> MakeFileDiffs()
         {
-            IEnumerable<FilePatch> patches = null;
+            IEnumerable<FileDiff> fileDiffs = null;
 
             _repos.ExecuteJobSync(
-                "MakeFilePatches()",
+                "MakeFileDiffs()",
                 () =>
                 {
-                    patches = Internal.Parents
+                    fileDiffs = Internal.Parents
                         .SelectMany(p => _repos.Internal.Diff.Compare<Patch>(p.Tree, Internal.Tree))
                         .Select(c =>
-                            new FilePatch
+                            new FileDiff
                             {
                                 Path = c.Path,
                                 Patch = c.Patch
@@ -81,8 +81,8 @@ namespace Anne.Model.Git
                         );
                 });
 
-            Debug.Assert(patches != null);
-            return patches;
+            Debug.Assert(fileDiffs != null);
+            return fileDiffs;
         }
     }
 }

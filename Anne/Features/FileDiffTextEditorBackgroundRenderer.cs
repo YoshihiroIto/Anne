@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows.Media;
+using Anne.Features.Interfaces;
 using Anne.Foundation;
 using ICSharpCode.AvalonEdit.Rendering;
 
@@ -11,7 +12,7 @@ namespace Anne.Features
         public KnownLayer Layer => KnownLayer.Background;
 
         private readonly FileDiffTextEditor _editor;
-        private FileDiffVm.DiffLine[] DiffLines => ((FileDiffVm) _editor?.DataContext)?.DiffLines;
+        private DiffLine[] DiffLines => ((IFileDiffVm) _editor?.DataContext)?.DiffLines;
 
         public FileDiffTextEditorBackgroundRenderer(FileDiffTextEditor editor)
         {
@@ -31,7 +32,7 @@ namespace Anne.Features
             if (args.DiffLine.ContentDiffs == null)
                 return;
 
-            var brush = args.DiffLine.LineType == FileDiffVm.DiffLine.LineTypes.Add
+            var brush = args.DiffLine.LineType == DiffLine.LineTypes.Add
                 ? Constants.HighlightAddBackground
                 : Constants.HighlightRemoveBackground;
 

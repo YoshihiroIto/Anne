@@ -34,8 +34,8 @@ namespace Anne.Foundation
         {
             Debug.WriteLine("LoadImage: " + email);
 
-// ネットアクセスしたくない時用
-#if !true
+// ネットアクセスしたくない時はfalseにする
+#if true
             var url = GenerateUrlFromEmail(email);
 
             BitmapImage bitmap = null;

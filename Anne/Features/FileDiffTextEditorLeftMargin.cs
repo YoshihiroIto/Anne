@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
+using Anne.Features.Interfaces;
 using Anne.Foundation;
 using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
@@ -12,7 +13,7 @@ namespace Anne.Features
     public class FileDiffTextEditorLeftMargin : AbstractMargin
     {
         private readonly FileDiffTextEditor _editor;
-        private FileDiffVm.DiffLine[] DiffLines => ((FileDiffVm) _editor?.DataContext)?.DiffLines;
+        private DiffLine[] DiffLines => ((IFileDiffVm) _editor?.DataContext)?.DiffLines;
 
         private const double IndexWidth = 40;
         private const double LineTypeWidth = 16;
@@ -104,40 +105,40 @@ namespace Anne.Features
                 DrawFileTypeMark(args.DrawingContext, args.Rect, args.DiffLine);
         }
 
-        private static void DrawIndex(DrawingContext dc, Rect rect, FileDiffVm.DiffLine diffLine)
+        private static void DrawIndex(DrawingContext dc, Rect rect, DiffLine diffLine)
         {
             switch(diffLine.LineType)
             {
-                case FileDiffVm.DiffLine.LineTypes.ChunckTag:
+                case DiffLine.LineTypes.ChunckTag:
                     DrawIndexText(dc, rect, "･･･", OldIndexOffset, TextAlignment.Center);
                     DrawIndexText(dc, rect, "･･･", NewIndexOffset, TextAlignment.Center);
                     break;
 
-                case FileDiffVm.DiffLine.LineTypes.Normal:
+                case DiffLine.LineTypes.Normal:
                     DrawIndexText(dc, rect, diffLine.OldIndex, OldIndexOffset, TextAlignment.Right);
                     DrawIndexText(dc, rect, diffLine.NewIndex, NewIndexOffset, TextAlignment.Right);
                     break;
 
-                case FileDiffVm.DiffLine.LineTypes.Add:
+                case DiffLine.LineTypes.Add:
                     DrawIndexText(dc, rect, diffLine.NewIndex, NewIndexOffset, TextAlignment.Right);
                     break;
 
-                case FileDiffVm.DiffLine.LineTypes.Delete:
+                case DiffLine.LineTypes.Delete:
                     DrawIndexText(dc, rect, diffLine.OldIndex, OldIndexOffset, TextAlignment.Right);
                     break;
             }
         }
 
-        private static void DrawFileTypeMark(DrawingContext dc, Rect rect, FileDiffVm.DiffLine diffLine)
+        private static void DrawFileTypeMark(DrawingContext dc, Rect rect, DiffLine diffLine)
         {
             string mark;
             Brush brush;
-            if (diffLine.LineType == FileDiffVm.DiffLine.LineTypes.Add)
+            if (diffLine.LineType == DiffLine.LineTypes.Add)
             {
                 mark = "+";
                 brush = Brushes.Green;
             }
-            else if (diffLine.LineType == FileDiffVm.DiffLine.LineTypes.Delete)
+            else if (diffLine.LineType == DiffLine.LineTypes.Delete)
             {
                 mark = "-";
                 brush = Brushes.Red;

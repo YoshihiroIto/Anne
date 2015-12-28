@@ -107,6 +107,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features\ChangingFileVm.cs" />
+    <Compile Include="Features\Converters\PathStringToSyntaxHighlightingConverter.cs" />
+    <Compile Include="Features\DiffLine.cs" />
     <Compile Include="Features\DoneCommitVm.cs" />
     <Compile Include="Features\DoneCommitView.xaml.cs">
       <DependentUpon>DoneCommitView.xaml</DependentUpon>
@@ -121,6 +123,7 @@
     <Compile Include="Features\FileDiffTextEditorBackgroundRenderer.cs" />
     <Compile Include="Features\FileStatusVm.cs" />
     <Compile Include="Features\Interfaces\ICommitVm.cs" />
+    <Compile Include="Features\Interfaces\IFileDiffVm.cs" />
     <Compile Include="Features\RepositoryView.xaml.cs">
       <DependentUpon>RepositoryView.xaml</DependentUpon>
     </Compile>
@@ -150,7 +153,7 @@
     </Compile>
     <Compile Include="Features\BranchVm.cs" />
     <Compile Include="Features\RepositoryVm.cs" />
-    <Compile Include="Features\Selector\CommitDataSelector.cs" />
+    <Compile Include="Features\Selectors\CommitDataSelector.cs" />
     <Compile Include="Features\WorkInProgressCommitView.xaml.cs">
       <DependentUpon>WorkInProgressCommitView.xaml</DependentUpon>
     </Compile>
@@ -214,6 +217,7 @@
       <Name>Livet2</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

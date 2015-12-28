@@ -14,12 +14,12 @@ namespace Anne.Features
             public VisualLine VisualLine { get; set; }
             public DrawingContext DrawingContext { get; set; }
             public Rect Rect { get; set; }
-            public FileDiffVm.DiffLine DiffLine { get; set; }
+            public DiffLine DiffLine { get; set; }
             public int Index { get; set; }
         }
 
         public static void DrawBackground(
-            TextView textView, DrawingContext dc, double x, double width, FileDiffVm.DiffLine[] diffLines,
+            TextView textView, DrawingContext dc, double x, double width, DiffLine[] diffLines,
             bool isLight,
             Action<PerLineDrawArgs> perLineDraw = null)
         {
@@ -37,19 +37,19 @@ namespace Anne.Features
 
                 switch (diffLine.LineType)
                 {
-                    case FileDiffVm.DiffLine.LineTypes.ChunckTag:
+                    case DiffLine.LineTypes.ChunckTag:
                         brush = isLight
                             ? Constants.LightChunckTagBackground
                             : Constants.ChunckTagBackground;
                         break;
 
-                    case FileDiffVm.DiffLine.LineTypes.Add:
+                    case DiffLine.LineTypes.Add:
                         brush = isLight
                             ? Constants.LightAddBackground
                             : Constants.AddBackground;
                         break;
 
-                    case FileDiffVm.DiffLine.LineTypes.Delete:
+                    case DiffLine.LineTypes.Delete:
                         brush = isLight
                             ? Constants.LightRemoveBackground
                             : Constants.RemoveBackground;
