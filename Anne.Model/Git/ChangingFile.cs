@@ -17,8 +17,16 @@ namespace Anne.Model.Git
             internal set { SetProperty(ref _isInStaging, value); }
         }
 
+
+        public string Patch
+        {
+            get { return _patch; }
+            set { SetProperty(ref _patch, value); } 
+        }
+
         private bool _isInStaging;
         private string _path;
+        private string _patch;
 
         private readonly Repository _repos;
 

@@ -34,7 +34,7 @@ namespace Anne.Model.Git
         public string Path { get; }
 
         // 内部状態
-        internal LibGit2Sharp.Repository Internal { get; }
+        public LibGit2Sharp.Repository Internal { get; }
         private readonly JobQueue _jobQueue = new JobQueue();
 
         public Repository(string path)
