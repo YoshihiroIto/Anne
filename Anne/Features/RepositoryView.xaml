@@ -101,7 +101,7 @@
         <ColumnDefinition Width="140" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="300" />
+        <ColumnDefinition Width="140" />
     </Grid.ColumnDefinitions>
 
     <DockPanel LastChildFill="True">
