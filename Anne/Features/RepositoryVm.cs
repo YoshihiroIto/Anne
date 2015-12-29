@@ -83,7 +83,7 @@ namespace Anne.Features
                 if (changeingFiles.Any())
                 {
                     if (frontItem == null || frontItem is DoneCommitVm)
-                        Commits.InsertOnScheduler(0, new WipCommitVm(FileStatus));
+                        Commits.InsertOnScheduler(0, new WipCommitVm(this));
                 }
                 else
                 {
@@ -106,6 +106,11 @@ namespace Anne.Features
                 .ObserveOnUIDispatcher()
                 .Subscribe(e => ShowDialog(e.Exception))
                 .AddTo(MultipleDisposable);
+        }
+
+        public void Commit(string message)
+        {
+            _model.Commit(message);
         }
 
         private void ShowDialog(Exception e)

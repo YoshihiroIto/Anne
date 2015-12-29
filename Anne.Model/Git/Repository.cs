@@ -109,6 +109,17 @@ namespace Anne.Model.Git
                 () => Internal.Unstage(paths));
         }
 
+        public void Commit(string message)
+        {
+            _jobQueue.AddJob(
+                $"Commit: {message}",
+                () =>
+                {
+                    var author = Internal.Config.BuildSignature(DateTimeOffset.Now);
+                    Internal.Commit(message, author, author);
+                });
+        }
+
         public void AddJob(string summry, Action action)
         {
             _jobQueue.AddJob(summry, action);

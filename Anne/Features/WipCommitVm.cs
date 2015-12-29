@@ -24,22 +24,20 @@ namespace Anne.Features
             set { SetProperty(ref _description, value); }
         }
 
-        public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles
-            => _fileStatus.WipFiles;
+        public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles => _repos.FileStatus.WipFiles;
+        public ReactiveCommand CommitCommand { get; }
 
-        public ReactiveProperty<WipFileVm> SelectedWipFile { get; }
-            = new ReactiveProperty<WipFileVm>();
+        public ReactiveProperty<WipFileVm> SelectedWipFile { get; } = new ReactiveProperty<WipFileVm>();
 
-        public ReactiveCommand CommitCommand { get; } 
-
-        private readonly FileStatusVm _fileStatus;
+        private readonly RepositoryVm _repos;
         private string _summry = string.Empty;
         private string _description = string.Empty;
 
-        public WipCommitVm(FileStatusVm fileStatus)
+
+        public WipCommitVm(RepositoryVm repos)
         {
-            Debug.Assert(fileStatus != null);
-            _fileStatus = fileStatus;
+            Debug.Assert(repos != null);
+            _repos = repos;
 
             SelectedWipFile.AddTo(MultipleDisposable);
 
@@ -48,10 +46,8 @@ namespace Anne.Features
                 .ToReactiveCommand()
                 .AddTo(MultipleDisposable);
 
-            CommitCommand.Subscribe(_ =>
-            {
-                Debug.WriteLine("Commit");
-            }).AddTo(MultipleDisposable);
+            CommitCommand.Subscribe(_ => repos.Commit((Summry + "\n\n" + Description).Trim()))
+                .AddTo(MultipleDisposable);
         }
     }
 }
