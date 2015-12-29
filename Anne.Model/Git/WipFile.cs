@@ -44,7 +44,7 @@ namespace Anne.Model.Git
             if (IsInStaging)
                 return;
 
-            _repos.Add(Path);
+            _repos.Stage(Path);
         }
 
         public void Unstage()
@@ -52,7 +52,7 @@ namespace Anne.Model.Git
             if (IsInStaging == false)
                 return;
 
-            _repos.CancelAdd(Path);
+            _repos.Unstage(Path);
         }
     }
 }

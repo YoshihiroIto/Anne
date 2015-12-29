@@ -95,18 +95,18 @@ namespace Anne.Model.Git
             Internal.Network.Remotes.Select(r => r.Name).ForEach(Fetch);
         }
 
-        public void Add(string path)
+        public void Stage(params string[] paths)
         {
             _jobQueue.AddJob(
-                $"Add: {path}",
-                () => Internal.Index.Add(path));
+                $"Stage: {string.Join(",", paths)}",
+                () => Internal.Stage(paths));
         }
 
-        public void CancelAdd(params string[] paths)
+        public void Unstage(params string[] paths)
         {
             _jobQueue.AddJob(
-                $"CancelAdd: {string.Join(",", paths)}",
-                () => Internal.Index.Replace(Internal.Head.Tip, paths));
+                $"Unstage: {string.Join(",", paths)}",
+                () => Internal.Unstage(paths));
         }
 
         public void AddJob(string summry, Action action)
