@@ -26,21 +26,21 @@ namespace Anne.Model.Git
         public string AutherEmail => Internal.Author.Email;
         public DateTimeOffset When => Internal.Author.When;
 
-        private ObservableCollection<FileDiff> _fileDiffs = new ObservableCollection<FileDiff>();
+        private ObservableCollection<ChangeFile> _changeFiles = new ObservableCollection<ChangeFile>();
 
-        public ObservableCollection<FileDiff> FileDiffs
+        public ObservableCollection<ChangeFile> ChangeFiles
         {
-            set { SetProperty(ref _fileDiffs, value); }
+            set { SetProperty(ref _changeFiles, value); }
 
             get
             {
                 if (_isFileDiffsMakeDone == false)
                 {
                     _isFileDiffsMakeDone = true;
-                    Task.Run(() => MakeFileDiffs().ForEach(x => FileDiffs.Add(x)));
+                    Task.Run(() => MakeFileDiffs().ForEach(x => ChangeFiles.Add(x)));
                 }
 
-                return _fileDiffs;
+                return _changeFiles;
             }
         }
 
@@ -58,13 +58,13 @@ namespace Anne.Model.Git
             _repos = repos;
             Internal = src;
 
-            new AnonymousDisposable(() => _fileDiffs?.ForEach(f => f.Dispose()))
+            new AnonymousDisposable(() => _changeFiles?.ForEach(f => f.Dispose()))
                 .AddTo(MultipleDisposable);
         }
 
-        private IEnumerable<FileDiff> MakeFileDiffs()
+        private IEnumerable<ChangeFile> MakeFileDiffs()
         {
-            IEnumerable<FileDiff> fileDiffs = null;
+            IEnumerable<ChangeFile> fileDiffs = null;
 
             _repos.ExecuteJobSync(
                 "MakeFileDiffs()",
@@ -73,7 +73,7 @@ namespace Anne.Model.Git
                     fileDiffs = Internal.Parents
                         .SelectMany(p => _repos.Internal.Diff.Compare<Patch>(p.Tree, Internal.Tree))
                         .Select(c =>
-                            new FileDiff
+                            new ChangeFile
                             {
                                 Path = c.Path,
                                 Patch = c.Patch

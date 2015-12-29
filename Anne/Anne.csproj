@@ -108,19 +108,19 @@
   <ItemGroup>
     <Compile Include="Features\WipFileVm.cs" />
     <Compile Include="Features\Converters\PathStringToSyntaxHighlightingConverter.cs" />
-    <Compile Include="Features\DiffLine.cs" />
+    <Compile Include="Diff\DiffLine.cs" />
     <Compile Include="Features\DoneCommitVm.cs" />
     <Compile Include="Features\DoneCommitView.xaml.cs">
       <DependentUpon>DoneCommitView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Features\FileDiffTextEditor.cs" />
-    <Compile Include="Features\FileDiffTextEditorHelper.cs" />
-    <Compile Include="Features\FileDiffTextEditorLeftMargin.cs" />
-    <Compile Include="Features\FileDiffView.xaml.cs">
-      <DependentUpon>FileDiffView.xaml</DependentUpon>
+    <Compile Include="Diff\DiffTextEditor.cs" />
+    <Compile Include="Diff\DiffTextEditorHelper.cs" />
+    <Compile Include="Diff\DiffTextEditorLeftMargin.cs" />
+    <Compile Include="Diff\DiffView.xaml.cs">
+      <DependentUpon>DiffView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Features\FileDiffVm.cs" />
-    <Compile Include="Features\FileDiffTextEditorBackgroundRenderer.cs" />
+    <Compile Include="Features\ChangeFileVm.cs" />
+    <Compile Include="Diff\DiffTextEditorBackgroundRenderer.cs" />
     <Compile Include="Features\FileStatusVm.cs" />
     <Compile Include="Features\Interfaces\ICommitVm.cs" />
     <Compile Include="Features\Interfaces\IFileDiffVm.cs" />
@@ -135,7 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Features\FileDiffView.xaml">
+    <Page Include="Diff\DiffView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

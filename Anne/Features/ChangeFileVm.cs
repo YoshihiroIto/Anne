@@ -1,20 +1,21 @@
 ﻿using System.Diagnostics;
+using Anne.Diff;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
-using FileDiff = Anne.Model.Git.FileDiff;
+using Anne.Model.Git;
 
 namespace Anne.Features
 {
-    public class FileDiffVm : ViewModelBase, IFileDiffVm
+    public class ChangeFileVm : ViewModelBase, IFileDiffVm
     {
         // IFileDiffVm
         public string Path => _model.Path;
         public string Diff { get; set; }
         public DiffLine[] DiffLines { get; set;  }
 
-        private readonly FileDiff _model;
+        private readonly ChangeFile _model;
 
-        public FileDiffVm(FileDiff model)
+        public ChangeFileVm(ChangeFile model)
         {
             Debug.Assert(model != null);
 

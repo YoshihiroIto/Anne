@@ -1,6 +1,6 @@
 ﻿using ParseDiff;
 
-namespace Anne.Features
+namespace Anne.Diff
 {
     public class DiffLine
     {

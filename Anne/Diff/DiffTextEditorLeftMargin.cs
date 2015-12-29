@@ -8,11 +8,11 @@ using Anne.Foundation;
 using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 
-namespace Anne.Features
+namespace Anne.Diff
 {
-    public class FileDiffTextEditorLeftMargin : AbstractMargin
+    public class DiffTextEditorLeftMargin : AbstractMargin
     {
-        private readonly FileDiffTextEditor _editor;
+        private readonly DiffTextEditor _editor;
         private DiffLine[] DiffLines => ((IFileDiffVm) _editor?.DataContext)?.DiffLines;
 
         private const double IndexWidth = 40;
@@ -23,7 +23,7 @@ namespace Anne.Features
         private const double NewIndexOffset = IndexWidth;
         private const double LineTypeIndexOffset = IndexWidth + IndexWidth;
 
-        public FileDiffTextEditorLeftMargin(FileDiffTextEditor editor)
+        public DiffTextEditorLeftMargin(DiffTextEditor editor)
         {
             Debug.Assert(editor != null);
 
@@ -71,20 +71,20 @@ namespace Anne.Features
         {
             const double x0 = 0;
             const double w0 = MarginWidth - LineTypeWidth;
-            FileDiffTextEditorHelper.DrawBackground(TextView, dc, x0, w0, DiffLines, false, DrawForegroundLeft);
+            DiffTextEditorHelper.DrawBackground(TextView, dc, x0, w0, DiffLines, false, DrawForegroundLeft);
 
             const double x1 = IndexWidth*2;
             const double w1 = LineTypeWidth;
-            FileDiffTextEditorHelper.DrawBackground(TextView, dc, x1, w1, DiffLines, true, DrawForeground);
+            DiffTextEditorHelper.DrawBackground(TextView, dc, x1, w1, DiffLines, true, DrawForeground);
         }
 
-        private static void DrawForegroundLeft(FileDiffTextEditorHelper.PerLineDrawArgs args)
+        private static void DrawForegroundLeft(DiffTextEditorHelper.PerLineDrawArgs args)
         {
             if (args.Index == 0)
                 DrawIndex(args.DrawingContext, args.Rect, args.DiffLine);
         }
 
-        private static void DrawForeground(FileDiffTextEditorHelper.PerLineDrawArgs args)
+        private static void DrawForeground(DiffTextEditorHelper.PerLineDrawArgs args)
         {
             args.DrawingContext.DrawLine(
                 Constants.FramePen,

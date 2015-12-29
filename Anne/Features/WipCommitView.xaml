@@ -4,6 +4,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:features="clr-namespace:Anne.Features"
+      xmlns:diff="clr-namespace:Anne.Diff"
       d:DesignHeight="300"
       d:DesignWidth="300"
       mc:Ignorable="d">
@@ -40,5 +41,5 @@
         </ListView.ItemTemplate>
     </ListView>
 
-    <features:FileDiffView Grid.Row="2" DataContext="{Binding SelectedWipFile.Value, Mode=OneWay}" />
+    <diff:DiffView Grid.Row="2" DataContext="{Binding SelectedWipFile.Value, Mode=OneWay}" />
 </Grid>

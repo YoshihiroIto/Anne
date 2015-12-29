@@ -4,9 +4,9 @@ using System.Windows.Media;
 using Anne.Foundation;
 using ICSharpCode.AvalonEdit.Rendering;
 
-namespace Anne.Features
+namespace Anne.Diff
 {
-    public static class FileDiffTextEditorHelper
+    public static class DiffTextEditorHelper
     {
         public class PerLineDrawArgs
         {

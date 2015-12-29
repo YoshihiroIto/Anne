@@ -5,16 +5,16 @@ using Anne.Features.Interfaces;
 using Anne.Foundation;
 using ICSharpCode.AvalonEdit.Rendering;
 
-namespace Anne.Features
+namespace Anne.Diff
 {
-    public class FileDiffTextEditorBackgroundRenderer : IBackgroundRenderer
+    public class DiffTextEditorBackgroundRenderer : IBackgroundRenderer
     {
         public KnownLayer Layer => KnownLayer.Background;
 
-        private readonly FileDiffTextEditor _editor;
+        private readonly DiffTextEditor _editor;
         private DiffLine[] DiffLines => ((IFileDiffVm) _editor?.DataContext)?.DiffLines;
 
-        public FileDiffTextEditorBackgroundRenderer(FileDiffTextEditor editor)
+        public DiffTextEditorBackgroundRenderer(DiffTextEditor editor)
         {
             Debug.Assert(editor != null);
 
@@ -23,11 +23,11 @@ namespace Anne.Features
 
         public void Draw(TextView textView, DrawingContext dc)
         {
-            FileDiffTextEditorHelper.DrawBackground(
+            DiffTextEditorHelper.DrawBackground(
                 textView, dc, 0, textView.ActualWidth, DiffLines, true, DrawContentDiff);
         }
 
-        private static void DrawContentDiff(FileDiffTextEditorHelper.PerLineDrawArgs args)
+        private static void DrawContentDiff(DiffTextEditorHelper.PerLineDrawArgs args)
         {
             if (args.DiffLine.ContentDiffs == null)
                 return;

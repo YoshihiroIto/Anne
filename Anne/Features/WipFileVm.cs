@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
+using Anne.Diff;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;

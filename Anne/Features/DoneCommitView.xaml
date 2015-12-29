@@ -4,6 +4,7 @@
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:features="clr-namespace:Anne.Features"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:diff="clr-namespace:Anne.Diff"
            LastChildFill="True"
            d:DesignHeight="300"
            d:DesignWidth="300"
@@ -132,6 +133,6 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <features:FileDiffView Grid.Row="1" DataContext="{Binding SelectedFilePatch.Value, Mode=OneWay}" />
+        <diff:DiffView Grid.Row="1" DataContext="{Binding SelectedFilePatch.Value, Mode=OneWay}" />
     </Grid>
 </DockPanel>
