@@ -69,13 +69,13 @@
         <!--  コミットリスト  -->
         <DataTemplate x:Key="DoneCommitListItemTemplate" DataType="{x:Type features:DoneCommitVm}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Caption, Mode=OneTime}" />
+                <TextBlock Text="{Binding Summry, Mode=OneTime}" />
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="WipCommitListItemTemplate" DataType="{x:Type features:WipCommitVm}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock FontWeight="Bold" Text="{Binding Caption, Mode=OneTime}" />
+                <TextBlock FontWeight="Bold" Text="{Binding Summry, Mode=OneWay}" />
             </StackPanel>
         </DataTemplate>
 

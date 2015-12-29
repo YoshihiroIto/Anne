@@ -5,14 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      d:DesignHeight="300"
+      d:DesignHeight="600"
       d:DesignWidth="300"
       mc:Ignorable="d">
 
     <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
         <RowDefinition Height="2*" />
-        <RowDefinition Height="2*" />
+        <RowDefinition Height="3*" />
+        <RowDefinition Height="3*" />
     </Grid.RowDefinitions>
 
     <DockPanel Grid.Row="0" LastChildFill="True">
@@ -100,12 +100,14 @@
         </Grid>
 
         <!--  メッセージ  -->
-        <control:TextEditor HorizontalScrollBarVisibility="Hidden"
+        <TextBox HorizontalScrollBarVisibility="Hidden"
+        BorderBrush="{x:Null}"
+        Background="{x:Null}"
                             IsReadOnly="True"
                             Text="{Binding Message,
                                            Mode=OneTime}"
                             VerticalScrollBarVisibility="Auto"
-                            WordWrap="True" />
+                             />
     </DockPanel>
 
     <!--  変更ファイル  -->

@@ -12,7 +12,7 @@ namespace Anne.Features
     public class DoneCommitVm : ViewModelBase, ICommitVm
     {
         // ICommitVm
-        public string Caption => MessageShort;
+        public string Summry => MessageShort;
 
         public string Message => _model.Message;
         public string MessageShort => _model.MessageShort;

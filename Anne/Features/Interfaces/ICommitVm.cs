@@ -2,6 +2,6 @@
 {
     public interface ICommitVm
     {
-        string Caption { get; }
+        string Summry { get; }
     }
 }
