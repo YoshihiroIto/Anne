@@ -10,17 +10,14 @@ namespace Anne.Features
 {
     public class FileStatusVm : ViewModelBase
     {
-        public ReadOnlyReactiveProperty<IEnumerable<ChangingFileVm>> ChangingFiles { get; }
-
-        private readonly Repository _repos;
+        public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles { get; }
 
         public FileStatusVm(Repository repos)
         {
             Debug.Assert(repos != null);
-            _repos = repos;
 
-            ChangingFiles = repos.FileStatus.ChangingFiles
-                .Select(x => x.Select(y => new ChangingFileVm(repos, y)))
+            WipFiles = repos.FileStatus.WipFiles
+                .Select(x => x.Select(y => new WipFileVm(repos, y)))
                 .ToReadOnlyReactiveProperty();
         }
     }

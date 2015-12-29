@@ -106,7 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\ChangingFileVm.cs" />
+    <Compile Include="Features\WipFileVm.cs" />
     <Compile Include="Features\Converters\PathStringToSyntaxHighlightingConverter.cs" />
     <Compile Include="Features\DiffLine.cs" />
     <Compile Include="Features\DoneCommitVm.cs" />
@@ -139,7 +139,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Features\WorkInProgressCommitView.xaml">
+    <Page Include="Features\WipCommitView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -154,10 +154,10 @@
     <Compile Include="Features\BranchVm.cs" />
     <Compile Include="Features\RepositoryVm.cs" />
     <Compile Include="Features\Selectors\CommitDataSelector.cs" />
-    <Compile Include="Features\WorkInProgressCommitView.xaml.cs">
-      <DependentUpon>WorkInProgressCommitView.xaml</DependentUpon>
+    <Compile Include="Features\WipCommitView.xaml.cs">
+      <DependentUpon>WipCommitView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Features\WorkInProgressCommitVm.cs" />
+    <Compile Include="Features\WipCommitVm.cs" />
     <Compile Include="Windows\MainWindowVm.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

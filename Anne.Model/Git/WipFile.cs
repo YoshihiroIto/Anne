@@ -3,7 +3,7 @@ using Anne.Foundation.Mvvm;
 
 namespace Anne.Model.Git
 {
-    public class ChangingFile : ModelBase
+    public class WipFile : ModelBase
     {
         public string Path
         {
@@ -30,7 +30,7 @@ namespace Anne.Model.Git
 
         private readonly Repository _repos;
 
-        public ChangingFile(Repository repos, string path, bool isInStaging)
+        public WipFile(Repository repos, string path, bool isInStaging)
         {
             Debug.Assert(repos != null);
             _repos = repos;

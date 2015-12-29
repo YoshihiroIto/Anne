@@ -7,6 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
+using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using StatefulModel;
@@ -15,8 +16,8 @@ namespace Anne.Model.Git
 {
     public class FileStatus : ModelBase
     {
-        public ReactiveProperty<IEnumerable<ChangingFile>> ChangingFiles { get; } =
-            new ReactiveProperty<IEnumerable<ChangingFile>>(Scheduler.Immediate, new ChangingFile[0]);
+        public ReactiveProperty<IEnumerable<WipFile>> WipFiles { get; } =
+            new ReactiveProperty<IEnumerable<WipFile>>(Scheduler.Immediate, new WipFile[0]);
 
         private readonly Repository _repos;
 
@@ -25,7 +26,7 @@ namespace Anne.Model.Git
             Debug.Assert(repos != null);
             _repos = repos;
 
-            new AnonymousDisposable(() => ChangingFiles.Value.ForEach(c => c.Dispose()))
+            new AnonymousDisposable(() => WipFiles.Value.ForEach(c => c.Dispose()))
                 .AddTo(MultipleDisposable);
 
             UpdateChengingFiles(null);
@@ -60,14 +61,26 @@ namespace Anne.Model.Git
             if (e != null)
                 Debug.WriteLine($"UpdateChengingFiles : {e.FullPath}, {e.Name}, {e.ChangeType}");
 
-            var old = ChangingFiles.Value;
+            var old = WipFiles.Value;
 
             _repos.AddJob("UpdateChengingFiles", () =>
             {
-                ChangingFiles.Value =
-                    _repos.Internal.RetrieveStatus(new LibGit2Sharp.StatusOptions())
+                WipFiles.Value =
+                    _repos.Internal.RetrieveStatus(new StatusOptions())
                         .Where(i => i.State != LibGit2Sharp.FileStatus.Ignored)
-                        .Select(x => new ChangingFile(_repos, x.FilePath, IsInStaging(x.State)))
+                        .Select(x =>
+                        {
+                            var compare = _repos.Internal.Diff.Compare<Patch>(
+                                _repos.Internal.Head.Tip.Tree,
+                                DiffTargets.Index | DiffTargets.WorkingDirectory,
+                                new[] {x.FilePath}
+                                ).FirstOrDefault();
+
+                            return new WipFile(_repos, x.FilePath, IsInStaging(x.State))
+                            {
+                                Patch = compare?.Patch
+                            };
+                        })
                         .ToObservableCollection();
 
                 old.ForEach(c => c.Dispose());

@@ -1,37 +1,32 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Concurrency;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
-using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Repository = Anne.Model.Git.Repository;
 
 namespace Anne.Features
 {
-    public class ChangingFileVm : ViewModelBase, IFileDiffVm
+    public class WipFileVm : ViewModelBase, IFileDiffVm
     {
+        // IFileDiffVm
         public string Path => _model.Path;
-
         public string Diff { get; set; }
         public DiffLine[] DiffLines { get; set; }
 
         public ReactiveProperty<bool> IsInStaging { get; }
 
+        private readonly WipFile _model;
         private ReadOnlyReactiveProperty<bool> IsInStagingFromModel { get; }
 
-        private readonly ChangingFile _model;
-        private readonly Repository _repos;
-
-        public ChangingFileVm(Repository repos, ChangingFile model)
+        public WipFileVm(Repository repos, WipFile model)
             : base(true)
         {
             Debug.Assert(repos != null);
             Debug.Assert(model != null);
-            _repos = repos;
             _model = model;
 
             #region IsInStaging, IsInStagingFromModel
@@ -58,19 +53,7 @@ namespace Anne.Features
 
             #endregion
 
-            MakeDiff();
-        }
-
-        private void MakeDiff()
-        {
-            var c = _repos.Internal.Diff.Compare<Patch>(
-                _repos.Internal.Head.Tip.Tree,
-                DiffTargets.Index | DiffTargets.WorkingDirectory,
-                new[] {Path}
-                ).FirstOrDefault();
-
-            if (c != null)
-                this.MakeDiff(c.Patch);
+            this.MakeDiff(_model.Patch);
         }
     }
 }

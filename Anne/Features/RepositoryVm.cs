@@ -75,19 +75,19 @@ namespace Anne.Features
             new AnonymousDisposable(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
 
-            // todo:_model.Commits と FileStatus.ChangingFiles をマージする
-            FileStatus.ChangingFiles.Subscribe(changeingFiles =>
+            // todo:_model.Commits と FileStatus.WipFiles をマージする
+            FileStatus.WipFiles.Subscribe(changeingFiles =>
             {
                 var frontItem = Commits.FirstOrDefault();
 
                 if (changeingFiles.Any())
                 {
                     if (frontItem == null || frontItem is DoneCommitVm)
-                        Commits.InsertOnScheduler(0, new WorkInProgressCommitVm(FileStatus));
+                        Commits.InsertOnScheduler(0, new WipCommitVm(FileStatus));
                 }
                 else
                 {
-                    var vm = frontItem as WorkInProgressCommitVm;
+                    var vm = frontItem as WipCommitVm;
                     if (vm != null)
                     {
                         Commits.RemoveAtOnScheduler(0);

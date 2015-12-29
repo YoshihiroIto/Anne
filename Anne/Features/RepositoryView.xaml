@@ -73,7 +73,7 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="WorkInProgressCommitListItemTemplate" DataType="{x:Type features:WorkInProgressCommitVm}">
+        <DataTemplate x:Key="WipCommitListItemTemplate" DataType="{x:Type features:WipCommitVm}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock FontWeight="Bold" Text="{Binding Caption, Mode=OneTime}" />
             </StackPanel>
@@ -81,20 +81,20 @@
 
         <selectors:CommitDataSelector x:Key="CommitListItemDataSelector"
                                      Done="{StaticResource DoneCommitListItemTemplate}"
-                                     WorkInProgress="{StaticResource WorkInProgressCommitListItemTemplate}" />
+                                     Wip="{StaticResource WipCommitListItemTemplate}" />
 
         <!--  コミットビュー  -->
         <DataTemplate x:Key="DoneCommitViewTemplate" DataType="{x:Type features:DoneCommitVm}">
             <features:DoneCommitView />
         </DataTemplate>
 
-        <DataTemplate x:Key="WorkInProgressCommitViewTemplate" DataType="{x:Type features:WorkInProgressCommitVm}">
-            <features:WorkInProgressCommitView />
+        <DataTemplate x:Key="WipCommitViewTemplate" DataType="{x:Type features:WipCommitVm}">
+            <features:WipCommitView />
         </DataTemplate>
 
         <selectors:CommitDataSelector x:Key="CommitViewDataSelector"
                                      Done="{StaticResource DoneCommitViewTemplate}"
-                                     WorkInProgress="{StaticResource WorkInProgressCommitViewTemplate}" />
+                                     Wip="{StaticResource WipCommitViewTemplate}" />
     </Grid.Resources>
 
     <Grid.ColumnDefinitions>

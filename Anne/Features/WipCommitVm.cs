@@ -7,25 +7,25 @@ using Reactive.Bindings.Extensions;
 
 namespace Anne.Features
 {
-    public class WorkInProgressCommitVm : ViewModelBase, ICommitVm
+    public class WipCommitVm : ViewModelBase, ICommitVm
     {
         // ICommitVm
         public string Caption => "Uncommited changes";
 
-        public ReadOnlyReactiveProperty<IEnumerable<ChangingFileVm>> ChangingFiles
-            => _fileStatus.ChangingFiles;
+        public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles
+            => _fileStatus.WipFiles;
 
-        public ReactiveProperty<ChangingFileVm> SelectedChangingFile { get; }
-            = new ReactiveProperty<ChangingFileVm>();
+        public ReactiveProperty<WipFileVm> SelectedWipFile { get; }
+            = new ReactiveProperty<WipFileVm>();
 
         private readonly FileStatusVm _fileStatus;
 
-        public WorkInProgressCommitVm(FileStatusVm fileStatus)
+        public WipCommitVm(FileStatusVm fileStatus)
         {
             Debug.Assert(fileStatus != null);
             _fileStatus = fileStatus;
 
-            SelectedChangingFile.AddTo(MultipleDisposable);
+            SelectedWipFile.AddTo(MultipleDisposable);
         }
     }
 }

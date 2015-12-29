@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
-using DiffMatchPatch;
-using ParseDiff;
 using FileDiff = Anne.Model.Git.FileDiff;
 
 namespace Anne.Features

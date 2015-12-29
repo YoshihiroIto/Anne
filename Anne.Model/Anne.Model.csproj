@@ -86,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Git\ChangingFile.cs" />
+    <Compile Include="Git\WipFile.cs" />
     <Compile Include="Git\FileStatus.cs" />
     <Compile Include="Git\Branch.cs" />
     <Compile Include="Git\Commit.cs" />
