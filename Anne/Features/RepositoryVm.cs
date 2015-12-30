@@ -69,6 +69,7 @@ namespace Anne.Features
             _model.Commits.Subscribe(src =>
             {
                 Commits.OfType<IDisposable>().ForEach(x => x.Dispose());
+
                 Commits.AddRangeOnScheduler(src.Select(x => new DoneCommitVm(x)));
             }).AddTo(MultipleDisposable);
 
@@ -76,11 +77,11 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             // todo:_model.Commits と FileStatus.WipFiles をマージする
-            FileStatus.WipFiles.Subscribe(changeingFiles =>
+            FileStatus.WipFiles.Subscribe(wipFileVms =>
             {
                 var frontItem = Commits.FirstOrDefault();
 
-                if (changeingFiles.Any())
+                if (wipFileVms.Any())
                 {
                     if (frontItem == null || frontItem is DoneCommitVm)
                         Commits.InsertOnScheduler(0, new WipCommitVm(this));
