@@ -39,11 +39,14 @@ namespace Anne.Features
                     return null;
 
                 _isDownloading = true;
+
                 Task.Run(
                     () =>
                     {
-                        AutherImage = GravatarLoader.Get(_model.AutherEmail);
+                        var image = GravatarLoader.Get(_model.AutherEmail);
                         _isDownloading = false;
+
+                        Livet.DispatcherHelper.UIDispatcher.Invoke(() => AutherImage = image);
                     });
 
                 return null;
