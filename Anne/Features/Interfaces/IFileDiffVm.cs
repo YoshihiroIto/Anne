@@ -16,7 +16,7 @@ namespace Anne.Features.Interfaces
 
         int LinesAdded { get; }
         int LinesDeleted { get; }
-        LibGit2Sharp.Mode Mode { get; }
+        LibGit2Sharp.ChangeKind Status { get; }
     }
 
     public static class FileDiffExtensions

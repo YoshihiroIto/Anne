@@ -19,7 +19,7 @@ namespace Anne.Features
         public string Diff { get; set; }
         public int LinesAdded => _model.LinesAdded;
         public int LinesDeleted => _model.LinesDeleted;
-        public Mode Mode => _model.Mode;
+        public ChangeKind Status => _model.Status;
 
         public DiffLine[] DiffLines { get; set; }
         public ReactiveProperty<bool> IsInStaging { get; }

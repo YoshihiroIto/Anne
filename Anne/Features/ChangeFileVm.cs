@@ -15,7 +15,7 @@ namespace Anne.Features
         public DiffLine[] DiffLines { get; set;  }
         public int LinesAdded => _model.LinesAdded;
         public int LinesDeleted => _model.LinesDeleted;
-        public Mode Mode => _model.Mode;
+        public ChangeKind Status => _model.Status;
 
         private readonly ChangeFile _model;
 

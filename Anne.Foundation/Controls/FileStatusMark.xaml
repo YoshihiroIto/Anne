@@ -1,0 +1,35 @@
+﻿<Viewbox x:Class="Anne.Foundation.Controls.FileStatusMark"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:controls="clr-namespace:Anne.Foundation.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:selectors="clr-namespace:Anne.Foundation.Controls.Selectors"
+         Stretch="Uniform"
+         d:DesignHeight="300"
+         d:DesignWidth="300"
+         mc:Ignorable="d">
+    <Viewbox.Resources>
+        <DataTemplate x:Key="AddedTemplate">
+            <controls:MarkAdded />
+        </DataTemplate>
+        <DataTemplate x:Key="DeletedTemplate">
+            <controls:MarkDeleted />
+        </DataTemplate>
+        <DataTemplate x:Key="ModifiedTemplate">
+            <controls:MarkModified />
+        </DataTemplate>
+        <DataTemplate x:Key="RenamedTemplate">
+            <controls:MarkRenamed />
+        </DataTemplate>
+
+        <selectors:FileStatusMarkSelector x:Key="FileStatusMarkSelector"
+                                          Added="{StaticResource AddedTemplate}"
+                                          Deleted="{StaticResource DeletedTemplate}"
+                                          Renamed="{StaticResource RenamedTemplate}"
+                                          Modified="{StaticResource ModifiedTemplate}" />
+    </Viewbox.Resources>
+
+    <ContentControl Content="{Binding Status, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:FileStatusMark}}}" ContentTemplateSelector="{StaticResource FileStatusMarkSelector}" />
+</Viewbox>
+

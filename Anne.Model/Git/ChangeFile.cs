@@ -28,10 +28,10 @@ namespace Anne.Model.Git
             set { SetProperty(ref _linesDeleted, value); } 
         }
             
-        public LibGit2Sharp.Mode Mode
+        public LibGit2Sharp.ChangeKind Status
         {
-            get { return _mode; }
-            set { SetProperty(ref _mode, value); } 
+            get { return _status; }
+            set { SetProperty(ref _status, value); } 
         }
 
         // ReSharper disable InconsistentNaming
@@ -39,7 +39,7 @@ namespace Anne.Model.Git
         protected string _patch;
         protected int _linesAdded;
         protected int _linesDeleted;
-        protected LibGit2Sharp.Mode _mode;
+        protected LibGit2Sharp.ChangeKind _status;
         // ReSharper restore InconsistentNaming
     }
 }

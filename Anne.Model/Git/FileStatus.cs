@@ -70,7 +70,7 @@ namespace Anne.Model.Git
                                 wipFile.Patch = compare.Patch;
                                 wipFile.LinesAdded = compare.LinesAdded;
                                 wipFile.LinesDeleted = compare.LinesDeleted;
-                                wipFile.Mode = compare.Mode;
+                                wipFile.Status = compare.Status;
                             }
 
                             return wipFile;

@@ -79,7 +79,7 @@ namespace Anne.Model.Git
                                 Patch = c.Patch,
                                 LinesAdded = c.LinesAdded,
                                 LinesDeleted = c.LinesDeleted,
-                                Mode = c.Mode
+                                Status = c.Status
                             }
                         );
                 });
