@@ -28,7 +28,7 @@ namespace Anne.Model.Git
             new AnonymousDisposable(() => WipFiles.Value.ForEach(c => c.Dispose()))
                 .AddTo(MultipleDisposable);
 
-            UpdateChangingFiles(null);
+            UpdateWipFiles(null);
 
             var watcher = new FileWatcher(repos.Path)
                 .AddTo(MultipleDisposable);
@@ -36,20 +36,20 @@ namespace Anne.Model.Git
             new EventListener<FileSystemEventHandler>(
                 h => watcher.FileUpdated += h,
                 h => watcher.FileUpdated -= h,
-                (s, e) => UpdateChangingFiles(e))
+                (s, e) => UpdateWipFiles(e))
                 .AddTo(MultipleDisposable);
 
             watcher.Start();
         }
 
-        private void UpdateChangingFiles(FileSystemEventArgs e)
+        private void UpdateWipFiles(FileSystemEventArgs e)
         {
             if (e != null)
-                Debug.WriteLine($"UpdateChangingFiles : {e.FullPath}, {e.Name}, {e.ChangeType}");
+                Debug.WriteLine($"UpdateWipFiles : {e.FullPath}, {e.Name}, {e.ChangeType}");
 
             var old = WipFiles.Value;
 
-            _repos.AddJob("UpdateChangingFiles", () =>
+            _repos.AddJob("UpdateWipFiles", () =>
             {
                 WipFiles.Value =
                     _repos.Internal.RetrieveStatus(new StatusOptions())
