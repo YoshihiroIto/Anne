@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Anne.Features.Interfaces;
@@ -58,20 +59,30 @@ namespace Anne.Features
 
         #endregion
 
-        private ReadOnlyReactiveCollection<ChangeFileVm> _fileDiffs;
+        private ReadOnlyReactiveCollection<ChangeFileVm> _changeFiles;
 
-        public ReadOnlyReactiveCollection<ChangeFileVm> FileDiffs
+        public ReadOnlyReactiveCollection<ChangeFileVm> ChangeFiles
         {
             get
             {
-                return _fileDiffs ?? (
-                    _fileDiffs = _model.ChangeFiles
-                        .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
-                        .AddTo(MultipleDisposable));
+                if (_changeFiles != null)
+                    return _changeFiles;
+
+                _changeFiles = _model.ChangeFiles
+                    .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
+                    .AddTo(MultipleDisposable);
+
+                ChangeFiles.ObserveAddChanged().Subscribe(x =>
+                {
+                    if (SelectedChangeFile.Value == null)
+                        SelectedChangeFile.Value = x;
+                }).AddTo(MultipleDisposable);
+
+                return _changeFiles;
             }
         }
 
-        public ReactiveProperty<ChangeFileVm> SelectedFilePatch { get; } = new ReactiveProperty<ChangeFileVm>();
+        public ReactiveProperty<ChangeFileVm> SelectedChangeFile { get; } = new ReactiveProperty<ChangeFileVm>();
 
         private readonly Model.Git.Commit _model;
 
@@ -80,7 +91,12 @@ namespace Anne.Features
             Debug.Assert(model != null);
             _model = model;
 
-            SelectedFilePatch.AddTo(MultipleDisposable);
+            SelectedChangeFile.AddTo(MultipleDisposable);
+
+            //ChangeFiles.ObserveAddChanged().Subscribe(x =>
+            //{
+            //    Debug.WriteLine(x);
+            //}).AddTo(MultipleDisposable);
         }
     }
 }

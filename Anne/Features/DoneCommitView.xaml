@@ -112,10 +112,10 @@
     <!--  変更ファイル  -->
     <ListView Grid.Row="1"
               BorderBrush="LightGray"
-              ItemsSource="{Binding FileDiffs,
+              ItemsSource="{Binding ChangeFiles,
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
-              SelectedItem="{Binding SelectedFilePatch.Value}"
+              SelectedItem="{Binding SelectedChangeFile.Value}"
               SelectionMode="Single"
               VirtualizingPanel.IsVirtualizing="True"
               VirtualizingPanel.ScrollUnit="Pixel"
@@ -148,6 +148,6 @@
     <Border Grid.Row="2"
             BorderBrush="LightGray"
             BorderThickness="1,0,1,1">
-        <diff:DiffView DataContext="{Binding SelectedFilePatch.Value, Mode=OneWay}" />
+        <diff:DiffView DataContext="{Binding SelectedChangeFile.Value, Mode=OneWay}" />
     </Border>
 </Grid>

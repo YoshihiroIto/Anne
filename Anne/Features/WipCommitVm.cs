@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using Anne.Features.Interfaces;
@@ -25,8 +26,20 @@ namespace Anne.Features
             set { SetProperty(ref _description, value); }
         }
 
-        public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles => _repos.FileStatus.WipFiles;
         public ReactiveCommand CommitCommand { get; }
+
+        public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles
+        {
+            get
+            {
+                var files = _repos.FileStatus.WipFiles;
+
+                if (SelectedWipFile.Value == null)
+                    SelectedWipFile.Value = files.Value.FirstOrDefault();
+
+                return files;
+            }
+        }
 
         public ReactiveProperty<WipFileVm> SelectedWipFile { get; } = new ReactiveProperty<WipFileVm>();
         public ReadOnlyReactiveProperty<int> SummryRemaining { get; }
