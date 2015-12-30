@@ -125,8 +125,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\WipFileVm.cs" />
     <Compile Include="Features\Converters\PathStringToSyntaxHighlightingConverter.cs" />
+    <Compile Include="Features\WipFileVm.cs" />
+    <Compile Include="Features\Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Diff\DiffLine.cs" />
     <Compile Include="Features\DoneCommitVm.cs" />
     <Compile Include="Features\DoneCommitView.xaml.cs">

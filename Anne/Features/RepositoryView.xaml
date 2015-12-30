@@ -2,6 +2,7 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
+      xmlns:converters="clr-namespace:Anne.Features.Converters"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:features="clr-namespace:Anne.Features"
       xmlns:git="clr-namespace:Anne.Model.Git;assembly=Anne.Model"
@@ -21,6 +22,8 @@
     </i:Interaction.Triggers>
 
     <Grid.Resources>
+        <converters:StringToVisibilityConverter x:Key="WipVisiblity" NoWhiteSpace="Collapsed" />
+
         <Style x:Key="CurrentMarkStyle" TargetType="{x:Type TextBlock}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsCurrent.Value, Mode=OneWay}" Value="True">
@@ -68,20 +71,24 @@
 
         <!--  コミットリスト  -->
         <DataTemplate x:Key="DoneCommitListItemTemplate" DataType="{x:Type features:DoneCommitVm}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Summry, Mode=OneTime}" />
-            </StackPanel>
+            <TextBlock Text="{Binding Summry, Mode=OneTime}" />
         </DataTemplate>
 
         <DataTemplate x:Key="WipCommitListItemTemplate" DataType="{x:Type features:WipCommitVm}">
-            <StackPanel Orientation="Horizontal">
+            <Grid>
+                <TextBlock FontWeight="Bold"
+                           Foreground="DarkGray"
+                           Text="Work In Progress"
+                           Visibility="{Binding Summry,
+                                                Converter={StaticResource WipVisiblity},
+                                                Mode=OneWay}" />
                 <TextBlock FontWeight="Bold" Text="{Binding Summry, Mode=OneWay}" />
-            </StackPanel>
+            </Grid>
         </DataTemplate>
 
         <selectors:CommitDataSelector x:Key="CommitListItemDataSelector"
-                                     Done="{StaticResource DoneCommitListItemTemplate}"
-                                     Wip="{StaticResource WipCommitListItemTemplate}" />
+                                      Done="{StaticResource DoneCommitListItemTemplate}"
+                                      Wip="{StaticResource WipCommitListItemTemplate}" />
 
         <!--  コミットビュー  -->
         <DataTemplate x:Key="DoneCommitViewTemplate" DataType="{x:Type features:DoneCommitVm}">
@@ -93,8 +100,8 @@
         </DataTemplate>
 
         <selectors:CommitDataSelector x:Key="CommitViewDataSelector"
-                                     Done="{StaticResource DoneCommitViewTemplate}"
-                                     Wip="{StaticResource WipCommitViewTemplate}" />
+                                      Done="{StaticResource DoneCommitViewTemplate}"
+                                      Wip="{StaticResource WipCommitViewTemplate}" />
     </Grid.Resources>
 
     <Grid.ColumnDefinitions>
