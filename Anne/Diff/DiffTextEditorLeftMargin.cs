@@ -165,7 +165,7 @@ namespace Anne.Diff
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     new Typeface("Consolas"),
-                    14,
+                    12,
                     Brushes.DimGray);
 
             double offset;

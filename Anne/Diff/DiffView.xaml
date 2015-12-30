@@ -15,7 +15,7 @@
 
     <diff:DiffTextEditor DockPanel.Dock="Top"
                          FontFamily="Consolas"
-                         FontSize="14"
+                         FontSize="12"
                          HorizontalScrollBarVisibility="Hidden"
                          IsReadOnly="True"
                          SyntaxHighlighting="{Binding Path,
