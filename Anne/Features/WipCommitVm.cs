@@ -44,13 +44,11 @@ namespace Anne.Features
             SelectedWipFile
                 .AddTo(MultipleDisposable);
 
-            var summryO = this.ObserveProperty(x => x.Summry);
-            (summryO as IDisposable)?.AddTo(MultipleDisposable);
-
-            SummryRemaining = summryO
-                .Select(x => 80 - x.Length)
-                .ToReadOnlyReactiveProperty()
-                .AddTo(MultipleDisposable);
+            SummryRemaining =
+                this.ObserveProperty(x => x.Summry)
+                    .Select(x => 80 - x.Length)
+                    .ToReadOnlyReactiveProperty()
+                    .AddTo(MultipleDisposable);
 
             SummryRemainingBrush = SummryRemaining
                 .Select(x =>
@@ -64,11 +62,11 @@ namespace Anne.Features
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            CommitCommand = 
-                summryO
-                .Select(x => string.IsNullOrWhiteSpace(x) == false)
-                .ToReactiveCommand()
-                .AddTo(MultipleDisposable);
+            CommitCommand =
+                this.ObserveProperty(x => x.Summry)
+                    .Select(x => string.IsNullOrWhiteSpace(x) == false)
+                    .ToReactiveCommand()
+                    .AddTo(MultipleDisposable);
 
             CommitCommand.Subscribe(_ => repos.Commit((Summry + "\n\n" + Description).Trim()))
                 .AddTo(MultipleDisposable);

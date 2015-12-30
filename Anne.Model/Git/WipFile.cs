@@ -17,7 +17,6 @@ namespace Anne.Model.Git
             internal set { SetProperty(ref _isInStaging, value); }
         }
 
-
         public string Patch
         {
             get { return _patch; }

@@ -23,14 +23,17 @@
             </Grid.ColumnDefinitions>
 
             <controls:PromptTextBox BorderThickness="1,1,1,0"
+                                    IsTabStop="True"
                                     Prompt="Summry"
                                     Text="{Binding Summry,
                                                    UpdateSourceTrigger=PropertyChanged}" />
 
             <Label Grid.Column="1"
                    BorderThickness="0,1,1,0"
-                   Content="{Binding SummryRemaining.Value, Mode=OneWay}"
-                   Foreground="{Binding SummryRemainingBrush.Value, Mode=OneWay}" />
+                   Content="{Binding SummryRemaining.Value,
+                                     Mode=OneWay}"
+                   Foreground="{Binding SummryRemainingBrush.Value,
+                                        Mode=OneWay}" />
         </Grid>
 
         <StackPanel DockPanel.Dock="Bottom">
@@ -40,11 +43,13 @@
                     HorizontalAlignment="Left"
                     Command="{Binding CommitCommand,
                                       Mode=OneTime}"
-                    Content="Commit" />
+                    Content="Commit"
+                    IsTabStop="True" />
         </StackPanel>
 
         <controls:PromptTextBox VerticalContentAlignment="Top"
                                 AcceptsReturn="True"
+                                IsTabStop="True"
                                 Prompt="Description"
                                 Text="{Binding Description,
                                                UpdateSourceTrigger=PropertyChanged}"
