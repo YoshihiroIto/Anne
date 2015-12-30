@@ -33,6 +33,12 @@ namespace Anne.Model.Git
             get { return _status; }
             set { SetProperty(ref _status, value); } 
         }
+            
+        public bool IsBinary
+        {
+            get { return _isBinary; }
+            set { SetProperty(ref _isBinary, value); } 
+        }
 
         // ReSharper disable InconsistentNaming
         protected string _path;
@@ -40,6 +46,7 @@ namespace Anne.Model.Git
         protected int _linesAdded;
         protected int _linesDeleted;
         protected LibGit2Sharp.ChangeKind _status;
+        protected bool _isBinary;
         // ReSharper restore InconsistentNaming
     }
 }

@@ -17,6 +17,7 @@ namespace Anne.Features.Interfaces
         int LinesAdded { get; }
         int LinesDeleted { get; }
         LibGit2Sharp.ChangeKind Status { get; }
+        bool IsBinary { get; }
     }
 
     public static class FileDiffExtensions

@@ -20,6 +20,7 @@ namespace Anne.Features
         public int LinesAdded => _model.LinesAdded;
         public int LinesDeleted => _model.LinesDeleted;
         public ChangeKind Status => _model.Status;
+        public bool IsBinary => _model.IsBinary; 
 
         public DiffLine[] DiffLines { get; set; }
         public ReactiveProperty<bool> IsInStaging { get; }
@@ -58,7 +59,8 @@ namespace Anne.Features
 
             #endregion
 
-            this.MakeDiff(_model.Patch);
+            if (_model.IsBinary == false)
+                this.MakeDiff(_model.Patch);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Anne.Features
         public int LinesAdded => _model.LinesAdded;
         public int LinesDeleted => _model.LinesDeleted;
         public ChangeKind Status => _model.Status;
+        public bool IsBinary => _model.IsBinary; 
 
         private readonly ChangeFile _model;
 
@@ -25,7 +26,8 @@ namespace Anne.Features
 
             _model = model;
 
-            this.MakeDiff(_model.Patch);
+            if (_model.IsBinary == false)
+                this.MakeDiff(_model.Patch);
         }
     }
 }

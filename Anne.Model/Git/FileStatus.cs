@@ -71,6 +71,7 @@ namespace Anne.Model.Git
                                 wipFile.LinesAdded = compare.LinesAdded;
                                 wipFile.LinesDeleted = compare.LinesDeleted;
                                 wipFile.Status = compare.Status;
+                                wipFile.IsBinary = compare.IsBinaryComparison;
                             }
 
                             return wipFile;

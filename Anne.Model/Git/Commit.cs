@@ -79,7 +79,8 @@ namespace Anne.Model.Git
                                 Patch = c.Patch,
                                 LinesAdded = c.LinesAdded,
                                 LinesDeleted = c.LinesDeleted,
-                                Status = c.Status
+                                Status = c.Status,
+                                IsBinary = c.IsBinaryComparison
                             }
                         );
                 });
