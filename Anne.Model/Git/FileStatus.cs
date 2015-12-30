@@ -47,29 +47,42 @@ namespace Anne.Model.Git
             if (e != null)
                 Debug.WriteLine($"UpdateWipFiles : {e.FullPath}, {e.Name}, {e.ChangeType}");
 
-            var old = WipFiles.Value;
+            var oldFiles = WipFiles.Value.ToArray();
 
             _repos.AddJob("UpdateWipFiles", () =>
             {
-                WipFiles.Value =
+                var newFiles =
                     _repos.Internal.RetrieveStatus(new StatusOptions())
                         .Where(i => i.State != LibGit2Sharp.FileStatus.Ignored)
                         .Select(x =>
                         {
-                            var compare = _repos.Internal.Diff.Compare<Patch>(
-                                _repos.Internal.Head.Tip.Tree,
-                                DiffTargets.Index | DiffTargets.WorkingDirectory,
-                                new[] {x.FilePath}
-                                ).FirstOrDefault();
+                            var compare =
+                                _repos.Internal.Diff.Compare<Patch>(
+                                    _repos.Internal.Head.Tip.Tree,
+                                    DiffTargets.Index | DiffTargets.WorkingDirectory,
+                                    new[] {x.FilePath}
+                                    ).FirstOrDefault();
 
-                            return new WipFile(_repos, x.FilePath, IsInStaging(x.State))
-                            {
-                                Patch = compare?.Patch
-                            };
+                            return
+                                new WipFile(_repos, x.FilePath, IsInStaging(x.State))
+                                {
+                                    Patch = compare?.Patch
+                                };
                         })
                         .ToObservableCollection();
 
-                old.ForEach(c => c.Dispose());
+                if (newFiles.Select(x => x.Path).SequenceEqual(oldFiles.Select(x => x.Path)))
+                {
+                    oldFiles.Zip(newFiles, (o, n) => new {Old = o, New = n})
+                        .ForEach(x => x.Old.IsInStaging = x.New.IsInStaging);
+
+                    newFiles.ForEach(c => c.Dispose());
+                }
+                else
+                {
+                    WipFiles.Value = newFiles;
+                    oldFiles.ForEach(c => c.Dispose());
+                }
             });
         }
 
