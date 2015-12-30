@@ -86,8 +86,9 @@ namespace Anne.Model.Git
                     h => watcher.FileUpdated -= h,
                     (s, e) =>
                     {
-                        Commits.Value.ForEach(x => x.Dispose());
+                        var old = Commits.Value;
                         Commits.Value = Internal.Commits.Select(x => new Commit(this, x)).Memoize();
+                        old.ForEach(x => x.Dispose());
                     })
                     .AddTo(MultipleDisposable);
 
