@@ -19,11 +19,11 @@
             <Grid.Resources>
                 <Style x:Key="CommitMetaCaptionStyle" TargetType="{x:Type TextBlock}">
                     <Setter Property="HorizontalAlignment" Value="Right" />
-                    <Setter Property="Margin" Value="4,0" />
+                    <Setter Property="Margin" Value="8,0,0,0" />
                     <Setter Property="FontWeight" Value="Bold" />
                 </Style>
                 <Style x:Key="CommitMetaValueStyle" TargetType="{x:Type TextBlock}">
-                    <Setter Property="Margin" Value="4,0" />
+                    <Setter Property="Margin" Value="8,0,0,0" />
                 </Style>
             </Grid.Resources>
 
@@ -44,9 +44,8 @@
             <Border Grid.Row="0"
                     Grid.RowSpan="4"
                     Grid.Column="0"
-                    Width="64"
-                    Height="64"
-                    Margin="8"
+                    Width="80"
+                    Height="80"
                     BorderBrush="LightGray"
                     BorderThickness="1"
                     SnapsToDevicePixels="True">
@@ -99,19 +98,19 @@
         </Grid>
 
         <!--  メッセージ  -->
-        <TextBox HorizontalScrollBarVisibility="Hidden"
-        BorderBrush="{x:Null}"
-        Background="{x:Null}"
-                            IsReadOnly="True"
-                            Text="{Binding Message,
-                                           Mode=OneTime}"
-                            VerticalScrollBarVisibility="Auto"
-                             />
+        <TextBox Margin="0,8,0,0"
+                 Background="{x:Null}"
+                 BorderBrush="{x:Null}"
+                 HorizontalScrollBarVisibility="Hidden"
+                 IsReadOnly="True"
+                 Text="{Binding Message,
+                                Mode=OneTime}"
+                 VerticalScrollBarVisibility="Auto" />
     </DockPanel>
 
     <!--  変更ファイル  -->
-
     <ListView Grid.Row="1"
+              BorderBrush="LightGray"
               ItemsSource="{Binding FileDiffs,
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
@@ -133,5 +132,9 @@
         </ListView.ItemTemplate>
     </ListView>
 
-    <diff:DiffView Grid.Row="2" DataContext="{Binding SelectedFilePatch.Value, Mode=OneWay}" />
+    <Border Grid.Row="2"
+            BorderBrush="LightGray"
+            BorderThickness="1,0,1,1">
+        <diff:DiffView DataContext="{Binding SelectedFilePatch.Value, Mode=OneWay}" />
+    </Border>
 </Grid>

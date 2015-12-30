@@ -22,22 +22,27 @@
                                                UpdateSourceTrigger=PropertyChanged}" />
 
         <StackPanel DockPanel.Dock="Bottom">
-            <Button Width="80"
+            <Button Width="96"
+                    Height="24"
+                    Margin="0,4,0,8"
                     HorizontalAlignment="Left"
                     Command="{Binding CommitCommand,
                                       Mode=OneTime}"
                     Content="Commit" />
         </StackPanel>
 
-        <controls:PromptTextBox AcceptsReturn="True"
+        <controls:PromptTextBox VerticalContentAlignment="Top"
+                                AcceptsReturn="True"
+                                BorderThickness="1,0,1,1"
                                 Prompt="Description"
                                 Text="{Binding Description,
                                                UpdateSourceTrigger=PropertyChanged}"
                                 TextWrapping="Wrap"
-                                VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top" />
+                                VerticalScrollBarVisibility="Auto" />
     </DockPanel>
 
     <ListView Grid.Row="1"
+              BorderBrush="LightGray"
               ItemsSource="{Binding WipFiles.Value,
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
