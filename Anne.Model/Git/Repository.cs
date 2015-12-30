@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -142,6 +141,20 @@ namespace Anne.Model.Git
                 });
         }
 
+        public void Push()
+        {
+            _jobQueue.AddJob(
+                "Push:",
+                () =>
+                {
+                    var currentBrunch = Internal.Branches.FirstOrDefault(x => x.IsCurrentRepositoryHead);
+                    if (currentBrunch == null)
+                        return;
+
+                    Internal.Network.Push(currentBrunch);
+                });
+        }
+
         public void AddJob(string summry, Action action)
         {
             _jobQueue.AddJob(summry, action);
@@ -201,23 +214,6 @@ namespace Anne.Model.Git
                     var branch = Branches.FirstOrDefault(b => b.Name == branchName);
                     branch?.Switch();
                     UpdateBranchProps();
-                });
-        }
-
-        public void StatusTest()
-        {
-            _jobQueue.AddJob(
-                "Status",
-                () =>
-                {
-                    Debug.WriteLine(string.Empty);
-                    Debug.WriteLine("-------------------------------------------------------");
-                    Debug.WriteLine("---- StatusTest ---------------------------------------");
-                    Debug.WriteLine("-------------------------------------------------------");
-
-                    Internal.RetrieveStatus(new StatusOptions())
-                        .Where(i => i.State != LibGit2Sharp.FileStatus.Ignored)
-                        .ForEach(i => { Debug.WriteLine($"{i.FilePath}, {i.State}"); });
                 });
         }
 
