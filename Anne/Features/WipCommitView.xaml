@@ -75,10 +75,15 @@
         <ListView.ItemTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Horizontal">
-                    <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                    <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                     <CheckBox IsChecked="{Binding IsInStaging.Value}" />
-                    <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
                     <TextBlock Margin="4,0,0,0" Text="{Binding Path, Mode=OneTime}" />
+                    <TextBlock Margin="8,0,0,0" Text="("/>
+                    <TextBlock Text="{Binding LinesAdded, Mode=OneTime}" Foreground="Green" />
+                    <TextBlock Text=", "/>
+                    <TextBlock Text="{Binding LinesDeleted, Mode=OneTime}" Foreground="Red" />
+                    <TextBlock Text=")"/>
+                    <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
                 </StackPanel>
             </DataTemplate>
         </ListView.ItemTemplate>

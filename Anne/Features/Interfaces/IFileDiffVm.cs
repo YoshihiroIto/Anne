@@ -13,6 +13,10 @@ namespace Anne.Features.Interfaces
         string Path { get; }
         string Diff { get; set;  }
         DiffLine[] DiffLines { get; set; }
+
+        int LinesAdded { get; }
+        int LinesDeleted { get; }
+        LibGit2Sharp.Mode Mode { get; }
     }
 
     public static class FileDiffExtensions

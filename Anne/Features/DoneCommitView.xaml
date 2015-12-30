@@ -126,8 +126,16 @@
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                <TextBlock Text="{Binding Path, Mode=OneTime}" />
+                <StackPanel Orientation="Horizontal">
+                    <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
+                    <TextBlock Margin="4,0,0,0" Text="{Binding Path, Mode=OneTime}" />
+                    <TextBlock Margin="8,0,0,0" Text="(" />
+                    <TextBlock Foreground="Green" Text="{Binding LinesAdded, Mode=OneTime}" />
+                    <TextBlock Text=", " />
+                    <TextBlock Foreground="Red" Text="{Binding LinesDeleted, Mode=OneTime}" />
+                    <TextBlock Text=")" />
+                    <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
+                </StackPanel>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

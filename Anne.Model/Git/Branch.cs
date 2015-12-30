@@ -13,13 +13,14 @@ namespace Anne.Model.Git
             get { return _name; }
             set
             {
-                if (SetProperty(ref _name, value))
-                {
-                    // ReSharper disable once ExplicitCallerInfoArgument
-                    RaisePropertyChanged(nameof(LocalName));
-                    // ReSharper disable once ExplicitCallerInfoArgument
-                    RaisePropertyChanged(nameof(RemoteName));
-                }
+                if (!SetProperty(ref _name, value))
+                    return;
+
+                // ReSharper disable once ExplicitCallerInfoArgument
+                RaisePropertyChanged(nameof(LocalName));
+
+                // ReSharper disable once ExplicitCallerInfoArgument
+                RaisePropertyChanged(nameof(RemoteName));
             }
         }
 

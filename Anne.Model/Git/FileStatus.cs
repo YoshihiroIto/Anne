@@ -63,11 +63,17 @@ namespace Anne.Model.Git
                                     new[] {x.FilePath}
                                     ).FirstOrDefault();
 
-                            return
-                                new WipFile(_repos, x.FilePath, IsInStaging(x.State))
-                                {
-                                    Patch = compare?.Patch
-                                };
+                            var wipFile =  new WipFile(_repos, IsInStaging(x.State), x.FilePath);
+
+                            if (compare != null)
+                            {
+                                wipFile.Patch = compare.Patch;
+                                wipFile.LinesAdded = compare.LinesAdded;
+                                wipFile.LinesDeleted = compare.LinesDeleted;
+                                wipFile.Mode = compare.Mode;
+                            }
+
+                            return wipFile;
                         })
                         .ToObservableCollection();
 

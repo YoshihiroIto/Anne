@@ -76,7 +76,10 @@ namespace Anne.Model.Git
                             new ChangeFile
                             {
                                 Path = c.Path,
-                                Patch = c.Patch
+                                Patch = c.Patch,
+                                LinesAdded = c.LinesAdded,
+                                LinesDeleted = c.LinesDeleted,
+                                Mode = c.Mode
                             }
                         );
                 });

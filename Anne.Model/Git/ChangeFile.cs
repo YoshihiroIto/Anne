@@ -16,7 +16,30 @@ namespace Anne.Model.Git
             set { SetProperty(ref _patch, value); } 
         }
 
-        private string _path;
-        private string _patch;
+        public int LinesAdded
+        {
+            get { return _linesAdded; }
+            set { SetProperty(ref _linesAdded, value); } 
+        }
+            
+        public int LinesDeleted
+        {
+            get { return _linesDeleted; }
+            set { SetProperty(ref _linesDeleted, value); } 
+        }
+            
+        public LibGit2Sharp.Mode Mode
+        {
+            get { return _mode; }
+            set { SetProperty(ref _mode, value); } 
+        }
+
+        // ReSharper disable InconsistentNaming
+        protected string _path;
+        protected string _patch;
+        protected int _linesAdded;
+        protected int _linesDeleted;
+        protected LibGit2Sharp.Mode _mode;
+        // ReSharper restore InconsistentNaming
     }
 }

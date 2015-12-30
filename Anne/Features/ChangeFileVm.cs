@@ -3,6 +3,7 @@ using Anne.Diff;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
+using LibGit2Sharp;
 
 namespace Anne.Features
 {
@@ -12,6 +13,9 @@ namespace Anne.Features
         public string Path => _model.Path;
         public string Diff { get; set; }
         public DiffLine[] DiffLines { get; set;  }
+        public int LinesAdded => _model.LinesAdded;
+        public int LinesDeleted => _model.LinesDeleted;
+        public Mode Mode => _model.Mode;
 
         private readonly ChangeFile _model;
 

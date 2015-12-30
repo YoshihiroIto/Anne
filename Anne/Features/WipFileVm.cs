@@ -5,6 +5,7 @@ using Anne.Diff;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
+using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Repository = Anne.Model.Git.Repository;
@@ -16,8 +17,11 @@ namespace Anne.Features
         // IFileDiffVm
         public string Path => _model.Path;
         public string Diff { get; set; }
-        public DiffLine[] DiffLines { get; set; }
+        public int LinesAdded => _model.LinesAdded;
+        public int LinesDeleted => _model.LinesDeleted;
+        public Mode Mode => _model.Mode;
 
+        public DiffLine[] DiffLines { get; set; }
         public ReactiveProperty<bool> IsInStaging { get; }
 
         private readonly WipFile _model;
