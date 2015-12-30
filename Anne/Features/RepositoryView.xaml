@@ -104,21 +104,103 @@
                                       Wip="{StaticResource WipCommitViewTemplate}" />
     </Grid.Resources>
 
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="140" />
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="140" />
-    </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="140" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="140" />
+        </Grid.ColumnDefinitions>
 
-    <DockPanel LastChildFill="True">
-        <ListView DockPanel.Dock="Top"
-                  ItemTemplate="{StaticResource BranchTemplate}"
-                  ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
+        <StackPanel Grid.Row="0"
+                    Grid.ColumnSpan="6"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,8" HorizontalAlignment="Center">
+            <Button Width="64" Height="64" Command="{Binding PullCommand, Mode=OneTime}">
+                <StackPanel>
+                    <Viewbox Width="40" Height="40">
+                        <Canvas Width="24" Height="24">
+                          <Path Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" Fill="Black" />
+                        </Canvas>
+                    </Viewbox>
+                    <Label Margin="0"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center"
+                           Content="Pull"
+                           Padding="0" />
+                </StackPanel>
+            </Button>
+
+            <Button Margin="-1,0,0,0" Width="64" Height="64" Command="{Binding PushCommand, Mode=OneTime}">
+                <StackPanel>
+                    <Viewbox Width="40" Height="40">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" Fill="Black" />
+                        </Canvas>
+                    </Viewbox>
+                    <Label Margin="0"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center"
+                           Content="Push"
+                           Padding="0" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <DockPanel Grid.Row="1" Grid.Column="0" LastChildFill="True">
+            <ListView DockPanel.Dock="Top"
+                      ItemTemplate="{StaticResource BranchTemplate}"
+                      ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
+                      ScrollViewer.CanContentScroll="True"
+                      SelectedItem="{Binding SelectedLocalBranch.Value}"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.ScrollUnit="Pixel"
+                      VirtualizingPanel.VirtualizationMode="Recycling">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+
+            <ListView ItemTemplate="{StaticResource BranchTemplate}"
+                      ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
+                      ScrollViewer.CanContentScroll="True"
+                      SelectedItem="{Binding SelectedRemoteBranch.Value}"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                      VirtualizingPanel.ScrollUnit="Pixel"
+                      VirtualizingPanel.VirtualizationMode="Recycling">
+                <ListView.GroupStyle>
+                    <GroupStyle HeaderTemplate="{StaticResource RemoteBranchesListViewGroupTemplate}" />
+                </ListView.GroupStyle>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </DockPanel>
+
+        <GridSplitter Grid.Row="1"
+                      Grid.Column="1"
+                      Width="8"
+                      HorizontalAlignment="Center" />
+
+        <ListView Grid.Row="1"
+                  Grid.Column="2"
+                  ItemTemplateSelector="{StaticResource CommitListItemDataSelector}"
+                  ItemsSource="{Binding Commits,
+                                        Mode=OneWay}"
                   ScrollViewer.CanContentScroll="True"
-                  SelectedItem="{Binding SelectedLocalBranch.Value}"
+                  SelectedItem="{Binding SelectedCommit.Value}"
+                  SelectionMode="Single"
                   VirtualizingPanel.IsVirtualizing="True"
                   VirtualizingPanel.ScrollUnit="Pixel"
                   VirtualizingPanel.VirtualizationMode="Recycling">
@@ -129,117 +211,82 @@
             </ListView.ItemsPanel>
         </ListView>
 
-        <ListView ItemTemplate="{StaticResource BranchTemplate}"
-                  ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
-                  ScrollViewer.CanContentScroll="True"
-                  SelectedItem="{Binding SelectedRemoteBranch.Value}"
-                  VirtualizingPanel.IsVirtualizing="True"
-                  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                  VirtualizingPanel.ScrollUnit="Pixel"
-                  VirtualizingPanel.VirtualizationMode="Recycling">
-            <ListView.GroupStyle>
-                <GroupStyle HeaderTemplate="{StaticResource RemoteBranchesListViewGroupTemplate}" />
-            </ListView.GroupStyle>
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-        </ListView>
-    </DockPanel>
+        <GridSplitter Grid.Row="1"
+                      Grid.Column="3"
+                      Width="8"
+                      HorizontalAlignment="Center" />
 
-    <GridSplitter Grid.Column="1"
-                  Width="8"
-                  HorizontalAlignment="Center" />
+        <ContentControl Grid.Row="1"
+                        Grid.Column="4"
+                        Content="{Binding SelectedCommit.Value,
+                                          Mode=OneWay}"
+                        ContentTemplateSelector="{StaticResource CommitViewDataSelector}" />
 
-    <ListView Grid.Column="2"
-              ItemTemplateSelector="{StaticResource CommitListItemDataSelector}"
-              ItemsSource="{Binding Commits,
-                                    Mode=OneWay}"
-              ScrollViewer.CanContentScroll="True"
-              SelectedItem="{Binding SelectedCommit.Value}"
-              SelectionMode="Single"
-              VirtualizingPanel.IsVirtualizing="True"
-              VirtualizingPanel.ScrollUnit="Pixel"
-              VirtualizingPanel.VirtualizationMode="Recycling">
-        <ListView.ItemsPanel>
-            <ItemsPanelTemplate>
-                <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
-            </ItemsPanelTemplate>
-        </ListView.ItemsPanel>
-    </ListView>
+        <!--  テスト用  -->
+        <DockPanel Grid.Row="1"
+                   Grid.Column="5"
+                   LastChildFill="True">
+            <Button Content="Checkout Test" DockPanel.Dock="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="CheckoutTest" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-    <GridSplitter Grid.Column="3"
-                  Width="8"
-                  HorizontalAlignment="Center" />
+            <Button Content="Remove Test" DockPanel.Dock="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="RemoveTest" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-    <ContentControl Grid.Column="4"
-                    Content="{Binding SelectedCommit.Value,
-                                      Mode=OneWay}"
-                    ContentTemplateSelector="{StaticResource CommitViewDataSelector}" />
+            <Button Margin="0,8,0,0"
+                    Content="Switch Test (master)"
+                    DockPanel.Dock="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="SwitchTest"
+                                                         MethodParameter="master"
+                                                         MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-    <!--  テスト用  -->
-    <DockPanel Grid.Column="5" LastChildFill="True">
-        <Button Content="Checkout Test" DockPanel.Dock="Top">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <behaviors:LivetCallMethodAction MethodName="CheckoutTest" MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
+            <Button Content="Switch Test (refactor)" DockPanel.Dock="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="SwitchTest"
+                                                         MethodParameter="refactoring"
+                                                         MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-        <Button Content="Remove Test" DockPanel.Dock="Top">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <behaviors:LivetCallMethodAction MethodName="RemoveTest" MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
+            <Button Margin="0,8,0,0"
+                    Content="Fetch Test (origin)"
+                    DockPanel.Dock="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="FetchTest"
+                                                         MethodParameter="origin"
+                                                         MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-        <Button Margin="0,8,0,0"
-                Content="Switch Test (master)"
-                DockPanel.Dock="Top">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <behaviors:LivetCallMethodAction MethodName="SwitchTest"
-                                                     MethodParameter="master"
-                                                     MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
+            <Button Content="FetchAll Test" DockPanel.Dock="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <behaviors:LivetCallMethodAction MethodName="FetchAllTest" MethodTarget="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-        <Button Content="Switch Test (refactor)" DockPanel.Dock="Top">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <behaviors:LivetCallMethodAction MethodName="SwitchTest"
-                                                     MethodParameter="refactoring"
-                                                     MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
-
-        <Button Margin="0,8,0,0"
-                Content="Fetch Test (origin)"
-                DockPanel.Dock="Top">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <behaviors:LivetCallMethodAction MethodName="FetchTest"
-                                                     MethodParameter="origin"
-                                                     MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
-
-        <Button Content="FetchAll Test" DockPanel.Dock="Top">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <behaviors:LivetCallMethodAction MethodName="FetchAllTest" MethodTarget="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
-
-        <!--  ジョブ  -->
-        <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
-        <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
-    </DockPanel>
+            <!--  ジョブ  -->
+            <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
+            <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
+        </DockPanel>
+    </Grid>
 </Grid>

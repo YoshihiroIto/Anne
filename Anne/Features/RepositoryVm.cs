@@ -28,6 +28,9 @@ namespace Anne.Features
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
+        public ReactiveCommand PushCommand { get; } = new ReactiveCommand();
+        public ReactiveCommand PullCommand { get; } = new ReactiveCommand();
+
         public FileStatusVm FileStatus { get; }
 
         private readonly Repository _model;
@@ -114,6 +117,8 @@ namespace Anne.Features
                 .ObserveOnUIDispatcher()
                 .Subscribe(e => ShowDialog(e.Exception))
                 .AddTo(MultipleDisposable);
+
+            InitializeCommands();
         }
 
         public void Commit(string message)
@@ -125,6 +130,18 @@ namespace Anne.Features
         {
             Debug.Assert(e != null);
             Messenger.Raise(new InformationMessage(e.Message, "Information", "Info"));
+        }
+
+        private void InitializeCommands()
+        {
+            PushCommand
+                .AddTo(MultipleDisposable);
+
+            PullCommand
+                .AddTo(MultipleDisposable);
+
+            PushCommand.Subscribe(_ => _model.Push());
+            PullCommand.Subscribe(_ => _model.Pull());
         }
 
         // test

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -141,10 +142,15 @@ namespace Anne.Model.Git
                 });
         }
 
+        public void Pull()
+        {
+            Debug.WriteLine("Pull() -- 未実装");
+        }
+
         public void Push()
         {
             _jobQueue.AddJob(
-                "Push:",
+                "Push",
                 () =>
                 {
                     var currentBrunch = Internal.Branches.FirstOrDefault(x => x.IsCurrentRepositoryHead);
