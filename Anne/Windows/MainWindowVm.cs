@@ -11,6 +11,8 @@ namespace Anne.Windows
     {
         public ReactiveProperty<RepositoryVm> SelectedRepository { get; } = new ReactiveProperty<RepositoryVm>();
 
+        public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>("Anne");
+
         public MainWindowVm()
         {
             SelectedRepository
