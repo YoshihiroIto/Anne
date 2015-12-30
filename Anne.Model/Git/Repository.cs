@@ -65,6 +65,7 @@ namespace Anne.Model.Git
                     Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
+            // todo:Internal.Commits の変更に追従する
             Commits = new ReactiveProperty<IEnumerable<Commit>>(
                 Scheduler.Immediate,
                 Internal.Commits.Select(x => new Commit(this, x)).Memoize())
