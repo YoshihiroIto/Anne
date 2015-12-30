@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -11,6 +12,7 @@ using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using StatefulModel;
+using StatefulModel.EventListeners;
 
 namespace Anne.Model.Git
 {
@@ -29,41 +31,28 @@ namespace Anne.Model.Git
             new AnonymousDisposable(() => WipFiles.Value.ForEach(c => c.Dispose()))
                 .AddTo(MultipleDisposable);
 
-            UpdateChengingFiles(null);
+            UpdateChangingFiles(null);
 
-            var watcher = new FileSystemWatcher(repos.Path)
-            {
-                Filter = string.Empty,
-                IncludeSubdirectories = true,
-                NotifyFilter =
-                    NotifyFilters.FileName |
-                    NotifyFilters.DirectoryName |
-                    NotifyFilters.LastWrite
-            }.AddTo(MultipleDisposable);
-
-            Observable.Merge(
-                watcher.CreatedAsObservable(),
-                watcher.DeletedAsObservable(),
-                watcher.ChangedAsObservable(),
-                watcher.RenamedAsObservable())
-                .Throttle(TimeSpan.FromMilliseconds(500))
-//                .Where(x => x.FullPath != Path.Combine(repos.Path, @".git"))
-//                .Where(x => x.FullPath != Path.Combine(repos.Path, @".git\index.lock"))
-//                .Where(x => x.FullPath != Path.Combine(repos.Path, @".git\index"))
-                .Subscribe(UpdateChengingFiles)
+            var watcher = new FileWatcher(repos.Path)
                 .AddTo(MultipleDisposable);
 
-            watcher.EnableRaisingEvents = true;
+            new EventListener<FileSystemEventHandler>(
+                h => watcher.FileUpdated += h,
+                h => watcher.FileUpdated -= h,
+                (s, e) => UpdateChangingFiles(e))
+                .AddTo(MultipleDisposable);
+
+            watcher.Start();
         }
 
-        private void UpdateChengingFiles(FileSystemEventArgs e)
+        private void UpdateChangingFiles(FileSystemEventArgs e)
         {
             if (e != null)
-                Debug.WriteLine($"UpdateChengingFiles : {e.FullPath}, {e.Name}, {e.ChangeType}");
+                Debug.WriteLine($"UpdateChangingFiles : {e.FullPath}, {e.Name}, {e.ChangeType}");
 
             var old = WipFiles.Value;
 
-            _repos.AddJob("UpdateChengingFiles", () =>
+            _repos.AddJob("UpdateChangingFiles", () =>
             {
                 WipFiles.Value =
                     _repos.Internal.RetrieveStatus(new StatusOptions())
@@ -100,41 +89,5 @@ namespace Anne.Model.Git
             LibGit2Sharp.FileStatus.RenamedInIndex,
             LibGit2Sharp.FileStatus.TypeChangeInIndex
         };
-    }
-
-    // http://blog.okazuki.jp/entry/20120322/1332378060
-    internal static class FileSystemWatcherExtensions
-    {
-        public static IObservable<FileSystemEventArgs> ChangedAsObservable(this FileSystemWatcher self)
-        {
-            return Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(
-                h => (_, e) => h(e),
-                h => self.Changed += h,
-                h => self.Changed -= h);
-        }
-
-        public static IObservable<FileSystemEventArgs> CreatedAsObservable(this FileSystemWatcher self)
-        {
-            return Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(
-                h => (_, e) => h(e),
-                h => self.Created += h,
-                h => self.Created -= h);
-        }
-
-        public static IObservable<FileSystemEventArgs> DeletedAsObservable(this FileSystemWatcher self)
-        {
-            return Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(
-                h => (_, e) => h(e),
-                h => self.Deleted += h,
-                h => self.Deleted -= h);
-        }
-
-        public static IObservable<FileSystemEventArgs> RenamedAsObservable(this FileSystemWatcher self)
-        {
-            return Observable.FromEvent<RenamedEventHandler, FileSystemEventArgs>(
-                h => (_, e) => h(e),
-                h => self.Renamed += h,
-                h => self.Renamed -= h);
-        }
     }
 }

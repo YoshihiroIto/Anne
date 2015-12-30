@@ -90,6 +90,7 @@
     <Compile Include="DisposableChecker.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Externals\DiffMatchPatch.cs" />
+    <Compile Include="FileWatcher.cs" />
     <Compile Include="GravatarLoader.cs" />
     <Compile Include="JobQueue.cs" />
     <Compile Include="MultipleDisposableExtensions.cs" />
