@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Windows.Media;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -28,20 +29,43 @@ namespace Anne.Features
         public ReactiveCommand CommitCommand { get; }
 
         public ReactiveProperty<WipFileVm> SelectedWipFile { get; } = new ReactiveProperty<WipFileVm>();
+        public ReadOnlyReactiveProperty<int> SummryRemaining { get; }
+        public ReadOnlyReactiveProperty<SolidColorBrush> SummryRemainingBrush { get; }
 
         private readonly RepositoryVm _repos;
         private string _summry = string.Empty;
         private string _description = string.Empty;
-
 
         public WipCommitVm(RepositoryVm repos)
         {
             Debug.Assert(repos != null);
             _repos = repos;
 
-            SelectedWipFile.AddTo(MultipleDisposable);
+            SelectedWipFile
+                .AddTo(MultipleDisposable);
 
-            CommitCommand = this.ObserveProperty(x => x.Summry)
+            var summryO = this.ObserveProperty(x => x.Summry);
+            (summryO as IDisposable)?.AddTo(MultipleDisposable);
+
+            SummryRemaining = summryO
+                .Select(x => 80 - x.Length)
+                .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
+            SummryRemainingBrush = SummryRemaining
+                .Select(x =>
+                {
+                    if (x < 0)
+                        return Brushes.Red;
+                    if (x < 20)
+                        return Brushes.DarkRed;
+                    return Brushes.Gray;
+                })
+                .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
+            CommitCommand = 
+                summryO
                 .Select(x => string.IsNullOrWhiteSpace(x) == false)
                 .ToReactiveCommand()
                 .AddTo(MultipleDisposable);

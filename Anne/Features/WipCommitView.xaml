@@ -16,15 +16,27 @@
     </Grid.RowDefinitions>
 
     <DockPanel Grid.Row="0" LastChildFill="True">
-        <controls:PromptTextBox DockPanel.Dock="Top"
-                                Prompt="Summry"
-                                Text="{Binding Summry,
-                                               UpdateSourceTrigger=PropertyChanged}" />
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <controls:PromptTextBox BorderThickness="1,1,1,0"
+                                    Prompt="Summry"
+                                    Text="{Binding Summry,
+                                                   UpdateSourceTrigger=PropertyChanged}" />
+
+            <Label Grid.Column="1"
+                   BorderThickness="0,1,1,0"
+                   Content="{Binding SummryRemaining.Value, Mode=OneWay}"
+                   Foreground="{Binding SummryRemainingBrush.Value, Mode=OneWay}" />
+        </Grid>
 
         <StackPanel DockPanel.Dock="Bottom">
             <Button Width="96"
                     Height="24"
-                    Margin="0,4,0,8"
+                    Margin="0,0,0,8"
                     HorizontalAlignment="Left"
                     Command="{Binding CommitCommand,
                                       Mode=OneTime}"
@@ -33,7 +45,6 @@
 
         <controls:PromptTextBox VerticalContentAlignment="Top"
                                 AcceptsReturn="True"
-                                BorderThickness="1,0,1,1"
                                 Prompt="Description"
                                 Text="{Binding Description,
                                                UpdateSourceTrigger=PropertyChanged}"
