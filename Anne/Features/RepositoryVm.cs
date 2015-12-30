@@ -68,9 +68,16 @@ namespace Anne.Features
 
             _model.Commits.Subscribe(src =>
             {
-                Commits.OfType<IDisposable>().ForEach(x => x.Dispose());
-
+                var old = Commits.ToArray();
+                
                 Commits.AddRangeOnScheduler(src.Select(x => new DoneCommitVm(x)));
+
+                old.ForEach(o =>
+                {
+                    Commits.RemoveOnScheduler(o);
+                    (o as IDisposable)?.Dispose();
+                });
+                
             }).AddTo(MultipleDisposable);
 
             new AnonymousDisposable(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()))
