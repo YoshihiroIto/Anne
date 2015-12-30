@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -11,6 +12,7 @@ using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using StatefulModel;
+using StatefulModel.EventListeners;
 
 namespace Anne.Model.Git
 {
@@ -65,14 +67,32 @@ namespace Anne.Model.Git
                     Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
-            // todo:Internal.Commits の変更に追従する
-            Commits = new ReactiveProperty<IEnumerable<Commit>>(
-                Scheduler.Immediate,
-                Internal.Commits.Select(x => new Commit(this, x)).Memoize())
-                .AddTo(MultipleDisposable);
+            {
+                Commits = new ReactiveProperty<IEnumerable<Commit>>(
+                    Scheduler.Immediate,
+                    Internal.Commits.Select(x => new Commit(this, x)).Memoize())
+                    .AddTo(MultipleDisposable);
 
-            new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
-                .AddTo(MultipleDisposable);
+                new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
+                    .AddTo(MultipleDisposable);
+            }
+
+            {
+                var watcher = new FileWatcher(System.IO.Path.Combine(Path, @".git\refs"))
+                    .AddTo(MultipleDisposable);
+
+                new EventListener<FileSystemEventHandler>(
+                    h => watcher.FileUpdated += h,
+                    h => watcher.FileUpdated -= h,
+                    (s, e) =>
+                    {
+                        Commits.Value.ForEach(x => x.Dispose());
+                        Commits.Value = Internal.Commits.Select(x => new Commit(this, x)).Memoize();
+                    })
+                    .AddTo(MultipleDisposable);
+
+                watcher.Start();
+            }
         }
 
         private void UpdateBranchProps()

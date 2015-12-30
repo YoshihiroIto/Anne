@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Tracing;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
