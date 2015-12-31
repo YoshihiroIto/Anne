@@ -8,6 +8,7 @@
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:foundation="clr-namespace:Anne.Foundation;assembly=Anne.Foundation"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:selectionExample="clr-namespace:SelectionExample;assembly=Anne.Foundation"
       d:DesignHeight="600"
       d:DesignWidth="300"
       mc:Ignorable="d">
@@ -79,7 +80,8 @@
               VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.VirtualizationMode="Recycling"
               foundation:ListBoxBehaviour.SeletedItems="{Binding SelectedWipFiles,
-                                                                 Mode=TwoWay}">
+                                                                 Mode=TwoWay}"
+              selectionExample:ListBoxSelector.Enabled="True">
         <ListView.Template>
             <ControlTemplate TargetType="ItemsControl">
                 <Border BorderBrush="LightGray"
