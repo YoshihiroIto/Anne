@@ -80,7 +80,7 @@
               VirtualizingPanel.VirtualizationMode="Recycling"
               foundation:ListBoxBehaviour.SeletedItems="{Binding SelectedWipFiles,
                                                                  Mode=TwoWay}">
-        <ItemsControl.Template>
+        <ListView.Template>
             <ControlTemplate TargetType="ItemsControl">
                 <Border BorderBrush="LightGray"
                         BorderThickness="1"
@@ -90,8 +90,7 @@
                     </ScrollViewer>
                 </Border>
             </ControlTemplate>
-        </ItemsControl.Template>
-
+        </ListView.Template>
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
@@ -123,6 +122,12 @@
                 </StackPanel>
             </DataTemplate>
         </ListView.ItemTemplate>
+
+        <ListView.ContextMenu>
+            <ContextMenu>
+                <MenuItem Command="{Binding DiscardChangesCommand, Mode=OneTime}" Header="Discard changes" />
+            </ContextMenu>
+        </ListView.ContextMenu>
     </ListView>
 
     <Border Grid.Row="2"

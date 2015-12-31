@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -124,6 +125,11 @@ namespace Anne.Features
         public void Commit(string message)
         {
             _model.Commit(message);
+        }
+
+        public void DiscardChanges(IEnumerable<string> paths)
+        {
+            _model.DiscardChanges(paths);
         }
 
         private void ShowDialog(Exception e)

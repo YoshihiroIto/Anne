@@ -142,6 +142,19 @@ namespace Anne.Model.Git
                 });
         }
 
+        public void DiscardChanges(IEnumerable<string> paths)
+        {
+            var enumerable = paths as string[] ?? paths.ToArray();
+            _jobQueue.AddJob(
+                $"DiscardChanges: {string.Join(",", enumerable)}",
+                () =>
+                {
+                    var opts = new CheckoutOptions { CheckoutModifiers = CheckoutModifiers.Force };
+
+                    Internal.CheckoutPaths("HEAD", enumerable, opts);
+                });
+        }
+
         public void Pull()
         {
             Debug.WriteLine("Pull() -- 未実装");

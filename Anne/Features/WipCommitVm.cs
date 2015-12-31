@@ -28,6 +28,7 @@ namespace Anne.Features
         }
 
         public ReactiveCommand CommitCommand { get; }
+        public ReactiveCommand DiscardChangesCommand { get; }
 
         public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles
         {
@@ -87,6 +88,15 @@ namespace Anne.Features
 
             CommitCommand.Subscribe(_ => repos.Commit((Summry + "\n\n" + Description).Trim()))
                 .AddTo(MultipleDisposable);
+
+            DiscardChangesCommand = this.ObserveProperty(x => x.SelectedWipFiles)
+                .Select(x => x.Count > 0)
+                .ToReactiveCommand()
+                .AddTo(MultipleDisposable);
+
+            DiscardChangesCommand.Subscribe(_ =>
+                repos.DiscardChanges(SelectedWipFiles.Cast<WipFileVm>().Select(x => x.Path))
+            ).AddTo(MultipleDisposable);
         }
     }
 }

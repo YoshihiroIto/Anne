@@ -128,7 +128,7 @@
               VirtualizingPanel.VirtualizationMode="Recycling"
               foundation:ListBoxBehaviour.SeletedItems="{Binding SelectedChangeFiles,
                                                                  Mode=TwoWay}">
-        <ItemsControl.Template>
+        <ListView.Template>
             <ControlTemplate TargetType="ItemsControl">
                 <Border BorderBrush="LightGray"
                         BorderThickness="1"
@@ -138,14 +138,12 @@
                     </ScrollViewer>
                 </Border>
             </ControlTemplate>
-        </ItemsControl.Template>
-
+        </ListView.Template>
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
             </ItemsPanelTemplate>
         </ListView.ItemsPanel>
-
         <ListView.ItemTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Horizontal">
