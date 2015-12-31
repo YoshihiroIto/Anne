@@ -42,22 +42,22 @@ namespace Anne.Features
             _model = model;
 
             JobSummries = _model.JobSummries
-                .ToReadOnlyReactiveCollection(UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveCollection()
                 .AddTo(MultipleDisposable);
 
             WorkingJob = _model.WorkingJob
-                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             // ブランチ
             LocalBranches = _model.Branches
-                .ToReadOnlyReactiveCollection(UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveCollection()
                 .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
 
             RemoteBranches = _model.Branches
-                .ToReadOnlyReactiveCollection(UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveCollection()
                 .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);

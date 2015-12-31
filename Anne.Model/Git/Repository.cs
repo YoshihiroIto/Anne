@@ -25,7 +25,7 @@ namespace Anne.Model.Git
         public ReactiveProperty<IEnumerable<Commit>> Commits { get; }
 
         // ジョブキュー
-        public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
+        public ReadOnlyReactiveCollection<string> JobSummries => _jobQueue.JobSummries;
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
         public event EventHandler<ExceptionEventArgs> JobExecutingException;
 
@@ -50,7 +50,6 @@ namespace Anne.Model.Git
 
             // ジョブキュー
             _jobQueue.AddTo(MultipleDisposable);
-            JobSummries = _jobQueue.JobSummries;
             WorkingJob = _jobQueue.WorkingJob
                 .ToReadOnlyReactiveProperty(eventScheduler: Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
