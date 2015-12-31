@@ -9,6 +9,9 @@ namespace Anne.Features.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+#if true
+            return null;
+#else
             var path = value as string;
             if (path == null)
                 return null;
@@ -16,6 +19,7 @@ namespace Anne.Features.Converters
             var ext = System.IO.Path.GetExtension(path);
 
             return HighlightingManager.Instance.GetDefinitionByExtension(ext);
+#endif
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
