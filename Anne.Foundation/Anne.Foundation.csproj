@@ -111,6 +111,7 @@
     <Compile Include="FileWatcher.cs" />
     <Compile Include="GravatarLoader.cs" />
     <Compile Include="JobQueue.cs" />
+    <Compile Include="ListBoxBehaviour.cs" />
     <Compile Include="MultipleDisposableExtensions.cs" />
     <Compile Include="Mvvm\ModelBase.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />

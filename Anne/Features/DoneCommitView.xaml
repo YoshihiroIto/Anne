@@ -5,6 +5,7 @@
       xmlns:converters="clr-namespace:Anne.Features.Converters"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
+      xmlns:foundation="clr-namespace:Anne.Foundation;assembly=Anne.Foundation"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       d:DesignHeight="600"
       d:DesignWidth="300"
@@ -121,11 +122,12 @@
               ItemsSource="{Binding ChangeFiles,
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
-              SelectedItem="{Binding SelectedChangeFile.Value}"
-              SelectionMode="Single"
+              SelectionMode="Extended"
               VirtualizingPanel.IsVirtualizing="True"
               VirtualizingPanel.ScrollUnit="Pixel"
-              VirtualizingPanel.VirtualizationMode="Recycling">
+              VirtualizingPanel.VirtualizationMode="Recycling"
+              foundation:ListBoxBehaviour.SeletedItems="{Binding SelectedChangeFiles,
+                                                                 Mode=TwoWay}">
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
@@ -160,6 +162,6 @@
     <Border Grid.Row="2"
             BorderBrush="LightGray"
             BorderThickness="1,0,1,1">
-        <diff:DiffView DataContext="{Binding SelectedChangeFile.Value, Mode=OneWay}" />
+        <diff:DiffView DataContext="{Binding SelectedChangeFiles, Mode=OneWay}" />
     </Border>
 </Grid>

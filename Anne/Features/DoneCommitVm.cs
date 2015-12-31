@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -74,15 +75,20 @@ namespace Anne.Features
 
                 ChangeFiles.ObserveAddChanged().Subscribe(x =>
                 {
-                    if (SelectedChangeFile.Value == null)
-                        SelectedChangeFile.Value = x;
+                    if (SelectedChangeFiles.Count == 0)
+                        SelectedChangeFiles = new[] {x};
                 }).AddTo(MultipleDisposable);
 
                 return _changeFiles;
             }
         }
 
-        public ReactiveProperty<ChangeFileVm> SelectedChangeFile { get; } = new ReactiveProperty<ChangeFileVm>();
+        private IList _selectedChangeFiles = new object[0];
+        public IList SelectedChangeFiles
+        {
+            get { return _selectedChangeFiles; }
+            set { SetProperty(ref _selectedChangeFiles, value); }
+        }
 
         private readonly Model.Git.Commit _model;
 
@@ -90,13 +96,6 @@ namespace Anne.Features
         {
             Debug.Assert(model != null);
             _model = model;
-
-            SelectedChangeFile.AddTo(MultipleDisposable);
-
-            //ChangeFiles.ObserveAddChanged().Subscribe(x =>
-            //{
-            //    Debug.WriteLine(x);
-            //}).AddTo(MultipleDisposable);
         }
     }
 }

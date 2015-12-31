@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -34,14 +35,20 @@ namespace Anne.Features
             {
                 var files = _repos.FileStatus.WipFiles;
 
-                if (SelectedWipFile.Value == null)
-                    SelectedWipFile.Value = files.Value.FirstOrDefault();
+                if (SelectedWipFiles.Count == 0)
+                    SelectedWipFiles = new[] {files.Value.FirstOrDefault()};
 
                 return files;
             }
         }
 
-        public ReactiveProperty<WipFileVm> SelectedWipFile { get; } = new ReactiveProperty<WipFileVm>();
+        private IList _selectedWipFiles = new object[0];
+        public IList SelectedWipFiles
+        {
+            get { return _selectedWipFiles; }
+            set { SetProperty(ref _selectedWipFiles, value); }
+        }
+
         public ReadOnlyReactiveProperty<int> SummryRemaining { get; }
         public ReadOnlyReactiveProperty<SolidColorBrush> SummryRemainingBrush { get; }
 
@@ -53,9 +60,6 @@ namespace Anne.Features
         {
             Debug.Assert(repos != null);
             _repos = repos;
-
-            SelectedWipFile
-                .AddTo(MultipleDisposable);
 
             SummryRemaining =
                 this.ObserveProperty(x => x.Summry)
