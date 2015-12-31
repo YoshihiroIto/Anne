@@ -33,8 +33,8 @@ namespace Anne.Foundation
         {
             try
             {
-                _sema.Release();
                 _cancellationToken.Cancel();
+                _sema.Release();
                 _task.Wait();
             }
             catch (AggregateException)
