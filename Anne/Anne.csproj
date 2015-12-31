@@ -46,16 +46,16 @@
       <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\MetroRadiance.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance.Chrome, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.Chrome.1.1.0.0\lib\net45\MetroRadiance.Chrome.dll</HintPath>
+    <Reference Include="MetroRadiance.Chrome, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.Chrome.1.1.0.2\lib\net45\MetroRadiance.Chrome.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.Core.1.1.0.0\lib\net45\MetroRadiance.Core.dll</HintPath>
+    <Reference Include="MetroRadiance.Core, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.Core.1.1.0.2\lib\net45\MetroRadiance.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
+      <HintPath>..\packages\MetroRadiance.Chrome.1.1.0.2\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ParseDiff, Version=1.0.15322.1101, Culture=neutral, processorArchitecture=MSIL">
@@ -104,7 +104,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MetroRadiance.Chrome.1.1.0.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
