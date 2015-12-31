@@ -33,15 +33,18 @@
             <controls:PromptTextBox BorderThickness="1,1,1,0"
                                     IsTabStop="True"
                                     Prompt="Summry"
+                                    SnapsToDevicePixels="True"
                                     Text="{Binding Summry,
                                                    UpdateSourceTrigger=PropertyChanged}" />
 
             <Label Grid.Column="1"
+                   BorderBrush="{StaticResource BorderBrushKey}"
                    BorderThickness="0,1,1,0"
                    Content="{Binding SummryRemaining.Value,
                                      Mode=OneWay}"
                    Foreground="{Binding SummryRemainingBrush.Value,
-                                        Mode=OneWay}" />
+                                        Mode=OneWay}"
+                   SnapsToDevicePixels="True" />
         </Grid>
 
         <StackPanel DockPanel.Dock="Bottom">
@@ -59,6 +62,7 @@
                                 AcceptsReturn="True"
                                 IsTabStop="True"
                                 Prompt="Description"
+                                SnapsToDevicePixels="True"
                                 Text="{Binding Description,
                                                UpdateSourceTrigger=PropertyChanged}"
                                 TextWrapping="Wrap"
@@ -87,7 +91,7 @@
                 </Border>
             </ControlTemplate>
         </ItemsControl.Template>
-        
+
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
@@ -124,8 +128,8 @@
     <Border Grid.Row="2"
             Background="White"
             BorderBrush="LightGray"
-            SnapsToDevicePixels="True"
-            BorderThickness="1,0,1,1">
+            BorderThickness="1,0,1,1"
+            SnapsToDevicePixels="True">
         <diff:DiffView DataContext="{Binding SelectedWipFiles, Mode=OneWay}" />
     </Border>
 </Grid>
