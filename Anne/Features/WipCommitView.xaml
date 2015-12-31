@@ -1,12 +1,15 @@
 ﻿<Grid x:Class="Anne.Features.WipCommitView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
       xmlns:controls="http://schemes.grabacr.net/winfx/2014/controls"
       xmlns:controls1="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
       xmlns:converters="clr-namespace:Anne.Features.Converters"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
+      xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       xmlns:foundation="clr-namespace:Anne.Foundation;assembly=Anne.Foundation"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:selectionExample="clr-namespace:SelectionExample;assembly=Anne.Foundation"
       d:DesignHeight="600"
@@ -124,6 +127,12 @@
                 </StackPanel>
             </DataTemplate>
         </ListView.ItemTemplate>
+
+        <i:Interaction.Triggers>
+            <ei:KeyTrigger Key="Space">
+                <behaviors:LivetCallMethodAction MethodName="ToggleStaging" MethodTarget="{Binding}" />
+            </ei:KeyTrigger>
+        </i:Interaction.Triggers>
 
         <ListView.ContextMenu>
             <ContextMenu>

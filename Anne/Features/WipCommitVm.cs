@@ -98,5 +98,12 @@ namespace Anne.Features
                 repos.DiscardChanges(SelectedWipFiles.Cast<WipFileVm>().Select(x => x.Path))
             ).AddTo(MultipleDisposable);
         }
+
+        public void ToggleStaging()
+        {
+            SelectedWipFiles
+                .Cast<WipFileVm>()
+                .ForEach(f => f.IsInStaging.Value = !f.IsInStaging.Value);
+        }
     }
 }
