@@ -34,9 +34,11 @@
                            Content="{Binding Path,
                                              Mode=OneTime}"
                            FontWeight="Bold"
-                           Padding="4,2" />
+                           Padding="4,2"
+                           SnapsToDevicePixels="True" />
 
-                    <diff:DiffTextEditor FontFamily="Consolas"
+                    <diff:DiffTextEditor x:Name="DiffTextEditor"
+                                         FontFamily="Consolas"
                                          FontSize="12"
                                          HorizontalScrollBarVisibility="Hidden"
                                          IsReadOnly="True"
@@ -47,6 +49,13 @@
                                                         Mode=OneTime}"
                                          VerticalScrollBarVisibility="Auto"
                                          WordWrap="True" />
+
+                    <Line SnapsToDevicePixels="True"
+                          Stroke="LightGray"
+                          X1="0"
+                          X2="{Binding ElementName=DiffTextEditor,
+                                       Path=ActualWidth,
+                                       Mode=OneWay}" />
                 </StackPanel>
                 <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
             </DataTemplate>

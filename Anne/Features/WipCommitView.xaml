@@ -76,6 +76,18 @@
               VirtualizingPanel.VirtualizationMode="Recycling"
               foundation:ListBoxBehaviour.SeletedItems="{Binding SelectedWipFiles,
                                                                  Mode=TwoWay}">
+        <ItemsControl.Template>
+            <ControlTemplate TargetType="ItemsControl">
+                <Border BorderBrush="LightGray"
+                        BorderThickness="1"
+                        SnapsToDevicePixels="True">
+                    <ScrollViewer Background="White">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </Border>
+            </ControlTemplate>
+        </ItemsControl.Template>
+        
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
@@ -110,7 +122,9 @@
     </ListView>
 
     <Border Grid.Row="2"
+            Background="White"
             BorderBrush="LightGray"
+            SnapsToDevicePixels="True"
             BorderThickness="1,0,1,1">
         <diff:DiffView DataContext="{Binding SelectedWipFiles, Mode=OneWay}" />
     </Border>
