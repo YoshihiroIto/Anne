@@ -137,7 +137,7 @@ namespace SelectionExample
                 this.selectionRect = new SelectionAdorner(this.scrollContent);
                 this.scrollContent.AdornerLayer.Add(this.selectionRect);
 
-                this.selector = new ItemsControlSelector(this.listBox);
+                this.selector = new ItemsControlSelector(this.listBox, this);
 
                 // The ListBox intercepts the regular MouseLeftButtonDown event
                 // to do its selection processing, so we need to handle the
@@ -242,15 +242,27 @@ namespace SelectionExample
             return this.scrollContent.CaptureMouse();
         }
 
+        // Added by yoi
+        private FrameworkElement latestSelectedItem;
+
         private void StopSelection()
         {
             // Hide the selection rectangle and stop the auto scrolling.
             this.selectionRect.IsEnabled = false;
             this.autoScroller.IsEnabled = false;
+
+            // Added by yoi
+            if (this.latestSelectedItem == null)
+                this.listBox.Focus();
+            else
+                this.latestSelectedItem.Focus();
         }
 
         private void StartSelection(Point location)
         {
+            // Added by yoi
+            this.latestSelectedItem = null;
+
             // We've stolen the MouseLeftButtonDown event from the ListBox
             // so we need to manually give it focus.
             this.listBox.Focus();
@@ -497,6 +509,9 @@ namespace SelectionExample
             private readonly ItemsControl itemsControl;
             private Rect previousArea;
 
+            // Added by yoi
+            private ListBoxSelector parent;
+
             /// <summary>
             /// Initializes a new instance of the ItemsControlSelector class.
             /// </summary>
@@ -504,13 +519,16 @@ namespace SelectionExample
             /// The control that contains the items to select.
             /// </param>
             /// <exception cref="ArgumentNullException">itemsControl is null.</exception>
-            public ItemsControlSelector(ItemsControl itemsControl)
+            public ItemsControlSelector(ItemsControl itemsControl, ListBoxSelector parent)
             {
                 if (itemsControl == null)
                 {
                     throw new ArgumentNullException("itemsControl");
                 }
                 this.itemsControl = itemsControl;
+
+                // Added by yoi
+                this.parent = parent;
             }
 
             /// <summary>
@@ -554,6 +572,9 @@ namespace SelectionExample
                         if (itemBounds.IntersectsWith(area))
                         {
                             Selector.SetIsSelected(item, true);
+
+                            // Added by yoi
+                            parent.latestSelectedItem = item;
                         }
                         else if (itemBounds.IntersectsWith(this.previousArea))
                         {

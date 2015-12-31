@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reactive.Concurrency;
 using Anne.Diff;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
@@ -37,7 +36,7 @@ namespace Anne.Features
 
             #region IsInStaging, IsInStagingFromModel
 
-            IsInStaging = new ReactiveProperty<bool>(Scheduler.Immediate, model.IsInStaging)
+            IsInStaging = new ReactiveProperty<bool>(model.IsInStaging)
                 .AddTo(MultipleDisposable);
 
             IsInStaging.Subscribe(x =>
@@ -46,8 +45,7 @@ namespace Anne.Features
                     model.Stage();
                 else
                     model.Unstage();
-            })
-                .AddTo(MultipleDisposable);
+            }).AddTo(MultipleDisposable);
 
             IsInStagingFromModel = model.ObserveProperty(x => x.IsInStaging)
                 .ToReadOnlyReactiveProperty()

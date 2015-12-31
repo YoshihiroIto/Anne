@@ -134,6 +134,12 @@
             </ei:KeyTrigger>
         </i:Interaction.Triggers>
 
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <EventSetter Event="KeyDown" Handler="ListViewItem_KeyDown" />
+            </Style>
+        </ListView.ItemContainerStyle>
+
         <ListView.ContextMenu>
             <ContextMenu>
                 <MenuItem Command="{Binding DiscardChangesCommand, Mode=OneTime}" Header="Discard changes" />
