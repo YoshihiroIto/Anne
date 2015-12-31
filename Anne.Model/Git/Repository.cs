@@ -25,7 +25,7 @@ namespace Anne.Model.Git
         public ReactiveProperty<IEnumerable<Commit>> Commits { get; }
 
         // ジョブキュー
-        public ReadOnlyReactiveCollection<string> JobSummries => _jobQueue.JobSummries;
+        public ReactiveCollection<string> JobSummries => _jobQueue.JobSummries;
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
         public event EventHandler<ExceptionEventArgs> JobExecutingException;
 

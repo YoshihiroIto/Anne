@@ -12,7 +12,8 @@ namespace Anne.Foundation
     {
         public event EventHandler<ExceptionEventArgs> JobExecutingException;
 
-        public ReadOnlyReactiveCollection<string> JobSummries { get; }
+        //public ReadOnlyReactiveCollection<string> JobSummries { get; }
+        public ReactiveCollection<string> JobSummries { get; } = new ReactiveCollection<string>();
         public ReactiveProperty<string> WorkingJob { get; } =
             new ReactiveProperty<string>(Scheduler.Immediate);
 
@@ -52,11 +53,15 @@ namespace Anne.Foundation
 
         public JobQueue()
         {
+
+// todo: _jobsから作成すると例外が起きてします。一旦処理しないようにする。要調査
+#if false
             JobSummries = _jobs
                 .ToReadOnlyReactiveCollection(
                     _jobs.ToCollectionChanged<Job>(),
                     x => x.Summry,
                     Scheduler.Immediate);
+#endif
 
             _task = Task.Run(() =>
             {
