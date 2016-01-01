@@ -62,7 +62,7 @@ namespace Anne.Model.Git
             Branches = Internal.Branches
                 .ToReadOnlyReactiveCollection(
                     Internal.Branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
-                    x => new Branch(x, Internal),
+                    x => new Branch(x.CanonicalName, Internal),
                     Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
@@ -73,6 +73,8 @@ namespace Anne.Model.Git
                     IncludeReachableFrom = Internal.Refs
                 };
 
+                UpdateLabelDict();
+
                 Commits = new ReactiveProperty<IEnumerable<Commit>>(
                     Scheduler.Immediate,
                     Internal.Commits.QueryBy(filter).Select(x => new Commit(this, x)).Memoize())
@@ -80,8 +82,6 @@ namespace Anne.Model.Git
 
                 new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
                     .AddTo(MultipleDisposable);
-
-                MakeLabelDict();
             }
 
             {
@@ -93,11 +93,11 @@ namespace Anne.Model.Git
                     h => watcher.FileUpdated -= h,
                     (s, e) =>
                     {
+                        UpdateLabelDict();
+
                         var old = Commits.Value;
                         Commits.Value = Internal.Commits.Select(x => new Commit(this, x)).Memoize();
                         old.ForEach(x => x.Dispose());
-
-                        MakeLabelDict();
                     })
                     .AddTo(MultipleDisposable);
 
@@ -112,7 +112,7 @@ namespace Anne.Model.Git
 
         private Dictionary<string /*sha*/, List<string> /*label*/> _labelDict = new Dictionary<string, List<string>>();
 
-        private void MakeLabelDict()
+        private void UpdateLabelDict()
         {
             _labelDict = new Dictionary<string, List<string>>();
 

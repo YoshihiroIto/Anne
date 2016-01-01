@@ -38,9 +38,6 @@ namespace Anne.Model.Git
             set { SetProperty(ref _isCurrent, value); } 
         }
 
-        private readonly LibGit2Sharp.Branch _internal;
-        private readonly LibGit2Sharp.Repository _repos;
-
         private static Regex BranchRegex { get; } = new Regex(@"(?<Remote>[0-9a-zA-Z_\-\.]*)/(?<Local>.*)", RegexOptions.Compiled);
 
         public string LocalName
@@ -67,14 +64,18 @@ namespace Anne.Model.Git
             }
         }
 
-        public string TipSha => _internal.Tip.Sha;
+        public string TipSha => Internal.Tip.Sha;
 
-        public Branch(LibGit2Sharp.Branch src, LibGit2Sharp.Repository repos)
+        private readonly LibGit2Sharp.Repository _repos;
+        private readonly string _sourceCanonicalName;
+        private LibGit2Sharp.Branch Internal => _repos.Branches[_sourceCanonicalName];
+        
+        public Branch(string sourceCanonicalName, LibGit2Sharp.Repository repos)
         {
-            Debug.Assert(src != null);
+            Debug.Assert(string.IsNullOrEmpty(sourceCanonicalName) == false);
             Debug.Assert(repos != null);
 
-            _internal = src;
+            _sourceCanonicalName = sourceCanonicalName;
             _repos = repos;
 
             UpdateProps();
@@ -82,18 +83,18 @@ namespace Anne.Model.Git
 
         public void UpdateProps()
         {
-            Name = _internal.FriendlyName;
-            IsRemote = _internal.IsRemote;
-            IsCurrent = _internal.IsCurrentRepositoryHead;
+            Name = Internal.FriendlyName;
+            IsRemote = Internal.IsRemote;
+            IsCurrent = Internal.IsCurrentRepositoryHead;
         }
 
         public void Checkout()
         {
             // ブランチを作る
-            var newBranch = _repos.CreateBranch(LocalName, _internal.Tip);
+            var newBranch = _repos.CreateBranch(LocalName, Internal.Tip);
 
             // 追跡する
-            _repos.Branches.Update(newBranch, b => b.TrackedBranch = _internal.CanonicalName);
+            _repos.Branches.Update(newBranch, b => b.TrackedBranch = Internal.CanonicalName);
 
             // チェックアウト
             _repos.Checkout(newBranch);
@@ -101,12 +102,12 @@ namespace Anne.Model.Git
 
         public void Remove()
         {
-            _repos.Branches.Remove(_internal);
+            _repos.Branches.Remove(Internal);
         }
 
         public void Switch()
         {
-            _repos.Checkout(_internal);
+            _repos.Checkout(Internal);
         }
     }
 }
