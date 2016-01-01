@@ -160,57 +160,47 @@
                     Margin="0,0,0,8"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
-            <Button Width="64"
-                    Height="64"
+
+            <StackPanel.Resources>
+                <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+                    <Button Width="64"
+                            Height="64"
+                            Command="{TemplateBinding Command}">
+                        <StackPanel>
+                            <Viewbox Width="40" Height="40">
+                                <Canvas Width="24" Height="24">
+                                    <ContentPresenter />
+                                </Canvas>
+                            </Viewbox>
+                            <Label Margin="0"
+                                   HorizontalContentAlignment="Center"
+                                   VerticalContentAlignment="Center"
+                                   Content="{TemplateBinding Name}"
+                                   Padding="0" />
+                        </StackPanel>
+                    </Button>
+                </ControlTemplate>
+            </StackPanel.Resources>
+
+            <Button Name="Fetch"
                     Command="{Binding FetchCommand,
-                                      Mode=OneTime}">
-                <StackPanel>
-                    <Viewbox Width="40" Height="40">
-                        <Canvas Width="24" Height="24">
-                            <Path Data="M12,17L7,12H10V8H14V12H17L12,17M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" Fill="Black" />
-                        </Canvas>
-                    </Viewbox>
-                    <Label Margin="0"
-                           HorizontalContentAlignment="Center"
-                           VerticalContentAlignment="Center"
-                           Content="Fetch"
-                           Padding="0" />
-                </StackPanel>
+                                      Mode=OneTime}"
+                    Template="{StaticResource ButtonTemplate}">
+                <Path Data="M12,17L7,12H10V8H14V12H17L12,17M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" Fill="Black" />
             </Button>
-            <Button Width="64"
-                    Height="64"
+
+            <Button Name="Pull"
                     Command="{Binding PullCommand,
-                                      Mode=OneTime}">
-                <StackPanel>
-                    <Viewbox Width="40" Height="40">
-                        <Canvas Width="24" Height="24">
-                            <Path Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" Fill="Black" />
-                        </Canvas>
-                    </Viewbox>
-                    <Label Margin="0"
-                           HorizontalContentAlignment="Center"
-                           VerticalContentAlignment="Center"
-                           Content="Pull"
-                           Padding="0" />
-                </StackPanel>
+                                      Mode=OneTime}"
+                    Template="{StaticResource ButtonTemplate}">
+                <Path Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" Fill="Black" />
             </Button>
-            <Button Width="64"
-                    Height="64"
-                    Margin="-1,0,0,0"
+
+            <Button Name="Push"
                     Command="{Binding PushCommand,
-                                      Mode=OneTime}">
-                <StackPanel>
-                    <Viewbox Width="40" Height="40">
-                        <Canvas Width="24" Height="24">
-                            <Path Data="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" Fill="Black" />
-                        </Canvas>
-                    </Viewbox>
-                    <Label Margin="0"
-                           HorizontalContentAlignment="Center"
-                           VerticalContentAlignment="Center"
-                           Content="Push"
-                           Padding="0" />
-                </StackPanel>
+                                      Mode=OneTime}"
+                    Template="{StaticResource ButtonTemplate}">
+                <Path Data="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" Fill="Black" />
             </Button>
         </StackPanel>
 
