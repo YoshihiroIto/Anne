@@ -91,18 +91,6 @@
     <Compile Include="Controls\FileStatusMark.xaml.cs">
       <DependentUpon>FileStatusMark.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MarkRenamed.xaml.cs">
-      <DependentUpon>MarkRenamed.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MarkModified.xaml.cs">
-      <DependentUpon>MarkModified.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MarkDeleted.xaml.cs">
-      <DependentUpon>MarkDeleted.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MarkAdded.xaml.cs">
-      <DependentUpon>MarkAdded.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Selectors\FileStatusMarkSelector.cs" />
     <Compile Include="Controls\TextEditor.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -141,22 +129,6 @@
     <Page Include="Controls\FileStatusMark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MarkRenamed.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MarkModified.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MarkDeleted.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MarkAdded.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

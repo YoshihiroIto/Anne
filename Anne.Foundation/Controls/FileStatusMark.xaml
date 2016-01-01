@@ -11,25 +11,40 @@
          mc:Ignorable="d">
     <Viewbox.Resources>
         <DataTemplate x:Key="AddedTemplate">
-            <controls:MarkAdded />
+            <Path Width="24"
+                  Height="24"
+                  Data="M17,13H13V17H11V13H7V11H11V7H13V11H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z"
+                  Fill="#FF6CD56C"
+                  Stretch="Fill" />
         </DataTemplate>
         <DataTemplate x:Key="DeletedTemplate">
-            <controls:MarkDeleted />
+            <Path Width="24"
+                  Height="24"
+                  Data="M17,13H7V11H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z"
+                  Fill="#FFFF637B"
+                  Stretch="Fill" />
         </DataTemplate>
         <DataTemplate x:Key="ModifiedTemplate">
-            <controls:MarkModified />
+            <Path Width="24"
+                  Height="24"
+                  Data="M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19M11,17H13V13.73L15.83,15.36L16.83,13.63L14,12L16.83,10.36L15.83,8.63L13,10.27V7H11V10.27L8.17,8.63L7.17,10.36L10,12L7.17,13.63L8.17,15.36L11,13.73V17Z"
+                  Fill="#FFF1C17A"
+                  Stretch="Fill" />
         </DataTemplate>
         <DataTemplate x:Key="RenamedTemplate">
-            <controls:MarkRenamed />
+            <Path Width="24"
+                  Height="12"
+                  Data="M18.4,10.6C16.55,9 14.15,8 11.5,8C6.85,8 2.92,11.03 1.54,15.22L3.9,16C4.95,12.81 7.95,10.5 11.5,10.5C13.45,10.5 15.23,11.22 16.62,12.38L13,16H22V7L18.4,10.6Z"
+                  Fill="#FF5151C5"
+                  Stretch="Fill" />
         </DataTemplate>
 
         <selectors:FileStatusMarkSelector x:Key="FileStatusMarkSelector"
                                           Added="{StaticResource AddedTemplate}"
                                           Deleted="{StaticResource DeletedTemplate}"
-                                          Renamed="{StaticResource RenamedTemplate}"
-                                          Modified="{StaticResource ModifiedTemplate}" />
+                                          Modified="{StaticResource ModifiedTemplate}"
+                                          Renamed="{StaticResource RenamedTemplate}" />
     </Viewbox.Resources>
 
     <ContentControl Content="{Binding Status, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:FileStatusMark}}}" ContentTemplateSelector="{StaticResource FileStatusMarkSelector}" />
 </Viewbox>
-
