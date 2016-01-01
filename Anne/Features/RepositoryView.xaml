@@ -87,8 +87,8 @@
                                    HorizontalContentAlignment="Center"
                                    VerticalContentAlignment="Center"
                                    Background="#FFFFC6BF"
-                                   BorderThickness="1"
                                    BorderBrush="Black"
+                                   BorderThickness="1"
                                    Content="{Binding}"
                                    Padding="4,1"
                                    SnapsToDevicePixels="True" />
@@ -100,14 +100,18 @@
         </DataTemplate>
 
         <DataTemplate x:Key="WipCommitListItemTemplate" DataType="{x:Type features:WipCommitVm}">
-            <Grid>
-                <TextBlock FontWeight="Bold"
+            <Grid Height="20">
+                <TextBlock VerticalAlignment="Center"
+                           FontWeight="Bold"
                            Foreground="DarkGray"
                            Text="Work In Progress"
                            Visibility="{Binding Summry,
                                                 Converter={StaticResource WipVisiblity},
                                                 Mode=OneWay}" />
-                <TextBlock FontWeight="Bold" Text="{Binding Summry, Mode=OneWay}" />
+                <TextBlock VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Text="{Binding Summry,
+                                          Mode=OneWay}" />
             </Grid>
         </DataTemplate>
 
