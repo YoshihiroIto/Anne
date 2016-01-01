@@ -140,7 +140,7 @@
                                               Mode=OneTime}"
                             Content="Discard"
                             DockPanel.Dock="Right"
-                            Visibility="{Binding IsMouseOver,
+                            Visibility="{Binding DataContext.IsSelected.Value,
                                                  Converter={StaticResource DiscardButtonVisibility},
                                                  RelativeSource={RelativeSource FindAncestor,
                                                                                 AncestorType={x:Type DockPanel}}}" />
@@ -158,6 +158,7 @@
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">
                 <EventSetter Event="KeyDown" Handler="ListViewItem_KeyDown" />
+                <Setter Property="IsSelected" Value="{Binding IsSelected.Value}" />
 
                 <Style.Triggers>
                     <Trigger Property="ItemsControl.AlternationIndex" Value="1">
