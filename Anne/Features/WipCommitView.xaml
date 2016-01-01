@@ -112,17 +112,7 @@
                                               Status="{Binding Status,
                                                                Mode=OneTime}" />
                     <TextBlock Margin="4,0,0,0" Text="{Binding Path, Mode=OneTime}" />
-                    <StackPanel Margin="8,0,0,0"
-                                Orientation="Horizontal"
-                                Visibility="{Binding IsBinary,
-                                                     Mode=OneTime,
-                                                     Converter={StaticResource VisibilityConverter}}">
-                        <TextBlock Text="(" />
-                        <TextBlock Foreground="Green" Text="{Binding LinesAdded, Mode=OneTime}" />
-                        <TextBlock Text=", " />
-                        <TextBlock Foreground="Red" Text="{Binding LinesDeleted, Mode=OneTime}" />
-                        <TextBlock Text=")" />
-                    </StackPanel>
+                    <diff:DiffLinesCountView Margin="8,0,0,0" Visibility="{Binding IsBinary, Mode=OneTime, Converter={StaticResource VisibilityConverter}}" />
                     <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
                 </StackPanel>
             </DataTemplate>
