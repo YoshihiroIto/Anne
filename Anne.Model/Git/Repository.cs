@@ -149,7 +149,6 @@ namespace Anne.Model.Git
                 () =>
                 {
                     var opts = new CheckoutOptions { CheckoutModifiers = CheckoutModifiers.Force };
-
                     Internal.CheckoutPaths("HEAD", enumerable, opts);
                 });
         }
@@ -160,7 +159,9 @@ namespace Anne.Model.Git
                 $"Reset: {mode} {sha}",
                 () =>
                 {
-                    Debug.WriteLine( $"Reset: {mode} {sha}" );
+                    var commit = Internal.Lookup<LibGit2Sharp.Commit>(sha);
+                    Debug.Assert(commit != null);
+                    Internal.Reset(mode, commit);
                 });
         }
 
