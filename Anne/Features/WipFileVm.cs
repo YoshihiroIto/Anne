@@ -19,13 +19,15 @@ namespace Anne.Features
         public int LinesAdded => _model.LinesAdded;
         public int LinesDeleted => _model.LinesDeleted;
         public ChangeKind Status => _model.Status;
-        public bool IsBinary => _model.IsBinary; 
+        public bool IsBinary => _model.IsBinary;
 
         public DiffLine[] DiffLines { get; set; }
         public ReactiveProperty<bool> IsInStaging { get; }
 
         private readonly WipFile _model;
         private ReadOnlyReactiveProperty<bool> IsInStagingFromModel { get; }
+
+        public ReactiveCommand DiscardChangesCommand { get; }
 
         public WipFileVm(Repository repos, WipFile model)
             : base(true)
@@ -59,6 +61,13 @@ namespace Anne.Features
 
             if (_model.IsBinary == false)
                 this.MakeDiff(_model.Patch);
+
+            DiscardChangesCommand = new ReactiveCommand()
+                .AddTo(MultipleDisposable);
+
+            DiscardChangesCommand
+                .Subscribe(_ => repos.DiscardChanges(new[] {Path}))
+                .AddTo(MultipleDisposable);
         }
     }
 }

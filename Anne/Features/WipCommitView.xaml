@@ -77,6 +77,7 @@
     </DockPanel>
 
     <ListView Grid.Row="1"
+              HorizontalContentAlignment="Stretch"
               BorderBrush="LightGray"
               ItemsSource="{Binding WipFiles.Value,
                                     Mode=OneWay}"
@@ -106,18 +107,37 @@
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Horizontal">
+                <DockPanel LastChildFill="False">
                     <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                    <CheckBox IsChecked="{Binding IsInStaging.Value}" />
+                    <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsInStaging.Value}" />
+
                     <controls1:FileStatusMark Width="14"
                                               Height="14"
                                               Margin="4,0,0,0"
+                                              VerticalAlignment="Center"
                                               Status="{Binding Status,
                                                                Mode=OneTime}" />
-                    <TextBlock Margin="4,0,0,0" Text="{Binding Path, Mode=OneTime}" />
-                    <diff:DiffLinesCountView Margin="8,0,0,0" Visibility="{Binding IsBinary, Mode=OneTime, Converter={StaticResource VisibilityConverter}}" />
+
+                    <TextBlock Margin="4,0,0,0"
+                               VerticalAlignment="Center"
+                               DockPanel.Dock="Left"
+                               Text="{Binding Path,
+                                              Mode=OneTime}" />
+
+                    <diff:DiffLinesCountView Margin="8,0,0,0"
+                                             VerticalAlignment="Center"
+                                             DockPanel.Dock="Left"
+                                             Visibility="{Binding IsBinary,
+                                                                  Mode=OneTime,
+                                                                  Converter={StaticResource VisibilityConverter}}" />
+
+                    <Button VerticalAlignment="Center"
+                            Command="{Binding DiscardChangesCommand,
+                                              Mode=OneTime}"
+                            Content="Discard"
+                            DockPanel.Dock="Right" />
                     <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
-                </StackPanel>
+                </DockPanel>
             </DataTemplate>
         </ListView.ItemTemplate>
 
