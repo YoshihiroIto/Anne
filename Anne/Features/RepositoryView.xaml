@@ -92,12 +92,7 @@
                                     SnapsToDevicePixels="True">
                                 <StackPanel Orientation="Horizontal">
                                     <controls:CommitLabelMark Margin="2,2,0,1" Type="{Binding Type.Value, Mode=OneWay}" />
-                                    <TextBox Margin="0,0,2,0"
-                                             Background="{x:Null}"
-                                             BorderBrush="{x:Null}"
-                                             BorderThickness="0"
-                                             Text="{Binding Name.Value,
-                                                            Mode=OneWay}" />
+                                    <TextBlock Margin="0,0,3,0" Text="{Binding Name.Value, Mode=OneWay}" />
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
