@@ -53,6 +53,8 @@ namespace Anne.Features
         public ReadOnlyReactiveProperty<int> SummryRemaining { get; }
         public ReadOnlyReactiveProperty<SolidColorBrush> SummryRemainingBrush { get; }
 
+        public ReactiveCommand<string>  ResetCommand { get; } 
+
         private readonly RepositoryVm _repos;
         private string _summry = string.Empty;
         private string _description = string.Empty;

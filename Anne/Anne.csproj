@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="Features\Converters\PathStringToSyntaxHighlightingConverter.cs" />
     <Compile Include="Features\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Features\Converters\TypeOfConverter.cs" />
     <Compile Include="Features\WipFileVm.cs" />
     <Compile Include="Features\Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Diff\DiffLine.cs" />

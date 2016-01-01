@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
+using LibGit2Sharp;
 using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -74,7 +75,7 @@ namespace Anne.Features
             {
                 var old = Commits.ToArray();
                 
-                Commits.AddRangeOnScheduler(src.Select(x => new DoneCommitVm(x)));
+                Commits.AddRangeOnScheduler(src.Select(x => new DoneCommitVm(this, x)));
 
                 old.ForEach(o =>
                 {
@@ -130,6 +131,11 @@ namespace Anne.Features
         public void DiscardChanges(IEnumerable<string> paths)
         {
             _model.DiscardChanges(paths);
+        }
+
+        public void Reset(ResetMode mode, string sha)
+        {
+            _model.Reset(mode, sha);
         }
 
         private void ShowDialog(Exception e)

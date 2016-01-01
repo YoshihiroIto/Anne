@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
+using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -92,10 +93,21 @@ namespace Anne.Features
 
         private readonly Model.Git.Commit _model;
 
-        public DoneCommitVm(Model.Git.Commit model)
+        public ReactiveCommand<ResetMode> ResetCommand { get; } 
+
+        public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model)
         {
             Debug.Assert(model != null);
             _model = model;
+
+            ResetCommand = new ReactiveCommand<ResetMode>().AddTo(MultipleDisposable);
+            ResetCommand.Subscribe(mode =>
+            {
+                Debug.WriteLine(">>>>>>>>>>" + mode);
+
+                repos.Reset(mode, model.Sha);
+            }).AddTo(MultipleDisposable);
+
         }
     }
 }

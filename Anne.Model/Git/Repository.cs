@@ -154,6 +154,16 @@ namespace Anne.Model.Git
                 });
         }
 
+        public void Reset(ResetMode mode, string sha)
+        {
+            _jobQueue.AddJob(
+                $"Reset: {mode} {sha}",
+                () =>
+                {
+                    Debug.WriteLine( $"Reset: {mode} {sha}" );
+                });
+        }
+
         public void Pull()
         {
             Debug.WriteLine("Pull() -- 未実装");
