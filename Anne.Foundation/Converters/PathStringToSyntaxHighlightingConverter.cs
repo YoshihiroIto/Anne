@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace Anne.Foundation.Converters
 {
@@ -8,7 +9,7 @@ namespace Anne.Foundation.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-#if true
+#if !true
             return null;
 #else
             var path = value as string;
