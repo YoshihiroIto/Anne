@@ -27,7 +27,7 @@ namespace Anne.Features
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            Background = new ReactiveProperty<Brush>(Brushes.LightPink)
+            Background = new ReactiveProperty<Brush>(Brushes.MistyRose)
                 .AddTo(MultipleDisposable);
         }
     }

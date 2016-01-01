@@ -3,11 +3,11 @@
 namespace Anne.Foundation.Controls
 {
     /// <summary>
-    /// MarkAdded.xaml の相互作用ロジック
+    /// FileStatusMark.xaml の相互作用ロジック
     /// </summary>
     public partial class FileStatusMark
     {
-        #region Status
+#region Status
         public LibGit2Sharp.ChangeKind Status
         {
             get { return (LibGit2Sharp.ChangeKind)GetValue(StatusProperty); }
@@ -24,7 +24,7 @@ namespace Anne.Foundation.Controls
                     BindsTwoWayByDefault = false
                 }
             );
-        #endregion
+#endregion
 
         public FileStatusMark()
         {

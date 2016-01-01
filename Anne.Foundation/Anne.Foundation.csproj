@@ -88,9 +88,13 @@
   <ItemGroup>
     <Compile Include="CommitLabelType.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controls\CommitLabelMark.xaml.cs">
+      <DependentUpon>CommitLabelMark.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FileStatusMark.xaml.cs">
       <DependentUpon>FileStatusMark.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Selectors\CommitLabelMarkSelector.cs" />
     <Compile Include="Controls\Selectors\FileStatusMarkSelector.cs" />
     <Compile Include="Controls\TextEditor.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -126,6 +130,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\CommitLabelMark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\FileStatusMark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
