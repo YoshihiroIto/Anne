@@ -29,6 +29,8 @@ namespace Anne.Features
 
         public ReactiveCommand DiscardChangesCommand { get; }
 
+        public ReactiveProperty<bool> IsSelected { get; } 
+
         public WipFileVm(Repository repos, WipFile model)
             : base(true)
         {
@@ -61,6 +63,9 @@ namespace Anne.Features
 
             if (_model.IsBinary == false)
                 this.MakeDiff(_model.Patch);
+
+            IsSelected = new ReactiveProperty<bool>()
+                .AddTo(MultipleDisposable);
 
             DiscardChangesCommand = new ReactiveCommand()
                 .AddTo(MultipleDisposable);

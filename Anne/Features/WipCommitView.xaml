@@ -16,9 +16,12 @@
       d:DesignWidth="300"
       mc:Ignorable="d">
     <Grid.Resources>
-        <converters:BoolToVisibilityConverter x:Key="VisibilityConverter"
+        <converters:BoolToVisibilityConverter x:Key="DiffLinesCountVisibility"
                                               False="Visible"
                                               True="Collapsed" />
+        <converters:BoolToVisibilityConverter x:Key="DiscardButtonVisibility"
+                                              False="Hidden"
+                                              True="Visible" />
     </Grid.Resources>
 
     <Grid.RowDefinitions>
@@ -108,7 +111,7 @@
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <DockPanel LastChildFill="False">
+                <DockPanel Background="Transparent" LastChildFill="False">
                     <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
                     <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsInStaging.Value}" />
 
@@ -130,13 +133,18 @@
                                              DockPanel.Dock="Left"
                                              Visibility="{Binding IsBinary,
                                                                   Mode=OneTime,
-                                                                  Converter={StaticResource VisibilityConverter}}" />
+                                                                  Converter={StaticResource DiffLinesCountVisibility}}" />
 
                     <Button VerticalAlignment="Center"
                             Command="{Binding DiscardChangesCommand,
                                               Mode=OneTime}"
                             Content="Discard"
-                            DockPanel.Dock="Right" />
+                            DockPanel.Dock="Right"
+                            Padding="2,1"
+                            Visibility="{Binding IsMouseOver,
+                                                 Converter={StaticResource DiscardButtonVisibility},
+                                                 RelativeSource={RelativeSource FindAncestor,
+                                                                                AncestorType={x:Type DockPanel}}}" />
                     <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
                 </DockPanel>
             </DataTemplate>
