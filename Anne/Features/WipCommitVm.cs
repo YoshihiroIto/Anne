@@ -40,7 +40,6 @@ namespace Anne.Features
                 if (SelectedWipFiles.Count == 0)
                     SelectedWipFiles = new[] {files.Value.FirstOrDefault()};
 
-
                 return files;
             }
         }
@@ -108,6 +107,7 @@ namespace Anne.Features
                 IsAllSelected = new ReactiveProperty<bool?>().AddTo(MultipleDisposable);
                 IsAllSelected.Subscribe(i =>
                 {
+                    // UI からの操作では on/off のどちらかに設定する
                     if (_isInUpdateIsAllSelected == false)
                     {
                         if (i.HasValue == false)
