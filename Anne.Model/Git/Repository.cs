@@ -67,13 +67,21 @@ namespace Anne.Model.Git
                 .AddTo(MultipleDisposable);
 
             {
+                var filter = new CommitFilter
+                {
+                    SortBy = CommitSortStrategies.Time,
+                    IncludeReachableFrom = Internal.Refs
+                };
+
                 Commits = new ReactiveProperty<IEnumerable<Commit>>(
                     Scheduler.Immediate,
-                    Internal.Commits.Select(x => new Commit(this, x)).Memoize())
+                    Internal.Commits.QueryBy(filter).Select(x => new Commit(this, x)).Memoize())
                     .AddTo(MultipleDisposable);
 
                 new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
                     .AddTo(MultipleDisposable);
+
+                MakeLabelDict();
             }
 
             {
@@ -88,6 +96,8 @@ namespace Anne.Model.Git
                         var old = Commits.Value;
                         Commits.Value = Internal.Commits.Select(x => new Commit(this, x)).Memoize();
                         old.ForEach(x => x.Dispose());
+
+                        MakeLabelDict();
                     })
                     .AddTo(MultipleDisposable);
 
@@ -98,6 +108,31 @@ namespace Anne.Model.Git
         private void UpdateBranchProps()
         {
             Branches.ForEach(x => x.UpdateProps());
+        }
+
+        private Dictionary<string /*sha*/, List<string> /*label*/> _labelDict = new Dictionary<string, List<string>>();
+
+        private void MakeLabelDict()
+        {
+            _labelDict = new Dictionary<string, List<string>>();
+
+            Branches.ForEach(b =>
+            {
+                if (_labelDict.ContainsKey(b.TipSha) == false)
+                    _labelDict[b.TipSha] = new List<string>();
+
+                _labelDict[b.TipSha].Add(b.Name);
+            });
+        }
+
+        public IEnumerable<string> GetCommitLabels(string commitSha)
+        {
+            List<string> labels;
+
+            return
+                _labelDict.TryGetValue(commitSha, out labels)
+                    ? labels
+                    : Enumerable.Empty<string>();
         }
 
         public void Fetch(string remoteName)
@@ -148,7 +183,7 @@ namespace Anne.Model.Git
                 $"DiscardChanges: {string.Join(",", enumerable)}",
                 () =>
                 {
-                    var opts = new CheckoutOptions { CheckoutModifiers = CheckoutModifiers.Force };
+                    var opts = new CheckoutOptions {CheckoutModifiers = CheckoutModifiers.Force};
                     Internal.CheckoutPaths("HEAD", enumerable, opts);
                 });
         }

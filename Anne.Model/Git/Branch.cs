@@ -67,6 +67,8 @@ namespace Anne.Model.Git
             }
         }
 
+        public string TipSha => _internal.Tip.Sha;
+
         public Branch(LibGit2Sharp.Branch src, LibGit2Sharp.Repository repos)
         {
             Debug.Assert(src != null);

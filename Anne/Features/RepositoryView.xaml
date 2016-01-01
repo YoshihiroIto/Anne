@@ -73,7 +73,30 @@
 
         <!--  コミットリスト  -->
         <DataTemplate x:Key="DoneCommitListItemTemplate" DataType="{x:Type features:DoneCommitVm}">
-            <TextBlock Text="{Binding Summry, Mode=OneTime}" />
+            <StackPanel Height="20" Orientation="Horizontal">
+                <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding Labels}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Label Margin="0,0,2,0"
+                                   HorizontalContentAlignment="Center"
+                                   VerticalContentAlignment="Center"
+                                   Background="#FFFFC6BF"
+                                   BorderThickness="1"
+                                   BorderBrush="Black"
+                                   Content="{Binding}"
+                                   Padding="4,1"
+                                   SnapsToDevicePixels="True" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneTime}" />
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="WipCommitListItemTemplate" DataType="{x:Type features:WipCommitVm}">

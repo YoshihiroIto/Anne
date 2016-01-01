@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -95,19 +96,18 @@ namespace Anne.Features
 
         public ReactiveCommand<ResetMode> ResetCommand { get; } 
 
+        public ObservableCollection<string> Labels { get; }
+
         public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model)
         {
             Debug.Assert(model != null);
             _model = model;
 
             ResetCommand = new ReactiveCommand<ResetMode>().AddTo(MultipleDisposable);
-            ResetCommand.Subscribe(mode =>
-            {
-                Debug.WriteLine(">>>>>>>>>>" + mode);
+            ResetCommand.Subscribe(mode => repos.Reset(mode, model.Sha))
+                .AddTo(MultipleDisposable);
 
-                repos.Reset(mode, model.Sha);
-            }).AddTo(MultipleDisposable);
-
+            Labels = repos.GetCommitLabels(model.Sha).ToObservableCollection();
         }
     }
 }

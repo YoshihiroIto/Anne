@@ -138,6 +138,11 @@ namespace Anne.Features
             _model.Reset(mode, sha);
         }
 
+        public IEnumerable<string> GetCommitLabels(string commitSha)
+        {
+            return _model.GetCommitLabels(commitSha);
+        }
+
         private void ShowDialog(Exception e)
         {
             Debug.Assert(e != null);
