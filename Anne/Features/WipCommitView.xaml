@@ -78,6 +78,7 @@
 
     <ListView Grid.Row="1"
               HorizontalContentAlignment="Stretch"
+              AlternationCount="2"
               BorderBrush="LightGray"
               ItemsSource="{Binding WipFiles.Value,
                                     Mode=OneWay}"
@@ -150,6 +151,12 @@
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">
                 <EventSetter Event="KeyDown" Handler="ListViewItem_KeyDown" />
+
+                <Style.Triggers>
+                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="#F8F8F8" />
+                    </Trigger>
+                </Style.Triggers>
             </Style>
         </ListView.ItemContainerStyle>
 

@@ -235,6 +235,7 @@
         <ListView x:Name="CommitList"
                   Grid.Row="1"
                   Grid.Column="2"
+                  AlternationCount="2"
                   ItemTemplateSelector="{StaticResource CommitListItemDataSelector}"
                   ItemsSource="{Binding Commits,
                                         Mode=OneWay}"
@@ -276,6 +277,9 @@
                         <DataTrigger Binding="{Binding ElementName=CommitList, Path=SelectedItem, Converter={StaticResource TypeOf}, Mode=OneWay}" Value="{x:Type features:DoneCommitVm}">
                             <Setter Property="ContextMenu" Value="{StaticResource DoneCommitContextMenu}" />
                         </DataTrigger>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="#F8F8F8" />
+                        </Trigger>
                     </Style.Triggers>
                 </Style>
             </ListView.ItemContainerStyle>

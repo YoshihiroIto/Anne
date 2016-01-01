@@ -120,6 +120,7 @@
     <!--  変更ファイル  -->
     <ListView Grid.Row="1"
               BorderBrush="LightGray"
+              AlternationCount="2"
               ItemsSource="{Binding ChangeFiles,
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
@@ -160,6 +161,15 @@
                 </StackPanel>
             </DataTemplate>
         </ListView.ItemTemplate>
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Style.Triggers>
+                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="#F8F8F8" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ListView.ItemContainerStyle>
     </ListView>
 
     <Border Grid.Row="2"
