@@ -165,7 +165,8 @@
                 <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
                     <Button Width="64"
                             Height="64"
-                            Command="{TemplateBinding Command}">
+                            Command="{TemplateBinding Command}"
+                            SnapsToDevicePixels="True">
                         <StackPanel>
                             <Viewbox Width="40" Height="40">
                                 <Canvas Width="24" Height="24">
@@ -190,6 +191,7 @@
             </Button>
 
             <Button Name="Pull"
+                    Margin="-1,0,0,0"
                     Command="{Binding PullCommand,
                                       Mode=OneTime}"
                     Template="{StaticResource ButtonTemplate}">
@@ -197,6 +199,7 @@
             </Button>
 
             <Button Name="Push"
+                    Margin="-1,0,0,0"
                     Command="{Binding PushCommand,
                                       Mode=OneTime}"
                     Template="{StaticResource ButtonTemplate}">
