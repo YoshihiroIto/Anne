@@ -74,7 +74,7 @@
         <!--  コミットリスト  -->
         <DataTemplate x:Key="DoneCommitListItemTemplate" DataType="{x:Type features:DoneCommitVm}">
             <StackPanel Height="20" Orientation="Horizontal">
-                <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding Labels}">
+                <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding CommitLabels}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" />
@@ -86,10 +86,10 @@
                             <Label Margin="0,0,2,0"
                                    HorizontalContentAlignment="Center"
                                    VerticalContentAlignment="Center"
-                                   Background="#FFFFC6BF"
+                                   Background="{Binding Background.Value, Mode=OneWay}"
                                    BorderBrush="Black"
                                    BorderThickness="1"
-                                   Content="{Binding}"
+                                   Content="{Binding Name.Value, Mode=OneWay}"
                                    Padding="4,1"
                                    SnapsToDevicePixels="True" />
                         </DataTemplate>

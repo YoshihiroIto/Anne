@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Anne.Features.Interfaces;
@@ -10,6 +11,7 @@ using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using StatefulModel;
 
 namespace Anne.Features
 {
@@ -95,8 +97,7 @@ namespace Anne.Features
         private readonly Model.Git.Commit _model;
 
         public ReactiveCommand<ResetMode> ResetCommand { get; } 
-
-        public ObservableCollection<string> Labels { get; }
+        public ObservableCollection<CommitLabelVm> CommitLabels { get; }
 
         public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model)
         {
@@ -107,7 +108,13 @@ namespace Anne.Features
             ResetCommand.Subscribe(mode => repos.Reset(mode, model.Sha))
                 .AddTo(MultipleDisposable);
 
-            Labels = repos.GetCommitLabels(model.Sha).ToObservableCollection();
+            CommitLabels = repos
+                .GetCommitLabels(model.Sha)
+                .Select(x => new CommitLabelVm(x))
+                .ToObservableCollection();
+
+            new AnonymousDisposable(() => CommitLabels.ForEach(x => x.Dispose()))
+                .AddTo(MultipleDisposable);
         }
     }
 }

@@ -128,6 +128,7 @@
     <Compile Include="Diff\DiffLinesCountView.xaml.cs">
       <DependentUpon>DiffLinesCountView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Features\CommitLabelVm.cs" />
     <Compile Include="Features\WipFileVm.cs" />
     <Compile Include="Diff\DiffLine.cs" />
     <Compile Include="Features\DoneCommitVm.cs" />

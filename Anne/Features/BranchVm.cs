@@ -19,27 +19,27 @@ namespace Anne.Features
 
             Name = model
                 .ObserveProperty(x => x.Name)
-                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             LocalName = model
                 .ObserveProperty(x => x.LocalName)
-                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             RemoteName = model
                 .ObserveProperty(x => x.RemoteName)
-                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             IsRemote = model
                 .ObserveProperty(x => x.IsRemote)
-                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             IsCurrent = model
                 .ObserveProperty(x => x.IsCurrent)
-                .ToReadOnlyReactiveProperty(eventScheduler:UIDispatcherScheduler.Default)
+                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
         }
     }

@@ -73,7 +73,7 @@ namespace Anne.Model.Git
                     IncludeReachableFrom = Internal.Refs
                 };
 
-                UpdateLabelDict();
+                UpdateCommitLabelDict();
 
                 Commits = new ReactiveProperty<IEnumerable<Commit>>(
                     Scheduler.Immediate,
@@ -93,7 +93,7 @@ namespace Anne.Model.Git
                     h => watcher.FileUpdated -= h,
                     (s, e) =>
                     {
-                        UpdateLabelDict();
+                        UpdateCommitLabelDict();
 
                         var old = Commits.Value;
                         Commits.Value = Internal.Commits.Select(x => new Commit(this, x)).Memoize();
@@ -103,6 +103,12 @@ namespace Anne.Model.Git
 
                 watcher.Start();
             }
+
+            new AnonymousDisposable(() =>
+                _commitLabelDict.Values
+                    .SelectMany(x => x)
+                    .ForEach(x => x.Dispose())
+                ).AddTo(MultipleDisposable);
         }
 
         private void UpdateBranchProps()
@@ -110,29 +116,39 @@ namespace Anne.Model.Git
             Branches.ForEach(x => x.UpdateProps());
         }
 
-        private Dictionary<string /*sha*/, List<string> /*label*/> _labelDict = new Dictionary<string, List<string>>();
+        private Dictionary<string /*sha*/, List<CommitLabel> /*label*/> _commitLabelDict =
+            new Dictionary<string, List<CommitLabel>>();
 
-        private void UpdateLabelDict()
+        private void UpdateCommitLabelDict()
         {
-            _labelDict = new Dictionary<string, List<string>>();
+            _commitLabelDict.Values
+                .SelectMany(x => x)
+                .ForEach(x => x.Dispose());
+            
+            _commitLabelDict = new Dictionary<string, List<CommitLabel>>();
 
             Branches.ForEach(b =>
             {
-                if (_labelDict.ContainsKey(b.TipSha) == false)
-                    _labelDict[b.TipSha] = new List<string>();
+                if (_commitLabelDict.ContainsKey(b.TipSha) == false)
+                    _commitLabelDict[b.TipSha] = new List<CommitLabel>();
 
-                _labelDict[b.TipSha].Add(b.Name);
+                _commitLabelDict[b.TipSha].Add(
+                    new CommitLabel
+                    {
+                        Name = b.Name,
+                        Type = b.IsRemote ? CommitLabelType.RemoveBranch : CommitLabelType.LocalBranch
+                    });
             });
         }
 
-        public IEnumerable<string> GetCommitLabels(string commitSha)
+        public IEnumerable<CommitLabel> GetCommitLabels(string commitSha)
         {
-            List<string> labels;
+            List<CommitLabel> labels;
 
             return
-                _labelDict.TryGetValue(commitSha, out labels)
+                _commitLabelDict.TryGetValue(commitSha, out labels)
                     ? labels
-                    : Enumerable.Empty<string>();
+                    : Enumerable.Empty<CommitLabel>();
         }
 
         public void Fetch(string remoteName)

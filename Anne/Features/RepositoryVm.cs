@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
+using Anne.Model.Git;
 using LibGit2Sharp;
 using Livet.Messaging;
 using Reactive.Bindings;
@@ -138,7 +139,7 @@ namespace Anne.Features
             _model.Reset(mode, sha);
         }
 
-        public IEnumerable<string> GetCommitLabels(string commitSha)
+        public IEnumerable<CommitLabel> GetCommitLabels(string commitSha)
         {
             return _model.GetCommitLabels(commitSha);
         }
