@@ -158,6 +158,8 @@ namespace Anne.Model.Git
                 () =>
                 {
                     var remote = Internal.Network.Remotes[remoteName];
+
+                    Internal.Config.Set("fetch.prune", true);
                     Internal.Network.Fetch(remote);
                 });
         }

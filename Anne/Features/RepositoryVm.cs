@@ -31,6 +31,7 @@ namespace Anne.Features
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
+        public ReactiveCommand FetchCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PushCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PullCommand { get; } = new ReactiveCommand();
 
@@ -152,14 +153,13 @@ namespace Anne.Features
 
         private void InitializeCommands()
         {
-            PushCommand
-                .AddTo(MultipleDisposable);
+            FetchCommand.AddTo(MultipleDisposable);
+            PushCommand.AddTo(MultipleDisposable);
+            PullCommand.AddTo(MultipleDisposable);
 
-            PullCommand
-                .AddTo(MultipleDisposable);
-
-            PushCommand.Subscribe(_ => _model.Push());
-            PullCommand.Subscribe(_ => _model.Pull());
+            FetchCommand.Subscribe(_ => _model.FetchAll()).AddTo(MultipleDisposable);
+            PushCommand.Subscribe(_ => _model.Push()).AddTo(MultipleDisposable);
+            PullCommand.Subscribe(_ => _model.Pull()).AddTo(MultipleDisposable);
         }
 
         // test

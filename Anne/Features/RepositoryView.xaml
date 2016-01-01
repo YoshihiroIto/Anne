@@ -92,10 +92,10 @@
                                     SnapsToDevicePixels="True">
                                 <StackPanel Orientation="Horizontal">
                                     <controls:CommitLabelMark Margin="2,2,0,1" Type="{Binding Type.Value, Mode=OneWay}" />
-                                    <TextBox Background="{x:Null}"
+                                    <TextBox Margin="0,0,2,0"
+                                             Background="{x:Null}"
                                              BorderBrush="{x:Null}"
                                              BorderThickness="0"
-                                             Margin="0,0,2,0"
                                              Text="{Binding Name.Value,
                                                             Mode=OneWay}" />
                                 </StackPanel>
@@ -162,6 +162,23 @@
                     Orientation="Horizontal">
             <Button Width="64"
                     Height="64"
+                    Command="{Binding FetchCommand,
+                                      Mode=OneTime}">
+                <StackPanel>
+                    <Viewbox Width="40" Height="40">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M12,17L7,12H10V8H14V12H17L12,17M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" Fill="Black" />
+                        </Canvas>
+                    </Viewbox>
+                    <Label Margin="0"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center"
+                           Content="Fetch"
+                           Padding="0" />
+                </StackPanel>
+            </Button>
+            <Button Width="64"
+                    Height="64"
                     Command="{Binding PullCommand,
                                       Mode=OneTime}">
                 <StackPanel>
@@ -177,7 +194,6 @@
                            Padding="0" />
                 </StackPanel>
             </Button>
-
             <Button Width="64"
                     Height="64"
                     Margin="-1,0,0,0"
