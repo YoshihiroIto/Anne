@@ -60,6 +60,9 @@
                                       Mode=OneTime}"
                     Content="Commit"
                     IsTabStop="True" />
+            <CheckBox Margin="6,0,0,2"
+                      IsChecked="{Binding IsAllSelected.Value}"
+                      IsThreeState="True" />
         </StackPanel>
 
         <controls:PromptTextBox VerticalContentAlignment="Top"

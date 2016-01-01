@@ -9,6 +9,7 @@ using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using StatefulModel;
 
 namespace Anne.Features
 {
@@ -39,11 +40,13 @@ namespace Anne.Features
                 if (SelectedWipFiles.Count == 0)
                     SelectedWipFiles = new[] {files.Value.FirstOrDefault()};
 
+
                 return files;
             }
         }
 
         private IList _selectedWipFiles = new object[0];
+
         public IList SelectedWipFiles
         {
             get { return _selectedWipFiles; }
@@ -53,7 +56,7 @@ namespace Anne.Features
         public ReadOnlyReactiveProperty<int> SummryRemaining { get; }
         public ReadOnlyReactiveProperty<SolidColorBrush> SummryRemainingBrush { get; }
 
-        public ReactiveCommand<string>  ResetCommand { get; } 
+        public ReactiveProperty<bool?> IsAllSelected { get; }
 
         private readonly RepositoryVm _repos;
         private string _summry = string.Empty;
@@ -98,7 +101,63 @@ namespace Anne.Features
 
             DiscardChangesCommand.Subscribe(_ =>
                 repos.DiscardChanges(SelectedWipFiles.Cast<WipFileVm>().Select(x => x.Path))
-            ).AddTo(MultipleDisposable);
+                ).AddTo(MultipleDisposable);
+
+            // IsAllSelected 関係
+            {
+                IsAllSelected = new ReactiveProperty<bool?>().AddTo(MultipleDisposable);
+                IsAllSelected.Subscribe(i =>
+                {
+                    if (_isInUpdateIsAllSelected == false)
+                    {
+                        if (i.HasValue == false)
+                        {
+                            IsAllSelected.Value = false;
+                            return;
+                        }
+                    }
+
+                    if (i.HasValue == false)
+                        return;
+
+                    WipFiles.Value.ForEach(x => x.IsInStaging.Value = i.Value);
+                }).AddTo(MultipleDisposable);
+
+                this.ObserveProperty(x => x.WipFiles)
+                    .Subscribe(x =>
+                    {
+                        _isInStageingDisposer?.Dispose();
+                        _isInStageingDisposer = new MultipleDisposable();
+
+                        x.Value.ForEach(y =>
+                            y.IsInStaging.Subscribe(_ => UpdateIsAllSelected()).AddTo(_isInStageingDisposer));
+                    })
+                    .AddTo(MultipleDisposable);
+
+                new AnonymousDisposable(() => _isInStageingDisposer?.Dispose())
+                    .AddTo(MultipleDisposable);
+            }
+        }
+
+        private MultipleDisposable _isInStageingDisposer;
+
+        private bool _isInUpdateIsAllSelected;
+        private void UpdateIsAllSelected()
+        {
+            using (new AnonymousDisposable(() => _isInUpdateIsAllSelected = false))
+            {
+                _isInUpdateIsAllSelected = true;
+
+                var isChecked = WipFiles.Value.All(y => y.IsInStaging.Value);
+                var isUnchecked = WipFiles.Value.All(y => y.IsInStaging.Value == false);
+
+                if (isChecked)
+                    IsAllSelected.Value = true;
+                else if (isUnchecked)
+                    IsAllSelected.Value = false;
+                else
+                    IsAllSelected.Value = null;
+            }
         }
 
         public void ToggleStaging()
