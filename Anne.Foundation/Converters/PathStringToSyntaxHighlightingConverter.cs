@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using ICSharpCode.AvalonEdit.Highlighting;
 
-namespace Anne.Features.Converters
+namespace Anne.Foundation.Converters
 {
     public class PathStringToSyntaxHighlightingConverter : IValueConverter
     {

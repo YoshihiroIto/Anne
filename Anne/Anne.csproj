@@ -128,11 +128,7 @@
     <Compile Include="Diff\DiffLinesCountView.xaml.cs">
       <DependentUpon>DiffLinesCountView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Features\Converters\PathStringToSyntaxHighlightingConverter.cs" />
-    <Compile Include="Features\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Features\Converters\TypeOfConverter.cs" />
     <Compile Include="Features\WipFileVm.cs" />
-    <Compile Include="Features\Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Diff\DiffLine.cs" />
     <Compile Include="Features\DoneCommitVm.cs" />
     <Compile Include="Features\DoneCommitView.xaml.cs">

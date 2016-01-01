@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace Anne.Features.Converters
+namespace Anne.Foundation.Converters
 {
     public class TypeOfConverter : IValueConverter
     {
