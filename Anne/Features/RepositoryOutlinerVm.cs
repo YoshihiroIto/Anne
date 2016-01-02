@@ -5,19 +5,19 @@ using Anne.Foundation;
 
 namespace Anne.Features
 {
-    public class RepositoryOutlinerVm : ReposOutlinerItemVm
+    public class RepositoryOutlinerVm : RepositoryOutlinerItemVm
     {
         // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
-        private readonly ReposOutlinerItemVm _localBranch;
-        private readonly ReposOutlinerItemVm _remoteBranch;
+        private readonly RepositoryOutlinerItemVm _localBranch;
+        private readonly RepositoryOutlinerItemVm _remoteBranch;
         // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 
         public RepositoryOutlinerVm(RepositoryVm repos)
             : base(string.Empty, RepositoryOutlinerItemType.Root)
         {
             // 各項目のルートノードを配置する
-            _localBranch = new ReposOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot);
-            _remoteBranch = new ReposOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot);
+            _localBranch = new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot);
+            _remoteBranch = new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot);
             Children.AddOnScheduler(_localBranch);
             Children.AddOnScheduler(_remoteBranch);
 
@@ -25,7 +25,7 @@ namespace Anne.Features
             UpdateBranchNodes(_remoteBranch, repos.RemoteBranches, true);
         }
 
-        private void UpdateBranchNodes(ReposOutlinerItemVm target, ReadOnlyObservableCollection<BranchVm> source,
+        private void UpdateBranchNodes(RepositoryOutlinerItemVm target, ReadOnlyObservableCollection<BranchVm> source,
             bool isRemote)
         {
             Debug.Assert(target != null);
@@ -55,7 +55,7 @@ namespace Anne.Features
                         if (isRemote && isFirst)
                             type = RepositoryOutlinerItemType.RemoteBranchRepos;
 
-                        nextNode = new ReposOutlinerItemVm(f, type);
+                        nextNode = new RepositoryOutlinerItemVm(f, type);
                         node.Children.Add(nextNode);
                     }
 
@@ -63,7 +63,7 @@ namespace Anne.Features
                     isFirst = false;
                 }
 
-                node.Children.Add(new ReposOutlinerItemVm(leaf, leafType));
+                node.Children.Add(new RepositoryOutlinerItemVm(leaf, leafType));
             });
         }
     }

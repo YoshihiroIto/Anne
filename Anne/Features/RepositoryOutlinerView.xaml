@@ -27,7 +27,7 @@
     </controls:TreeViewEx.Resources>
 
     <controls:TreeViewEx.ItemTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type features:ReposOutlinerItemVm}" ItemsSource="{Binding Children, Mode=OneWay}">
+        <HierarchicalDataTemplate DataType="{x:Type features:RepositoryOutlinerItemVm}" ItemsSource="{Binding Children, Mode=OneWay}">
             <StackPanel Orientation="Horizontal">
                 <controls1:RepositoryOutlinerItemMark Width="12"
                                                       Height="12"

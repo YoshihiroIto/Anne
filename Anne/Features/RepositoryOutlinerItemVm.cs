@@ -7,7 +7,7 @@ using StatefulModel;
 
 namespace Anne.Features
 {
-    public class ReposOutlinerItemVm : ViewModelBase
+    public class RepositoryOutlinerItemVm : ViewModelBase
     {
         public ReactiveProperty<string> Caption { get; }
             = new ReactiveProperty<string>();
@@ -15,12 +15,12 @@ namespace Anne.Features
         public ReactiveProperty<bool> IsExpanded { get; }
             = new ReactiveProperty<bool>();
 
-        public ReactiveCollection<ReposOutlinerItemVm> Children { get; }
-            = new ReactiveCollection<ReposOutlinerItemVm>();
+        public ReactiveCollection<RepositoryOutlinerItemVm> Children { get; }
+            = new ReactiveCollection<RepositoryOutlinerItemVm>();
 
         public RepositoryOutlinerItemType Type { get; }
 
-        public ReposOutlinerItemVm(string caption, RepositoryOutlinerItemType type)
+        public RepositoryOutlinerItemVm(string caption, RepositoryOutlinerItemType type)
         {
             Type = type;
 
