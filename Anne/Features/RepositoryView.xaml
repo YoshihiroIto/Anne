@@ -204,28 +204,6 @@
                 </i:Interaction.Triggers>
             </Button>
 
-            <Button Margin="0,8,0,0"
-                    Content="Switch Test (master)"
-                    DockPanel.Dock="Top">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="Switch"
-                                                         MethodParameter="master"
-                                                         MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
-            <Button Content="Switch Test (refactor)" DockPanel.Dock="Top">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="Switch"
-                                                         MethodParameter="refactoring"
-                                                         MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
             <!--  ジョブ  -->
             <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
             <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
