@@ -137,10 +137,6 @@
     </Grid.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="140" />
             <ColumnDefinition Width="Auto" />
@@ -150,61 +146,7 @@
             <ColumnDefinition Width="140" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0"
-                    Grid.ColumnSpan="6"
-                    Margin="0,0,0,8"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-
-            <StackPanel.Resources>
-                <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
-                    <Button Width="64"
-                            Height="64"
-                            Command="{TemplateBinding Command}"
-                            SnapsToDevicePixels="True">
-                        <StackPanel>
-                            <Viewbox Width="40" Height="40">
-                                <Canvas Width="24" Height="24">
-                                    <ContentPresenter />
-                                </Canvas>
-                            </Viewbox>
-                            <Label Margin="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{TemplateBinding Name}"
-                                   Padding="0" />
-                        </StackPanel>
-                    </Button>
-                </ControlTemplate>
-            </StackPanel.Resources>
-
-            <Button Name="Fetch"
-                    Command="{Binding FetchCommand,
-                                      Mode=OneTime}"
-                    Template="{StaticResource ButtonTemplate}">
-                <Path Data="M12,17L7,12H10V8H14V12H17L12,17M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" Fill="Black" />
-            </Button>
-
-            <Button Name="Pull"
-                    Margin="-1,0,0,0"
-                    Command="{Binding PullCommand,
-                                      Mode=OneTime}"
-                    Template="{StaticResource ButtonTemplate}">
-                <Path Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" Fill="Black" />
-            </Button>
-
-            <Button Name="Push"
-                    Margin="-1,0,0,0"
-                    Command="{Binding PushCommand,
-                                      Mode=OneTime}"
-                    Template="{StaticResource ButtonTemplate}">
-                <Path Data="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" Fill="Black" />
-            </Button>
-        </StackPanel>
-
-        <DockPanel Grid.Row="1"
-                   Grid.Column="0"
-                   LastChildFill="True">
+        <DockPanel Grid.Column="0" LastChildFill="True">
             <ListView DockPanel.Dock="Top"
                       ItemTemplate="{StaticResource BranchTemplate}"
                       ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
@@ -239,13 +181,11 @@
             </ListView>
         </DockPanel>
 
-        <GridSplitter Grid.Row="1"
-                      Grid.Column="1"
+        <GridSplitter Grid.Column="1"
                       Width="8"
                       HorizontalAlignment="Center" />
 
         <ListView x:Name="CommitList"
-                  Grid.Row="1"
                   Grid.Column="2"
                   AlternationCount="2"
                   ItemTemplateSelector="{StaticResource CommitListItemDataSelector}"
@@ -297,21 +237,17 @@
             </ListView.ItemContainerStyle>
         </ListView>
 
-        <GridSplitter Grid.Row="1"
-                      Grid.Column="3"
+        <GridSplitter Grid.Column="3"
                       Width="8"
                       HorizontalAlignment="Center" />
 
-        <ContentControl Grid.Row="1"
-                        Grid.Column="4"
+        <ContentControl Grid.Column="4"
                         Content="{Binding SelectedCommit.Value,
                                           Mode=OneWay}"
                         ContentTemplateSelector="{StaticResource CommitViewDataSelector}" />
 
         <!--  テスト用  -->
-        <DockPanel Grid.Row="1"
-                   Grid.Column="5"
-                   LastChildFill="True">
+        <DockPanel Grid.Column="5" LastChildFill="True">
             <Button Content="Checkout Test" DockPanel.Dock="Top">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
