@@ -31,6 +31,8 @@ namespace Anne.Features
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
+        public ReactiveProperty<RepositoryOutlinerVm> Outliner { get; } 
+
         public ReactiveCommand FetchCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PushCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PullCommand { get; } = new ReactiveCommand();
@@ -50,6 +52,11 @@ namespace Anne.Features
 
             WorkingJob = _model.WorkingJob
                 .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
+            Outliner = new ReactiveProperty<RepositoryOutlinerVm>(new RepositoryOutlinerVm(this))
+                .AddTo(MultipleDisposable);
+            new AnonymousDisposable(() => Outliner.Value.Dispose())
                 .AddTo(MultipleDisposable);
 
             // ブランチ

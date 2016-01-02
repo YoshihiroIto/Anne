@@ -132,6 +132,8 @@
       <DependentUpon>DiffLinesCountView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\CommitLabelVm.cs" />
+    <Compile Include="Features\RepositoryOutlinerItemVm.cs" />
+    <Compile Include="Features\RepositoryOutlinerVm.cs" />
     <Compile Include="Features\WipFileVm.cs" />
     <Compile Include="Diff\DiffLine.cs" />
     <Compile Include="Features\DoneCommitVm.cs" />

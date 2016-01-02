@@ -152,7 +152,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- 廃止予定 -->
+            <!--  廃止予定  -->
             <DockPanel Grid.Column="0" LastChildFill="True">
                 <ListView DockPanel.Dock="Top"
                           ItemTemplate="{StaticResource BranchTemplate}"
@@ -188,7 +188,7 @@
                 </ListView>
             </DockPanel>
 
-            <features:RepositoryOutlinerView Grid.Column="1" />
+            <features:RepositoryOutlinerView Grid.Column="1" ItemsSource="{Binding Outliner.Value.Children, Mode=OneWay}" />
         </Grid>
 
         <GridSplitter Grid.Column="1"
