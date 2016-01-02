@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Anne.Foundation;
 using Reactive.Bindings.Extensions;
-using StatefulModel;
 
 namespace Anne.Features
 {
@@ -16,15 +15,15 @@ namespace Anne.Features
         // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 
         public RepositoryOutlinerVm(RepositoryVm repos)
-            : base(string.Empty, RepositoryOutlinerItemType.Root)
+            : base(string.Empty, RepositoryOutlinerItemType.Root, null)
         {
             // 各項目のルートノードを配置する
             _localBranch =
-                new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot)
+                new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot, null)
                 .AddTo(MultipleDisposable);
 
             _remoteBranch =
-                new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot)
+                new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot, null)
                 .AddTo(MultipleDisposable);
 
             Children.AddOnScheduler(_localBranch);
@@ -75,7 +74,7 @@ namespace Anne.Features
                         if (isRemote && isFirst)
                             type = RepositoryOutlinerItemType.RemoteBranchRepos;
 
-                        nextNode = new RepositoryOutlinerItemVm(f, type);
+                        nextNode = new RepositoryOutlinerItemVm(f, type, null);
                         node.Children.Add(nextNode);
                     }
 
@@ -83,7 +82,7 @@ namespace Anne.Features
                     isFirst = false;
                 }
 
-                node.Children.Add(new RepositoryOutlinerItemVm(leaf, leafType));
+                node.Children.Add(new RepositoryOutlinerItemVm(leaf, leafType, s));
             });
         }
     }

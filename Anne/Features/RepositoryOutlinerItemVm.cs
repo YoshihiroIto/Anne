@@ -19,10 +19,26 @@ namespace Anne.Features
             = new ReactiveCollection<RepositoryOutlinerItemVm>();
 
         public RepositoryOutlinerItemType Type { get; }
+        public BranchVm Branch { get; }
 
-        public RepositoryOutlinerItemVm(string caption, RepositoryOutlinerItemType type)
+        public ReactiveProperty<bool> IsCurrent { get; }
+
+        public RepositoryOutlinerItemVm(string caption, RepositoryOutlinerItemType type, BranchVm branch)
         {
             Type = type;
+            Branch = branch;
+
+            if (Branch != null)
+            {
+                IsCurrent = branch.IsCurrent
+                    .ToReactiveProperty()
+                    .AddTo(MultipleDisposable);
+            }
+            else
+            {
+                IsCurrent = new ReactiveProperty<bool>(false)
+                    .AddTo(MultipleDisposable);
+            }
 
             Caption.AddTo(MultipleDisposable);
             Caption.Value = caption;

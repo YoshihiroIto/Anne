@@ -12,6 +12,7 @@ namespace Anne.Foundation.Controls.Selectors
         public DataTemplate LocalBranch { get; set; }
         public DataTemplate RemoteBranch { get; set; }
         public DataTemplate Folder { get; set; }
+        public DataTemplate Current { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -34,6 +35,8 @@ namespace Anne.Foundation.Controls.Selectors
                     return RemoteBranch;
                 case RepositoryOutlinerItemType.Folder:
                     return Folder;
+                case RepositoryOutlinerItemType.Current:
+                    return Current;
             }
 
             return null;

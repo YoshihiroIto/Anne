@@ -12,6 +12,8 @@
         LocalBranch,
         RemoteBranch,
         //
-        Folder
+        Folder,
+        //
+        Current
     }
 }
