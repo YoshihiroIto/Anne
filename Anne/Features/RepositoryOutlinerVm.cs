@@ -1,7 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Anne.Foundation;
+using Reactive.Bindings.Extensions;
+using StatefulModel;
 
 namespace Anne.Features
 {
@@ -16,13 +19,27 @@ namespace Anne.Features
             : base(string.Empty, RepositoryOutlinerItemType.Root)
         {
             // 各項目のルートノードを配置する
-            _localBranch = new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot);
-            _remoteBranch = new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot);
+            _localBranch =
+                new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot)
+                .AddTo(MultipleDisposable);
+
+            _remoteBranch =
+                new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot)
+                .AddTo(MultipleDisposable);
+
             Children.AddOnScheduler(_localBranch);
             Children.AddOnScheduler(_remoteBranch);
 
             UpdateBranchNodes(_localBranch, repos.LocalBranches, false);
             UpdateBranchNodes(_remoteBranch, repos.RemoteBranches, true);
+
+            repos.LocalBranches.CollectionChangedAsObservable()
+                .Subscribe(_ => UpdateBranchNodes(_localBranch, repos.LocalBranches, false))
+                .AddTo(MultipleDisposable);
+
+            repos.RemoteBranches.CollectionChangedAsObservable()
+                .Subscribe(_ => UpdateBranchNodes(_remoteBranch, repos.RemoteBranches, true))
+                .AddTo(MultipleDisposable);
         }
 
         private void UpdateBranchNodes(RepositoryOutlinerItemVm target, ReadOnlyObservableCollection<BranchVm> source,
@@ -31,8 +48,11 @@ namespace Anne.Features
             Debug.Assert(target != null);
             Debug.Assert(source != null);
 
-            var leafType = isRemote ? RepositoryOutlinerItemType.RemoteBranch : RepositoryOutlinerItemType.LocalBranch;
+            var leafType = isRemote
+                ? RepositoryOutlinerItemType.RemoteBranch
+                : RepositoryOutlinerItemType.LocalBranch;
 
+            target.Children.ForEach(x => x.Dispose());
             target.Children.Clear();
 
             source.ForEach(s =>
