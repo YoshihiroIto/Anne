@@ -11,7 +11,6 @@
       xmlns:libGit2Sharp="clr-namespace:LibGit2Sharp;assembly=LibGit2Sharp"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
-      xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       xmlns:selectors="clr-namespace:Anne.Features.Selectors"
       d:DesignHeight="300"
       d:DesignWidth="1000"
@@ -43,32 +42,6 @@
                 <TextBlock Style="{StaticResource CurrentMarkStyle}" />
                 <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
                 <TextBlock Text="{Binding LocalName.Value, Mode=OneWay}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <CollectionViewSource x:Key="SortedLocalBranches" Source="{Binding LocalBranches, Mode=OneWay}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="LocalName.Value" />
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
-
-        <CollectionViewSource x:Key="SortedRemoteBranches" Source="{Binding RemoteBranches, Mode=OneWay}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="LocalName.Value" />
-            </CollectionViewSource.SortDescriptions>
-
-            <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="RemoteName.Value" />
-            </CollectionViewSource.GroupDescriptions>
-        </CollectionViewSource>
-
-        <DataTemplate x:Key="RemoteBranchesListViewGroupTemplate">
-            <StackPanel Margin="0,8,0,0">
-                <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                <TextBlock FontWeight="Bold" Text="{Binding Name}" />
-                <Rectangle Height="1"
-                           Fill="LightGray"
-                           SnapsToDevicePixels="True" />
             </StackPanel>
         </DataTemplate>
 
@@ -138,58 +111,15 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="500" />
+            <ColumnDefinition Width="180" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="140" />
+            <ColumnDefinition Width="180" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <!--  廃止予定  -->
-            <DockPanel Grid.Column="0" LastChildFill="True">
-                <ListView DockPanel.Dock="Top"
-                          ItemTemplate="{StaticResource BranchTemplate}"
-                          ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
-                          ScrollViewer.CanContentScroll="True"
-                          SelectedItem="{Binding SelectedLocalBranch.Value}"
-                          VirtualizingPanel.IsVirtualizing="True"
-                          VirtualizingPanel.ScrollUnit="Pixel"
-                          VirtualizingPanel.VirtualizationMode="Recycling">
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                </ListView>
-
-                <ListView ItemTemplate="{StaticResource BranchTemplate}"
-                          ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
-                          ScrollViewer.CanContentScroll="True"
-                          SelectedItem="{Binding SelectedRemoteBranch.Value}"
-                          VirtualizingPanel.IsVirtualizing="True"
-                          VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                          VirtualizingPanel.ScrollUnit="Pixel"
-                          VirtualizingPanel.VirtualizationMode="Recycling">
-                    <ListView.GroupStyle>
-                        <GroupStyle HeaderTemplate="{StaticResource RemoteBranchesListViewGroupTemplate}" />
-                    </ListView.GroupStyle>
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                </ListView>
-            </DockPanel>
-
-            <features:RepositoryOutlinerView Grid.Column="1" ItemsSource="{Binding Outliner.Value.Children, Mode=OneWay}" />
-        </Grid>
+        <features:RepositoryOutlinerView ItemsSource="{Binding Outliner.Value.Children, Mode=OneWay}" />
 
         <GridSplitter Grid.Column="1"
                       Width="8"

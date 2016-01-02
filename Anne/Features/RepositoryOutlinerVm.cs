@@ -74,7 +74,10 @@ namespace Anne.Features
                         if (isRemote && isFirst)
                             type = RepositoryOutlinerItemType.RemoteBranchRepos;
 
-                        nextNode = new RepositoryOutlinerItemVm(f, type, null);
+                        nextNode = new RepositoryOutlinerItemVm(f, type, null)
+                        {
+                            IsExpanded = {Value = isFirst}
+                        };
                         node.Children.Add(nextNode);
                     }
 
