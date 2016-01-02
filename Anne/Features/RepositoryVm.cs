@@ -166,7 +166,5 @@ namespace Anne.Features
         public void CheckoutTest() => _model.CheckoutTest();
         public void RemoveTest() => _model.RemoveTest();
         public void SwitchTest(string branchName) => _model.SwitchTest(branchName);
-        public void FetchTest(string remoteName) => _model.Fetch(remoteName);
-        public void FetchAllTest() => _model.FetchAll();
     }
 }

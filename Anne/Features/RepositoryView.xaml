@@ -286,26 +286,6 @@
                 </i:Interaction.Triggers>
             </Button>
 
-            <Button Margin="0,8,0,0"
-                    Content="Fetch Test (origin)"
-                    DockPanel.Dock="Top">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="FetchTest"
-                                                         MethodParameter="origin"
-                                                         MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
-            <Button Content="FetchAll Test" DockPanel.Dock="Top">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="FetchAllTest" MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
             <!--  ジョブ  -->
             <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
             <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
