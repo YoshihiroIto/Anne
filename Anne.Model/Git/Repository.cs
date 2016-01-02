@@ -218,6 +218,18 @@ namespace Anne.Model.Git
                 });
         }
 
+        public void Switch(string branchName)
+        {
+            _jobQueue.AddJob(
+                $"Switch: {branchName}",
+                () =>
+                {
+                    var branch = Branches.FirstOrDefault(b => b.Name == branchName);
+                    branch?.Switch();
+                    UpdateBranchProps();
+                });
+        }
+
         public void Pull()
         {
             Debug.WriteLine("Pull() -- 未実装");
@@ -284,18 +296,6 @@ namespace Anne.Model.Git
                 {
                     var srcBranch = Branches.FirstOrDefault(b => b.Name == "refactoring");
                     srcBranch?.Remove();
-                });
-        }
-
-        public void SwitchTest(string branchName)
-        {
-            _jobQueue.AddJob(
-                $"Switch: {branchName}",
-                () =>
-                {
-                    var branch = Branches.FirstOrDefault(b => b.Name == branchName);
-                    branch?.Switch();
-                    UpdateBranchProps();
                 });
         }
 

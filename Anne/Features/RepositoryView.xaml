@@ -119,7 +119,7 @@
             <ColumnDefinition Width="180" />
         </Grid.ColumnDefinitions>
 
-        <features:RepositoryOutlinerView ItemsSource="{Binding Outliner.Value.Children, Mode=OneWay}" />
+        <features:RepositoryOutlinerView DataContext="{Binding Outliner.Value, Mode=OneWay}" ItemsSource="{Binding Children, Mode=OneWay}" />
 
         <GridSplitter Grid.Column="1"
                       Width="8"
@@ -209,7 +209,7 @@
                     DockPanel.Dock="Top">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="SwitchTest"
+                        <behaviors:LivetCallMethodAction MethodName="Switch"
                                                          MethodParameter="master"
                                                          MethodTarget="{Binding}" />
                     </i:EventTrigger>
@@ -219,7 +219,7 @@
             <Button Content="Switch Test (refactor)" DockPanel.Dock="Top">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="SwitchTest"
+                        <behaviors:LivetCallMethodAction MethodName="Switch"
                                                          MethodParameter="refactoring"
                                                          MethodTarget="{Binding}" />
                     </i:EventTrigger>

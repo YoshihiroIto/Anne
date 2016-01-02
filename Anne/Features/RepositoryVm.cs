@@ -73,7 +73,6 @@ namespace Anne.Features
             new AnonymousDisposable(() => Outliner.Value.Dispose())
                 .AddTo(MultipleDisposable);
 
-
             // ファイルステータス
             FileStatus = new FileStatusVm(model)
                 .AddTo(MultipleDisposable);
@@ -134,20 +133,10 @@ namespace Anne.Features
             InitializeCommands();
         }
 
-        public void Commit(string message)
-        {
-            _model.Commit(message);
-        }
-
-        public void DiscardChanges(IEnumerable<string> paths)
-        {
-            _model.DiscardChanges(paths);
-        }
-
-        public void Reset(ResetMode mode, string sha)
-        {
-            _model.Reset(mode, sha);
-        }
+        public void Commit(string message) => _model.Commit(message);
+        public void DiscardChanges(IEnumerable<string> paths) => _model.DiscardChanges(paths);
+        public void Reset(ResetMode mode, string sha) => _model.Reset(mode, sha);
+        public void Switch(string branchName) => _model.Switch(branchName);
 
         public IEnumerable<CommitLabel> GetCommitLabels(string commitSha)
         {
@@ -174,6 +163,5 @@ namespace Anne.Features
         // test
         public void CheckoutTest() => _model.CheckoutTest();
         public void RemoveTest() => _model.RemoveTest();
-        public void SwitchTest(string branchName) => _model.SwitchTest(branchName);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Anne.Foundation;
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace Anne.Features
@@ -14,9 +15,19 @@ namespace Anne.Features
         private readonly RepositoryOutlinerItemVm _remoteBranch;
         // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 
+        public ReactiveProperty<RepositoryOutlinerItemVm> SelectedItem { get; }
+
+        private readonly RepositoryVm _repos;
+
         public RepositoryOutlinerVm(RepositoryVm repos)
             : base(string.Empty, RepositoryOutlinerItemType.Root, null)
         {
+            Debug.Assert(repos != null);
+            _repos = repos;
+
+            SelectedItem = new ReactiveProperty<RepositoryOutlinerItemVm>()
+                .AddTo(MultipleDisposable);
+
             // 各項目のルートノードを配置する
             _localBranch =
                 new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot, null)
@@ -87,6 +98,17 @@ namespace Anne.Features
 
                 node.Children.Add(new RepositoryOutlinerItemVm(leaf, leafType, s));
             });
+        }
+
+        public void SwitchBranch()
+        {
+            var selectedBranch = SelectedItem.Value?.Branch;
+
+            if (selectedBranch?.IsRemote.Value == false)
+            {
+                if (selectedBranch.IsCurrent.Value == false)
+                    _repos.Switch(selectedBranch.Name.Value);
+            }
         }
     }
 }
