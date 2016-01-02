@@ -35,7 +35,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
-              Margin="0,0,0,8"
+              Margin="0,0,0,4"
               controls:MetroWindow.IsCaptionBar="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -68,6 +68,7 @@
                                      Mode=OneWay}"
                    FontFamily="Segoe UI Light"
                    FontSize="18"
+                   IsHitTestVisible="False"
                    Foreground="{DynamicResource ForegroundBrushKey}"
                    Padding="0" />
 
