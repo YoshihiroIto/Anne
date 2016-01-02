@@ -138,7 +138,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140" />
+            <ColumnDefinition Width="300" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -146,40 +146,50 @@
             <ColumnDefinition Width="140" />
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Column="0" LastChildFill="True">
-            <ListView DockPanel.Dock="Top"
-                      ItemTemplate="{StaticResource BranchTemplate}"
-                      ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
-                      ScrollViewer.CanContentScroll="True"
-                      SelectedItem="{Binding SelectedLocalBranch.Value}"
-                      VirtualizingPanel.IsVirtualizing="True"
-                      VirtualizingPanel.ScrollUnit="Pixel"
-                      VirtualizingPanel.VirtualizationMode="Recycling">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
+        <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <ListView ItemTemplate="{StaticResource BranchTemplate}"
-                      ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
-                      ScrollViewer.CanContentScroll="True"
-                      SelectedItem="{Binding SelectedRemoteBranch.Value}"
-                      VirtualizingPanel.IsVirtualizing="True"
-                      VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                      VirtualizingPanel.ScrollUnit="Pixel"
-                      VirtualizingPanel.VirtualizationMode="Recycling">
-                <ListView.GroupStyle>
-                    <GroupStyle HeaderTemplate="{StaticResource RemoteBranchesListViewGroupTemplate}" />
-                </ListView.GroupStyle>
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
-        </DockPanel>
+            <!-- 廃止予定 -->
+            <DockPanel Grid.Column="0" LastChildFill="True">
+                <ListView DockPanel.Dock="Top"
+                          ItemTemplate="{StaticResource BranchTemplate}"
+                          ItemsSource="{Binding Source={StaticResource SortedLocalBranches}}"
+                          ScrollViewer.CanContentScroll="True"
+                          SelectedItem="{Binding SelectedLocalBranch.Value}"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.ScrollUnit="Pixel"
+                          VirtualizingPanel.VirtualizationMode="Recycling">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+
+                <ListView ItemTemplate="{StaticResource BranchTemplate}"
+                          ItemsSource="{Binding Source={StaticResource SortedRemoteBranches}}"
+                          ScrollViewer.CanContentScroll="True"
+                          SelectedItem="{Binding SelectedRemoteBranch.Value}"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                          VirtualizingPanel.ScrollUnit="Pixel"
+                          VirtualizingPanel.VirtualizationMode="Recycling">
+                    <ListView.GroupStyle>
+                        <GroupStyle HeaderTemplate="{StaticResource RemoteBranchesListViewGroupTemplate}" />
+                    </ListView.GroupStyle>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </DockPanel>
+
+            <features:RepositoryOutlinerView Grid.Column="1" />
+        </Grid>
 
         <GridSplitter Grid.Column="1"
                       Width="8"

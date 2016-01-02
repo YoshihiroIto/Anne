@@ -116,6 +116,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TreeViewEx">
+      <HintPath>..\TreeViewEx\TreeViewEx.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -188,6 +191,9 @@
       <DependentUpon>WipCommitView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\WipCommitVm.cs" />
+    <Compile Include="Features\RepositoryOutlinerView.xaml.cs">
+      <DependentUpon>RepositoryOutlinerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\MainWindowToolBar.xaml.cs">
       <DependentUpon>MainWindowToolBar.xaml</DependentUpon>
     </Compile>
@@ -197,6 +203,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Features\RepositoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\RepositoryOutlinerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
