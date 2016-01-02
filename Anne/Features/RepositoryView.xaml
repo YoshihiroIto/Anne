@@ -14,7 +14,7 @@
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       xmlns:selectors="clr-namespace:Anne.Features.Selectors"
       d:DesignHeight="300"
-      d:DesignWidth="600"
+      d:DesignWidth="1000"
       mc:Ignorable="d">
 
     <i:Interaction.Triggers>
@@ -138,7 +138,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="500" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />

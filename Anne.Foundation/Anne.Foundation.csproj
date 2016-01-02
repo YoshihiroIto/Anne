@@ -88,6 +88,9 @@
   <ItemGroup>
     <Compile Include="CommitLabelType.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controls\RepositoryOutlinerItemMark.xaml.cs">
+      <DependentUpon>RepositoryOutlinerItemMark.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CommitLabelMark.xaml.cs">
       <DependentUpon>CommitLabelMark.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,7 @@
       <DependentUpon>FileStatusMark.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Selectors\CommitLabelMarkSelector.cs" />
+    <Compile Include="Controls\Selectors\RepositoryOutlinerItemMarkSelector.cs" />
     <Compile Include="Controls\Selectors\FileStatusMarkSelector.cs" />
     <Compile Include="Controls\TextEditor.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -115,6 +119,7 @@
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Externals\WrappingStream.cs" />
+    <Compile Include="RepositoryOutlinerItemType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libgit2sharp\LibGit2Sharp\LibGit2Sharp.csproj">
@@ -130,6 +135,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\RepositoryOutlinerItemMark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\CommitLabelMark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

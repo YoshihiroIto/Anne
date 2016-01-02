@@ -54,11 +54,6 @@ namespace Anne.Features
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            Outliner = new ReactiveProperty<RepositoryOutlinerVm>(new RepositoryOutlinerVm(this))
-                .AddTo(MultipleDisposable);
-            new AnonymousDisposable(() => Outliner.Value.Dispose())
-                .AddTo(MultipleDisposable);
-
             // ブランチ
             LocalBranches = _model.Branches
                 .ToReadOnlyReactiveCollection()
@@ -71,6 +66,13 @@ namespace Anne.Features
                 .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(x))
                 .AddTo(MultipleDisposable);
+
+            // アウトライナー
+            Outliner = new ReactiveProperty<RepositoryOutlinerVm>(new RepositoryOutlinerVm(this))
+                .AddTo(MultipleDisposable);
+            new AnonymousDisposable(() => Outliner.Value.Dispose())
+                .AddTo(MultipleDisposable);
+
 
             // ファイルステータス
             FileStatus = new FileStatusVm(model)

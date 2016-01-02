@@ -1,0 +1,46 @@
+﻿<Viewbox x:Class="Anne.Foundation.Controls.RepositoryOutlinerItemMark"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:controls="clr-namespace:Anne.Foundation.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:selectors="clr-namespace:Anne.Foundation.Controls.Selectors"
+         Stretch="Uniform"
+         d:DesignHeight="300"
+         d:DesignWidth="300"
+         mc:Ignorable="d">
+    <Viewbox.Resources>
+        <DataTemplate x:Key="LocalBranch">
+            <Path Width="24"
+                  Height="24"
+                  Data="M16,19A4,4 0 0,1 12,23A4,4 0 0,1 8,19C8,17.14 9.27,15.57 11,15.13C11,14.47 11,13.82 10.29,12.78C9.57,11.74 8.14,10.33 6.71,8.91C6.03,9.03 5.31,9 4.61,8.73C2.54,8 1.47,5.68 2.22,3.6C3,1.53 5.27,0.46 7.35,1.21C9.42,1.97 10.5,4.26 9.74,6.34C9.5,7.04 9.06,7.62 8.5,8.06C8.93,9.44 12,12 12,12.5C12,12 15.07,9.44 15.5,8.06C14.94,7.62 14.5,7.04 14.26,6.34C13.5,4.26 14.58,1.97 16.65,1.21C18.73,0.46 21,1.53 21.78,3.6C22.53,5.68 21.46,8 19.39,8.73C18.69,9 17.97,9.03 17.29,8.91C15.86,10.33 14.43,11.74 13.71,12.78C13,13.82 13,14.47 13,15.13C14.73,15.57 16,17.14 16,19M12,17A2,2 0 0,0 10,19A2,2 0 0,0 12,21A2,2 0 0,0 14,19A2,2 0 0,0 12,17M6.66,3.09C5.63,2.72 4.5,3.25 4.1,4.29C3.72,5.33 4.26,6.47 5.3,6.85C6.33,7.23 7.5,6.69 7.86,5.66C8.24,4.62 7.7,3.47 6.66,3.09M17.34,3.09C16.3,3.47 15.76,4.62 16.14,5.66C16.5,6.69 17.67,7.23 18.7,6.85C19.74,6.47 20.28,5.33 19.9,4.29C19.5,3.25 18.37,2.72 17.34,3.09Z"
+                  Fill="DodgerBlue" />
+        </DataTemplate>
+        <DataTemplate x:Key="RemoteBranch">
+            <Path Width="24"
+                  Height="24"
+                  Data="M16,19A4,4 0 0,1 12,23A4,4 0 0,1 8,19C8,17.14 9.27,15.57 11,15.13C11,14.47 11,13.82 10.29,12.78C9.57,11.74 8.14,10.33 6.71,8.91C6.03,9.03 5.31,9 4.61,8.73C2.54,8 1.47,5.68 2.22,3.6C3,1.53 5.27,0.46 7.35,1.21C9.42,1.97 10.5,4.26 9.74,6.34C9.5,7.04 9.06,7.62 8.5,8.06C8.93,9.44 12,12 12,12.5C12,12 15.07,9.44 15.5,8.06C14.94,7.62 14.5,7.04 14.26,6.34C13.5,4.26 14.58,1.97 16.65,1.21C18.73,0.46 21,1.53 21.78,3.6C22.53,5.68 21.46,8 19.39,8.73C18.69,9 17.97,9.03 17.29,8.91C15.86,10.33 14.43,11.74 13.71,12.78C13,13.82 13,14.47 13,15.13C14.73,15.57 16,17.14 16,19M12,17A2,2 0 0,0 10,19A2,2 0 0,0 12,21A2,2 0 0,0 14,19A2,2 0 0,0 12,17M6.66,3.09C5.63,2.72 4.5,3.25 4.1,4.29C3.72,5.33 4.26,6.47 5.3,6.85C6.33,7.23 7.5,6.69 7.86,5.66C8.24,4.62 7.7,3.47 6.66,3.09M17.34,3.09C16.3,3.47 15.76,4.62 16.14,5.66C16.5,6.69 17.67,7.23 18.7,6.85C19.74,6.47 20.28,5.33 19.9,4.29C19.5,3.25 18.37,2.72 17.34,3.09Z"
+                  Fill="DarkGray" />
+        </DataTemplate>
+        <DataTemplate x:Key="Folder">
+            <Path Width="24"
+                  Height="24"
+                  Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"
+                  Fill="Orange" />
+        </DataTemplate>
+        <DataTemplate x:Key="LocalBranchRepos">
+            <Path Width="24"
+                  Height="24"
+                  Data="M13,18H14A1,1 0 0,1 15,19H22V21H15A1,1 0 0,1 14,22H10A1,1 0 0,1 9,21H2V19H9A1,1 0 0,1 10,18H11V16H8A1,1 0 0,1 7,15V3A1,1 0 0,1 8,2H16A1,1 0 0,1 17,3V15A1,1 0 0,1 16,16H13V18M13,6H14V4H13V6M9,4V6H11V4H9M9,8V10H11V8H9M9,12V14H11V12H9Z"
+                  Fill="LightCoral" />
+        </DataTemplate>
+
+        <selectors:RepositoryOutlinerItemMarkSelector x:Key="RepositoryOutlinerItemMarkSelector"
+                                                      Folder="{StaticResource Folder}"
+                                                      LocalBranch="{StaticResource LocalBranch}"
+                                                      RemoteBranch="{StaticResource RemoteBranch}"
+                                                      RemoteBranchRepos="{StaticResource LocalBranchRepos}" />
+    </Viewbox.Resources>
+
+    <ContentControl Content="{Binding Type, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:RepositoryOutlinerItemMark}}}" ContentTemplateSelector="{StaticResource RepositoryOutlinerItemMarkSelector}" />
+</Viewbox>

@@ -2,16 +2,54 @@
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:controls="clr-namespace:System.Windows.Controls;assembly=TreeViewEx"
+                     xmlns:controls1="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:features="clr-namespace:Anne.Features"
+                     xmlns:foundation="clr-namespace:Anne.Foundation;assembly=Anne.Foundation"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      d:DesignHeight="300"
                      d:DesignWidth="300"
                      mc:Ignorable="d">
+    <controls:TreeViewEx.Resources>
+        <Style TargetType="controls:TreeViewExItem">
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}" />
+            <Setter Property="FontWeight" Value="Normal" />
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Type, Mode=OneTime}" Value="{x:Static foundation:RepositoryOutlinerItemType.LocalBranchRoot}">
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type, Mode=OneTime}" Value="{x:Static foundation:RepositoryOutlinerItemType.RemoteBranchRoot}">
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </controls:TreeViewEx.Resources>
 
     <controls:TreeViewEx.ItemTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type features:ReposOutlinerRoot}" ItemsSource="{Binding Children, Mode=OneWay}">
-            <TextBlock FontWeight="Bold" Text="{Binding Caption.Value, Mode=OneWay}" />
+        <HierarchicalDataTemplate DataType="{x:Type features:ReposOutlinerItemVm}" ItemsSource="{Binding Children, Mode=OneWay}">
+            <StackPanel Orientation="Horizontal">
+                <controls1:RepositoryOutlinerItemMark Width="12"
+                                                      Height="12"
+                                                      Margin="0,0,2,0"
+                                                      Type="{Binding Type,
+                                                                     Mode=OneWay}">
+                    <controls1:RepositoryOutlinerItemMark.Style>
+                        <Style TargetType="controls1:RepositoryOutlinerItemMark">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type, Mode=OneTime}" Value="{x:Static foundation:RepositoryOutlinerItemType.LocalBranchRoot}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type, Mode=OneTime}" Value="{x:Static foundation:RepositoryOutlinerItemType.RemoteBranchRoot}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls1:RepositoryOutlinerItemMark.Style>
+                </controls1:RepositoryOutlinerItemMark>
+
+                <TextBlock Text="{Binding Caption.Value, Mode=OneWay}" />
+            </StackPanel>
         </HierarchicalDataTemplate>
     </controls:TreeViewEx.ItemTemplate>
 </controls:TreeViewEx>
