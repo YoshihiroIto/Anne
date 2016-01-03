@@ -9,6 +9,7 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
                       xmlns:windows="clr-namespace:Anne.Windows"
+                      Title="{Binding Title.Value, Mode=OneWay}"
                       Width="1400"
                       Height="800"
                       ResizeMode="CanResize"
@@ -51,15 +52,14 @@
                                        WindowChrome.IsHitTestVisibleInChrome="True" />
 
             <Label Grid.Column="1"
-            Margin="4,0,0,0"
+                   Margin="8,0,0,0"
                    VerticalAlignment="Top"
                    VerticalContentAlignment="Center"
-                   Content="{Binding Title.Value,
-                                     Mode=OneWay}"
+                   Content="Anne"
                    FontFamily="Segoe UI Light"
                    FontSize="22"
-                   IsHitTestVisible="False"
                    Foreground="{DynamicResource ForegroundBrushKey}"
+                   IsHitTestVisible="False"
                    Padding="0" />
 
             <controls:SystemButtons Grid.Column="2" VerticalAlignment="Top" />

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reactive.Linq;
 using Anne.Features;
 using Anne.Foundation.Mvvm;
 using Anne.Model;
@@ -14,18 +15,20 @@ namespace Anne.Windows
         public ReactiveProperty<RepositoryVm> SelectedRepository { get; }
             = new ReactiveProperty<RepositoryVm>();
 
-        public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>("Anne");
+        public ReadOnlyReactiveProperty<string> Title { get; }
 
         public MainWindowVm()
         {
-            Title
-                .AddTo(MultipleDisposable);
-
             SelectedRepository
                 .AddTo(MultipleDisposable);
 
             Repositories = App.Instance.Repositories
                 .ToReadOnlyReactiveCollection(x => new RepositoryVm(x, this))
+                .AddTo(MultipleDisposable);
+
+            Title = SelectedRepository
+                .Select(x => x == null ? "Anne" : "Anne -- " + x.Path)
+                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             SelectedRepository.Value = Repositories.FirstOrDefault();
