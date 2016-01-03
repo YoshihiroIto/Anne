@@ -281,22 +281,18 @@ namespace Anne.Model.Git
 
         public void ExecuteJobSync(string summry, Action action)
         {
-            // todo:Mutexが望む動作をしてくれない。要調査
-
-            // var mutex = new Mutex();
-            var done = false;
-
-            _jobQueue.AddJob(summry, () =>
+            using (var sema = new SemaphoreSlim(0, 1))
             {
-                action();
+                _jobQueue.AddJob(summry, () =>
+                {
+                    action();
 
-                // mutex.ReleaseMutex();
-                done = true;
-            });
+                    // ReSharper disable once AccessToDisposedClosure
+                    sema.Release();
+                });
 
-            // mutex.WaitOne();
-            while (done == false)
-                Thread.Sleep(0);
+                sema.Wait();
+            }
         }
     }
 }

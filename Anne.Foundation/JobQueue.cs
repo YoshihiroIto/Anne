@@ -21,7 +21,7 @@ namespace Anne.Foundation
             new ObservableSynchronizedCollection<Job>();
 
         private readonly Task _task;
-        private readonly SemaphoreSlim _sema = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim _sema = new SemaphoreSlim(0, 1);
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
 
         private class Job
