@@ -230,6 +230,18 @@ namespace Anne.Model.Git
                 });
         }
 
+        public void Checkout(string branchName)
+        {
+            _jobQueue.AddJob(
+                "Checkout",
+                () =>
+                {
+                    var srcBranch = Branches.FirstOrDefault(b => b.Name == branchName);
+                    srcBranch?.Checkout();
+                    UpdateBranchProps();
+                });
+        }
+
         public void Pull()
         {
             Debug.WriteLine("Pull() -- 未実装");

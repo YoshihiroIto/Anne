@@ -31,11 +31,11 @@ namespace Anne.Features
             // 各項目のルートノードを配置する
             _localBranch =
                 new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot, null)
-                .AddTo(MultipleDisposable);
+                    .AddTo(MultipleDisposable);
 
             _remoteBranch =
                 new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot, null)
-                .AddTo(MultipleDisposable);
+                    .AddTo(MultipleDisposable);
 
             Children.AddOnScheduler(_localBranch);
             Children.AddOnScheduler(_remoteBranch);
@@ -104,8 +104,14 @@ namespace Anne.Features
         {
             var selectedBranch = SelectedItem.Value?.Branch;
 
-            if (selectedBranch?.IsRemote.Value == false)
+            if (selectedBranch?.IsRemote.Value == true)
             {
+                // checkout
+                _repos.Checkout(selectedBranch.Name.Value);
+            }
+            else if (selectedBranch?.IsRemote.Value == false)
+            {
+                // switch
                 if (selectedBranch.IsCurrent.Value == false)
                     _repos.Switch(selectedBranch.Name.Value);
             }
