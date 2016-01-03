@@ -161,9 +161,5 @@ namespace Anne.Features
             PushCommand.Subscribe(_ => _model.Push()).AddTo(MultipleDisposable);
             PullCommand.Subscribe(_ => _model.Pull()).AddTo(MultipleDisposable);
         }
-
-        // test
-        public void CheckoutTest() => _model.CheckoutTest();
-        public void RemoveTest() => _model.RemoveTest();
     }
 }

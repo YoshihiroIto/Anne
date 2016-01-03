@@ -298,32 +298,5 @@ namespace Anne.Model.Git
             while (done == false)
                 Thread.Sleep(0);
         }
-
-        #region Test
-
-        public void CheckoutTest()
-        {
-            _jobQueue.AddJob(
-                "Checkout",
-                () =>
-                {
-                    var srcBranch = Branches.FirstOrDefault(b => b.Name == "origin/refactoring");
-                    srcBranch?.Checkout();
-                    UpdateBranchProps();
-                });
-        }
-
-        public void RemoveTest()
-        {
-            _jobQueue.AddJob(
-                "Remove",
-                () =>
-                {
-                    var srcBranch = Branches.FirstOrDefault(b => b.Name == "refactoring");
-                    srcBranch?.Remove();
-                });
-        }
-
-        #endregion
     }
 }

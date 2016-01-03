@@ -1,7 +1,6 @@
 ﻿<Grid x:Class="Anne.Features.RepositoryView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
       xmlns:controls="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
       xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -188,22 +187,6 @@
 
         <!--  テスト用  -->
         <DockPanel Grid.Column="5" LastChildFill="True">
-            <Button Content="Checkout Test" DockPanel.Dock="Top">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="CheckoutTest" MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
-            <Button Content="Remove Test" DockPanel.Dock="Top">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <behaviors:LivetCallMethodAction MethodName="RemoveTest" MethodTarget="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-
             <!--  ジョブ  -->
             <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
             <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
