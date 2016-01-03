@@ -66,18 +66,19 @@ namespace Anne.Model.Git
                     Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
+            var filter = new CommitFilter
             {
-                var filter = new CommitFilter
-                {
-                    SortBy = CommitSortStrategies.Time,
-                    IncludeReachableFrom = Internal.Refs
-                };
+                SortBy = CommitSortStrategies.Time,
+                IncludeReachableFrom = Internal.Refs
+            };
 
+            {
                 UpdateCommitLabelDict();
 
                 Commits = new ReactiveProperty<IEnumerable<Commit>>(
                     Scheduler.Immediate,
-                    Internal.Commits.QueryBy(filter).Select(x => new Commit(this, x)).Memoize())
+                    Internal.Commits.QueryBy(filter)
+                        .Select(x => new Commit(this, x)).Memoize())
                     .AddTo(MultipleDisposable);
 
                 new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
@@ -96,7 +97,8 @@ namespace Anne.Model.Git
                         UpdateCommitLabelDict();
 
                         var old = Commits.Value;
-                        Commits.Value = Internal.Commits.Select(x => new Commit(this, x)).Memoize();
+                        Commits.Value = Internal.Commits.QueryBy(filter)
+                            .Select(x => new Commit(this, x)).Memoize();
                         old.ForEach(x => x.Dispose());
                     })
                     .AddTo(MultipleDisposable);
@@ -124,7 +126,7 @@ namespace Anne.Model.Git
             _commitLabelDict.Values
                 .SelectMany(x => x)
                 .ForEach(x => x.Dispose());
-            
+
             _commitLabelDict = new Dictionary<string, List<CommitLabel>>();
 
             Branches.ForEach(b =>
