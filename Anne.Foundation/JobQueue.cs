@@ -110,7 +110,13 @@ namespace Anne.Foundation
                 Action = action
             });
 
-            _sema.Release();
+            try
+            {
+                _sema.Release();
+            }
+            catch (SemaphoreFullException)
+            {
+            }
         }
     }
 }
