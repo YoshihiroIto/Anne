@@ -36,3 +36,6 @@
 * 例外的に無視拡張子のファイルを追加した時に困った
 	* リストに出てこない
 
+
+
+System.Windows.Data Error: 4 : Cannot find source for binding with reference 'ElementName=CommitList'. BindingExpression:Path=SelectedItem; DataItem=null; target element is 'ListViewItem' (Name=''); target property is 'NoTarget' (type 'Object')
