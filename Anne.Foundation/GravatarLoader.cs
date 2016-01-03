@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Media.Imaging;
@@ -32,38 +33,47 @@ namespace Anne.Foundation
 
         private static BitmapImage LoadImage(string email)
         {
-            Debug.WriteLine("LoadImage: " + email);
-
 // ネットアクセスしたくない時はfalseにする
 #if true
-            var url = GenerateUrlFromEmail(email);
+
+            if (NetworkInterface.GetIsNetworkAvailable() == false)
+                return null;
 
             BitmapImage bitmap = null;
 
-            using (var wc = new WebClient())
+            try
             {
-                var data = wc.DownloadData(url);
+                var url = GenerateUrlFromEmail(email);
 
-                Livet.DispatcherHelper.UIDispatcher.Invoke(() =>
+                using (var wc = new WebClient())
                 {
-                    using (var stream = new WrappingStream(new MemoryStream(data)))
+                    var data = wc.DownloadData(url);
+
+                    Livet.DispatcherHelper.UIDispatcher.Invoke(() =>
                     {
-                        bitmap = new BitmapImage();
-                        bitmap.BeginInit();
-                        bitmap.StreamSource = stream;
-                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmap.EndInit();
-                        bitmap.StreamSource = null;
+                        using (var stream = new WrappingStream(new MemoryStream(data)))
+                        {
+                            bitmap = new BitmapImage();
+                            bitmap.BeginInit();
+                            bitmap.StreamSource = stream;
+                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmap.EndInit();
+                            bitmap.StreamSource = null;
 
-                        if (bitmap.CanFreeze)
-                            bitmap.Freeze();
-                    }
-                });
+                            if (bitmap.CanFreeze)
+                                bitmap.Freeze();
+                        }
+                    });
+                }
+
+                Debug.Assert(bitmap != null);
+
+                return bitmap;
             }
-
-            Debug.Assert(bitmap != null);
-
-            return bitmap;
+            catch
+            {
+                return null;
+            }
 #else
             return null;
 #endif
