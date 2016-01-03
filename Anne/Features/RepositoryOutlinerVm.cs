@@ -17,6 +17,8 @@ namespace Anne.Features
 
         public ReactiveProperty<RepositoryOutlinerItemVm> SelectedItem { get; }
 
+        public ReactiveCommand SwitchBranchCommand { get; }
+
         private readonly RepositoryVm _repos;
 
         public RepositoryOutlinerVm(RepositoryVm repos)
@@ -50,6 +52,9 @@ namespace Anne.Features
             repos.RemoteBranches.CollectionChangedAsObservable()
                 .Subscribe(_ => UpdateBranchNodes(_remoteBranch, repos.RemoteBranches, true))
                 .AddTo(MultipleDisposable);
+
+            SwitchBranchCommand = new ReactiveCommand().AddTo(MultipleDisposable);
+            SwitchBranchCommand.Subscribe(_ => SwitchBranch()).AddTo(MultipleDisposable);
         }
 
         private void UpdateBranchNodes(RepositoryOutlinerItemVm target, ReadOnlyObservableCollection<BranchVm> source,
@@ -100,20 +105,18 @@ namespace Anne.Features
             });
         }
 
-        public void SwitchBranch()
+        private void SwitchBranch()
         {
             var selectedBranch = SelectedItem.Value?.Branch;
 
             if (selectedBranch?.IsRemote.Value == true)
             {
-                // checkout
-                _repos.Checkout(selectedBranch.Name.Value);
+                _repos.CheckoutBranch(selectedBranch.Name.Value);
             }
             else if (selectedBranch?.IsRemote.Value == false)
             {
-                // switch
                 if (selectedBranch.IsCurrent.Value == false)
-                    _repos.Switch(selectedBranch.Name.Value);
+                    _repos.SwitchBranch(selectedBranch.Name.Value);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -22,6 +23,7 @@ namespace Anne.Features
         public BranchVm Branch { get; }
 
         public ReactiveProperty<bool> IsCurrent { get; }
+        public ReactiveCommand RemoveBranchCommand { get; }
 
         public RepositoryOutlinerItemVm(string caption, RepositoryOutlinerItemType type, BranchVm branch)
         {
@@ -51,6 +53,15 @@ namespace Anne.Features
             Children.AddTo(MultipleDisposable);
             new AnonymousDisposable(() => Children.ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
+
+            RemoveBranchCommand = new ReactiveCommand().AddTo(MultipleDisposable);
+            RemoveBranchCommand.Subscribe(_ => RemoveBranch()).AddTo(MultipleDisposable);
+        }
+
+        private void RemoveBranch()
+        {
+            if (Branch.IsRemote.Value == false)
+                Branch.Remove();
         }
     }
 }

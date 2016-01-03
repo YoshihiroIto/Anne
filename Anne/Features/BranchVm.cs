@@ -13,9 +13,14 @@ namespace Anne.Features
         public ReadOnlyReactiveProperty<bool> IsRemote { get; }
         public ReadOnlyReactiveProperty<bool> IsCurrent { get; }
 
-        public BranchVm(Model.Git.Branch model)
+        private readonly RepositoryVm _repos;
+
+        public BranchVm(RepositoryVm repos, Model.Git.Branch model)
         {
+            Debug.Assert(repos != null);
             Debug.Assert(model != null);
+
+            _repos = repos;
 
             Name = model
                 .ObserveProperty(x => x.Name)
@@ -41,6 +46,11 @@ namespace Anne.Features
                 .ObserveProperty(x => x.IsCurrent)
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
+        }
+
+        public void Remove()
+        {
+            _repos.RemoveBranch(Name.Value);
         }
     }
 }

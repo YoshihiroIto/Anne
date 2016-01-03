@@ -58,13 +58,13 @@ namespace Anne.Features
             LocalBranches = _model.Branches
                 .ToReadOnlyReactiveCollection()
                 .ToFilteredReadOnlyObservableCollection(x => !x.IsRemote)
-                .ToReadOnlyReactiveCollection(x => new BranchVm(x))
+                .ToReadOnlyReactiveCollection(x => new BranchVm(this, x))
                 .AddTo(MultipleDisposable);
 
             RemoteBranches = _model.Branches
                 .ToReadOnlyReactiveCollection()
                 .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
-                .ToReadOnlyReactiveCollection(x => new BranchVm(x))
+                .ToReadOnlyReactiveCollection(x => new BranchVm(this, x))
                 .AddTo(MultipleDisposable);
 
             // アウトライナー
@@ -136,8 +136,9 @@ namespace Anne.Features
         public void Commit(string message) => _model.Commit(message);
         public void DiscardChanges(IEnumerable<string> paths) => _model.DiscardChanges(paths);
         public void Reset(ResetMode mode, string sha) => _model.Reset(mode, sha);
-        public void Switch(string branchName) => _model.Switch(branchName);
-        public void Checkout(string branchName) => _model.Checkout(branchName);
+        public void SwitchBranch(string branchName) => _model.SwitchBranch(branchName);
+        public void CheckoutBranch(string branchName) => _model.CheckoutBranch(branchName);
+        public void RemoveBranch(string branchName) => _model.RemoveBranch(branchName);
 
         public IEnumerable<CommitLabel> GetCommitLabels(string commitSha)
         {

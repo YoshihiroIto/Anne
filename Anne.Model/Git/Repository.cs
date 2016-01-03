@@ -220,10 +220,10 @@ namespace Anne.Model.Git
                 });
         }
 
-        public void Switch(string branchName)
+        public void SwitchBranch(string branchName)
         {
             _jobQueue.AddJob(
-                $"Switch: {branchName}",
+                $"SwitchBanch: {branchName}",
                 () =>
                 {
                     var branch = Branches.FirstOrDefault(b => b.Name == branchName);
@@ -232,15 +232,26 @@ namespace Anne.Model.Git
                 });
         }
 
-        public void Checkout(string branchName)
+        public void CheckoutBranch(string branchName)
         {
             _jobQueue.AddJob(
-                "Checkout",
+                "CheckoutBranch",
                 () =>
                 {
                     var srcBranch = Branches.FirstOrDefault(b => b.Name == branchName);
                     srcBranch?.Checkout();
                     UpdateBranchProps();
+                });
+        }
+
+        public void RemoveBranch(string branchName)
+        {
+            _jobQueue.AddJob(
+                "RemoveBranch",
+                () =>
+                {
+                    var srcBranch = Branches.FirstOrDefault(b => b.Name == branchName);
+                    srcBranch?.Remove();
                 });
         }
 
