@@ -6,8 +6,6 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             HorizontalAlignment="Center"
             Orientation="Horizontal"
-            d:DesignHeight="300"
-            d:DesignWidth="300"
             mc:Ignorable="d">
     <StackPanel.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">

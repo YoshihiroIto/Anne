@@ -7,6 +7,7 @@
                      xmlns:features="clr-namespace:Anne.Features"
                      xmlns:foundation="clr-namespace:Anne.Foundation;assembly=Anne.Foundation"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     BorderBrush="{StaticResource BorderBrushKey}"
                      d:DesignHeight="300"
                      d:DesignWidth="300"
                      mc:Ignorable="d">
@@ -26,7 +27,7 @@
         </Style>
 
         <ContextMenu x:Key="LocalBranchContextMenu">
-            <MenuItem Header="Remove" Command="{Binding RemoveBranchCommand, Mode=OneTime}"/>
+            <MenuItem Command="{Binding RemoveBranchCommand, Mode=OneTime}" Header="Remove" />
         </ContextMenu>
     </controls:TreeViewEx.Resources>
 

@@ -8,6 +8,7 @@ using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
+using Anne.Windows;
 using LibGit2Sharp;
 using Livet.Messaging;
 using Reactive.Bindings;
@@ -39,12 +40,24 @@ namespace Anne.Features
 
         public FileStatusVm FileStatus { get; }
 
+        public string Path => _model.Path;
+        public string Name => System.IO.Path.GetFileName(Path);
+
         private readonly Repository _model;
 
-        public RepositoryVm(Repository model)
+        // ※.管理は親側で行う
+        public ReadOnlyReactiveCollection<RepositoryVm> Repositories => _parent.Repositories;
+        public ReactiveProperty<RepositoryVm> SelectedRepository => _parent.SelectedRepository;
+
+        private readonly MainWindowVm _parent;
+
+        public RepositoryVm(Repository model, MainWindowVm parent)
         {
             Debug.Assert(model != null);
+            Debug.Assert(parent != null);
+
             _model = model;
+            _parent = parent;
 
             JobSummries = _model.JobSummries
                 .ToReadOnlyReactiveCollection()

@@ -9,19 +9,26 @@ namespace Anne.Windows
 {
     public class MainWindowVm : ViewModelBase
     {
-        public ReactiveProperty<RepositoryVm> SelectedRepository { get; } = new ReactiveProperty<RepositoryVm>();
+        public ReadOnlyReactiveCollection<RepositoryVm> Repositories { get; }
+
+        public ReactiveProperty<RepositoryVm> SelectedRepository { get; }
+            = new ReactiveProperty<RepositoryVm>();
 
         public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>("Anne");
 
         public MainWindowVm()
         {
+            Title
+                .AddTo(MultipleDisposable);
+
             SelectedRepository
                 .AddTo(MultipleDisposable);
 
-            var reposVm = new RepositoryVm(App.Instance.Repositories.First())
+            Repositories = App.Instance.Repositories
+                .ToReadOnlyReactiveCollection(x => new RepositoryVm(x, this))
                 .AddTo(MultipleDisposable);
 
-            SelectedRepository.Value = reposVm;
+            SelectedRepository.Value = Repositories.FirstOrDefault();
         }
     }
 }

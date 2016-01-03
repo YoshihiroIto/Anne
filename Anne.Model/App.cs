@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 using Reactive.Bindings.Extensions;
@@ -10,8 +11,8 @@ namespace Anne.Model
     {
         public static App Instance { get; } = new App();
 
-        public ObservableSynchronizedCollection<Repository> Repositories { get; } =
-            new ObservableSynchronizedCollection<Repository>();
+        public ObservableCollection<Repository> Repositories { get; }
+            = new ObservableCollection<Repository>();
 
         public static void Initialize()
         {
@@ -25,12 +26,13 @@ namespace Anne.Model
 
         private App()
         {
-            Repositories.AddTo(MultipleDisposable);
+            new AnonymousDisposable(() => Repositories.ForEach(x => x.Dispose()))
+                .AddTo(MultipleDisposable);
 
             // test
-            //Repositories.Add(new Repository(@"C:\Users\yoi\Documents\Anne"));
+            Repositories.Add(new Repository(@"C:\Users\yoi\Documents\Anne"));
             Repositories.Add(new Repository(@"C:\Users\yoi\Documents\Wox"));
-            //Repositories.Add(new Repository(@"C:\Users\yoi\Documents\libgit2sharp_test"));
+            Repositories.Add(new Repository(@"C:\Users\yoi\Documents\libgit2sharp_test"));
         }
     }
 }
