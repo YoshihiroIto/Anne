@@ -116,7 +116,8 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />     <!--ジョブリスト-->
+            <ColumnDefinition Width="Auto" />
+            <!--  ジョブリスト  -->
         </Grid.ColumnDefinitions>
 
         <DockPanel LastChildFill="True">
@@ -143,8 +144,7 @@
                       Width="8"
                       HorizontalAlignment="Center" />
 
-        <ListView x:Name="CommitList"
-                  Grid.Column="2"
+        <ListView Grid.Column="2"
                   AlternationCount="2"
                   BorderBrush="{StaticResource BorderBrushKey}"
                   ItemTemplateSelector="{StaticResource CommitListItemDataSelector}"
@@ -182,12 +182,13 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=CommitList, Path=SelectedItem, Converter={StaticResource TypeOf}, Mode=OneWay}" Value="{x:Type features:WipCommitVm}">
+                        <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource TypeOf}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Mode=OneWay}" Value="{x:Type features:WipCommitVm}">
                             <Setter Property="ContextMenu" Value="{StaticResource WipCommitContextMenu}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=CommitList, Path=SelectedItem, Converter={StaticResource TypeOf}, Mode=OneWay}" Value="{x:Type features:DoneCommitVm}">
+                        <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource TypeOf}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Mode=OneWay}" Value="{x:Type features:DoneCommitVm}">
                             <Setter Property="ContextMenu" Value="{StaticResource DoneCommitContextMenu}" />
                         </DataTrigger>
+
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                             <Setter Property="Background" Value="#F8F8F8" />
                         </Trigger>
