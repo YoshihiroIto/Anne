@@ -3,14 +3,13 @@
 
 * 別アプリでリポジトリ操作が行われた時
 * libgit2sharp が ssh を扱えない。どうする？
+    * push
 
 
 
 機能
 ----
 
-* push
-* pull
 * グラフ表示
 * summry, discription の過去から入力
 
