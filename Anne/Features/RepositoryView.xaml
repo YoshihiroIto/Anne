@@ -116,7 +116,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="Auto" />     <!--ジョブリスト-->
         </Grid.ColumnDefinitions>
 
         <DockPanel LastChildFill="True">
@@ -205,11 +205,11 @@
                                           Mode=OneWay}"
                         ContentTemplateSelector="{StaticResource CommitViewDataSelector}" />
 
-        <!--  テスト用  -->
-        <DockPanel Grid.Column="5" LastChildFill="True">
-            <!--  ジョブ  -->
-            <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" />
-            <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" />
-        </DockPanel>
+        <!-- <!&#45;&#45;  テスト用  &#45;&#45;> -->
+        <!-- <DockPanel Grid.Column="5" LastChildFill="True" Width="120"> -->
+        <!--     <!&#45;&#45;  ジョブ  &#45;&#45;> -->
+        <!--     <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" /> -->
+        <!--     <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" /> -->
+        <!-- </DockPanel> -->
     </Grid>
 </Grid>
