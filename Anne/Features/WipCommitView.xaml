@@ -4,14 +4,13 @@
       xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
       xmlns:controls="http://schemes.grabacr.net/winfx/2014/controls"
       xmlns:controls1="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
+      xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       xmlns:foundation="clr-namespace:Anne.Foundation;assembly=Anne.Foundation"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:selectionExample="clr-namespace:SelectionExample;assembly=Anne.Foundation"
-      xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
       d:DesignHeight="600"
       d:DesignWidth="300"
       mc:Ignorable="d">
@@ -59,11 +58,11 @@
                     Height="24"
                     Margin="0,0,0,8"
                     HorizontalAlignment="Left"
-                    SnapsToDevicePixels="True"
                     Command="{Binding CommitCommand,
                                       Mode=OneTime}"
                     Content="Commit"
-                    IsTabStop="True" />
+                    IsTabStop="True"
+                    SnapsToDevicePixels="True" />
             <CheckBox Margin="6,0,0,2"
                       IsChecked="{Binding IsAllSelected.Value}"
                       IsThreeState="True" />
@@ -92,8 +91,7 @@
               VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.VirtualizationMode="Recycling"
               foundation:ListBoxBehaviour.SeletedItems="{Binding SelectedWipFiles,
-                                                                 Mode=TwoWay}"
-              selectionExample:ListBoxSelector.Enabled="True">
+                                                                 Mode=TwoWay}">
         <ListView.Template>
             <ControlTemplate TargetType="ItemsControl">
                 <Border BorderBrush="LightGray"

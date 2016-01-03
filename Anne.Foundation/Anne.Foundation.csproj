@@ -109,7 +109,6 @@
     <Compile Include="DisposableChecker.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Externals\DiffMatchPatch.cs" />
-    <Compile Include="Externals\ListBoxSelector.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="GravatarLoader.cs" />
     <Compile Include="JobQueue.cs" />
