@@ -9,11 +9,9 @@
 機能
 ----
 
-* ブランチ切り替え
 * push
 * pull
 * グラフ表示
-* 複数リポジトリ対応
 * summry, discription の過去から入力
 
 
