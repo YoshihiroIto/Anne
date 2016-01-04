@@ -77,8 +77,11 @@ namespace Anne.Features
                     .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
                     .AddTo(MultipleDisposable);
 
-                if (SelectedChangeFiles.Count == 0)
-                    SelectedChangeFiles = ChangeFiles;
+                ChangeFiles.ObserveAddChanged().Subscribe(x =>
+                {
+                    if (SelectedChangeFiles.Count == 0)
+                        SelectedChangeFiles = new[] {x};
+                }).AddTo(MultipleDisposable);
 
                 return _changeFiles;
             }
