@@ -83,12 +83,6 @@ namespace Anne.Features
                 .ToReadOnlyReactiveCollection(x => new BranchVm(this, x))
                 .AddTo(MultipleDisposable);
 
-            // アウトライナー
-            Outliner = new ReactiveProperty<RepositoryOutlinerVm>(new RepositoryOutlinerVm(this))
-                .AddTo(MultipleDisposable);
-            new AnonymousDisposable(() => Outliner.Value.Dispose())
-                .AddTo(MultipleDisposable);
-
             HistoryDivergence = model.HistoryDivergence
                 .Select(x =>
                 {
@@ -109,6 +103,12 @@ namespace Anne.Features
                     return sb.ToString();
                 })
                 .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
+            // アウトライナー
+            Outliner = new ReactiveProperty<RepositoryOutlinerVm>(new RepositoryOutlinerVm(this))
+                .AddTo(MultipleDisposable);
+            new AnonymousDisposable(() => Outliner.Value.Dispose())
                 .AddTo(MultipleDisposable);
 
             // ファイルステータス
