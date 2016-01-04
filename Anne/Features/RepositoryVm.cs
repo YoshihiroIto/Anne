@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Text;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
@@ -32,7 +33,9 @@ namespace Anne.Features
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
-        public ReactiveProperty<RepositoryOutlinerVm> Outliner { get; } 
+        public ReactiveProperty<RepositoryOutlinerVm> Outliner { get; }
+
+        public ReadOnlyReactiveProperty<string> HistoryDivergence { get; }
 
         public ReactiveCommand FetchCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PushCommand { get; } = new ReactiveCommand();
@@ -86,6 +89,28 @@ namespace Anne.Features
             new AnonymousDisposable(() => Outliner.Value.Dispose())
                 .AddTo(MultipleDisposable);
 
+            HistoryDivergence = model.HistoryDivergence
+                .Select(x =>
+                {
+                    var aheadBy = x.AheadBy ?? 0;
+                    var behindBy = x.BehindBy ?? 0;
+
+                    var sb = new StringBuilder();
+                    {
+                        if (aheadBy != 0)
+                            sb.Append($"{aheadBy}↑");
+
+                        if ((aheadBy != 0) && (behindBy != 0))
+                            sb.Append("   ");
+
+                        if (behindBy != 0)
+                            sb.Append($"{behindBy}↓");
+                    }
+                    return sb.ToString();
+                })
+                .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
             // ファイルステータス
             FileStatus = new FileStatusVm(model)
                 .AddTo(MultipleDisposable);
@@ -97,7 +122,7 @@ namespace Anne.Features
             _model.Commits.Subscribe(src =>
             {
                 var old = Commits.ToArray();
-                
+
                 Commits.AddRangeOnScheduler(src.Select(x => new DoneCommitVm(this, x)));
 
                 old.ForEach(o =>
@@ -105,7 +130,6 @@ namespace Anne.Features
                     Commits.RemoveOnScheduler(o);
                     (o as IDisposable)?.Dispose();
                 });
-                
             }).AddTo(MultipleDisposable);
 
             new AnonymousDisposable(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()))

@@ -22,7 +22,7 @@ namespace Anne.Features
         private readonly RepositoryVm _repos;
 
         public RepositoryOutlinerVm(RepositoryVm repos)
-            : base(string.Empty, RepositoryOutlinerItemType.Root, null)
+            : base(string.Empty, RepositoryOutlinerItemType.Root, null, repos)
         {
             Debug.Assert(repos != null);
             _repos = repos;
@@ -32,11 +32,11 @@ namespace Anne.Features
 
             // 各項目のルートノードを配置する
             _localBranch =
-                new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot, null)
+                new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot, null, repos)
                     .AddTo(MultipleDisposable);
 
             _remoteBranch =
-                new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot, null)
+                new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot, null, repos)
                     .AddTo(MultipleDisposable);
 
             Children.AddOnScheduler(_localBranch);
@@ -90,7 +90,7 @@ namespace Anne.Features
                         if (isRemote && isFirst)
                             type = RepositoryOutlinerItemType.RemoteBranchRepos;
 
-                        nextNode = new RepositoryOutlinerItemVm(f, type, null)
+                        nextNode = new RepositoryOutlinerItemVm(f, type, null, _repos)
                         {
                             IsExpanded = {Value = isFirst}
                         };
@@ -101,7 +101,7 @@ namespace Anne.Features
                     isFirst = false;
                 }
 
-                node.Children.Add(new RepositoryOutlinerItemVm(leaf, leafType, s));
+                node.Children.Add(new RepositoryOutlinerItemVm(leaf, leafType, s, _repos));
             });
         }
 

@@ -32,6 +32,9 @@ namespace Anne.Model.Git
         // ファイルステータス
         public FileStatus FileStatus { get; }
 
+        public ReactiveProperty<HistoryDivergence> HistoryDivergence { get; }
+            = new ReactiveProperty<HistoryDivergence>();
+
         //
         public string Path { get; }
 
@@ -73,6 +76,7 @@ namespace Anne.Model.Git
             };
 
             {
+                UpdateHistoryDivergence();
                 UpdateCommitLabelDict();
 
                 Commits = new ReactiveProperty<IEnumerable<Commit>>(
@@ -94,6 +98,7 @@ namespace Anne.Model.Git
                     h => watcher.FileUpdated -= h,
                     (s, e) =>
                     {
+                        UpdateHistoryDivergence();
                         UpdateCommitLabelDict();
 
                         var old = Commits.Value;
@@ -111,6 +116,21 @@ namespace Anne.Model.Git
                     .SelectMany(x => x)
                     .ForEach(x => x.Dispose())
                 ).AddTo(MultipleDisposable);
+        }
+
+        public void UpdateHistoryDivergence()
+        {
+            var currentBranch = Branches.FirstOrDefault(b => b.IsCurrent);
+            if (currentBranch != null)
+            {
+                var trackingBranch =
+                    Internal.Lookup<LibGit2Sharp.Commit>(currentBranch.TrackingBranchSha);
+
+                HistoryDivergence.Value =
+                    Internal.ObjectDatabase.CalculateHistoryDivergence(Internal.Head.Tip, trackingBranch);
+            }
+            else
+                HistoryDivergence.Value = null;
         }
 
         private void UpdateBranchProps()

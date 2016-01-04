@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
@@ -23,12 +24,20 @@ namespace Anne.Features
         public BranchVm Branch { get; }
 
         public ReactiveProperty<bool> IsCurrent { get; }
+
+        public ReadOnlyReactiveProperty<string> HistoryDivergence => _repos.HistoryDivergence;
+
         public ReactiveCommand RemoveBranchCommand { get; }
 
-        public RepositoryOutlinerItemVm(string caption, RepositoryOutlinerItemType type, BranchVm branch)
+        private readonly RepositoryVm _repos;
+
+        public RepositoryOutlinerItemVm(string caption, RepositoryOutlinerItemType type, BranchVm branch, RepositoryVm repos)
         {
+            Debug.Assert(repos != null);
+
             Type = type;
             Branch = branch;
+            _repos = repos;
 
             if (Branch != null)
             {

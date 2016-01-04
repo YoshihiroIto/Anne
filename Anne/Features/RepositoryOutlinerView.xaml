@@ -3,6 +3,7 @@
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:controls="clr-namespace:System.Windows.Controls;assembly=TreeViewEx"
                      xmlns:controls1="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
+                     xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:features="clr-namespace:Anne.Features"
                      xmlns:foundation="clr-namespace:Anne.Foundation;assembly=Anne.Foundation"
@@ -29,6 +30,10 @@
         <ContextMenu x:Key="LocalBranchContextMenu">
             <MenuItem Command="{Binding RemoveBranchCommand, Mode=OneTime}" Header="Remove" />
         </ContextMenu>
+
+        <converters:BoolToVisibilityConverter x:Key="IsCurrentVisibility"
+                                              False="Collapsed"
+                                              True="Visible" />
     </controls:TreeViewEx.Resources>
 
     <controls:TreeViewEx.ItemTemplate>
@@ -57,20 +62,23 @@
                     <controls1:RepositoryOutlinerItemMark Width="14"
                                                           Height="14"
                                                           Margin="-30,0,2,0"
-                                                          Type="Current">
-                        <controls1:RepositoryOutlinerItemMark.Style>
-                            <Style TargetType="controls1:RepositoryOutlinerItemMark">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsCurrent.Value, Mode=OneWay}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </controls1:RepositoryOutlinerItemMark.Style>
-                    </controls1:RepositoryOutlinerItemMark>
+                                                          Type="Current"
+                                                          Visibility="{Binding IsCurrent.Value,
+                                                                               Mode=OneWay,
+                                                                               Converter={StaticResource IsCurrentVisibility}}" />
                 </Grid>
 
                 <TextBlock Text="{Binding Caption.Value, Mode=OneWay}" />
+
+                <TextBlock Margin="4,0"
+                           Background="Gray"
+                           Foreground="WhiteSmoke"
+                           Padding="2,0"
+                           SnapsToDevicePixels="True"
+                           Text="{Binding HistoryDivergence.Value, Mode=OneWay}"
+                           Visibility="{Binding IsCurrent.Value,
+                                                Mode=OneWay,
+                                                Converter={StaticResource IsCurrentVisibility}}" />
             </StackPanel>
         </HierarchicalDataTemplate>
     </controls:TreeViewEx.ItemTemplate>
