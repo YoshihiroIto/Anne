@@ -97,6 +97,7 @@ namespace Anne.Features
         private readonly Model.Git.Commit _model;
 
         public ReactiveCommand<ResetMode> ResetCommand { get; } 
+        public ReactiveCommand RevertCommand { get; } 
         public ObservableCollection<CommitLabelVm> CommitLabels { get; }
 
         public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model)
@@ -108,6 +109,12 @@ namespace Anne.Features
             ResetCommand.Subscribe(mode => repos.Reset(mode, model.Sha))
                 .AddTo(MultipleDisposable);
 
+            RevertCommand = new ReactiveCommand().AddTo(MultipleDisposable);
+            RevertCommand.Subscribe(mode => repos.Revert(model.Sha))
+                .AddTo(MultipleDisposable);
+
+
+
             CommitLabels = repos
                 .GetCommitLabels(model.Sha)
                 .Select(x => new CommitLabelVm(x))
@@ -115,6 +122,10 @@ namespace Anne.Features
 
             new AnonymousDisposable(() => CommitLabels.ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
+
+
         }
+
+
     }
 }

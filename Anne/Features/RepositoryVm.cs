@@ -148,7 +148,8 @@ namespace Anne.Features
 
         public void Commit(string message) => _model.Commit(message);
         public void DiscardChanges(IEnumerable<string> paths) => _model.DiscardChanges(paths);
-        public void Reset(ResetMode mode, string sha) => _model.Reset(mode, sha);
+        public void Reset(ResetMode mode, string commitSha) => _model.Reset(mode, commitSha);
+        public void Revert(string commitSha) => _model.Revert(commitSha);
         public void SwitchBranch(string branchName) => _model.SwitchBranch(branchName);
         public void CheckoutBranch(string branchName) => _model.CheckoutBranch(branchName);
         public void RemoveBranch(string branchName) => _model.RemoveBranch(branchName);

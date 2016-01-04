@@ -118,7 +118,7 @@ namespace Anne.Model.Git
             Branches.ForEach(x => x.UpdateProps());
         }
 
-        private Dictionary<string /*sha*/, List<CommitLabel> /*label*/> _commitLabelDict =
+        private Dictionary<string /*commitSha*/, List<CommitLabel> /*label*/> _commitLabelDict =
             new Dictionary<string, List<CommitLabel>>();
 
         private void UpdateCommitLabelDict()
@@ -208,13 +208,28 @@ namespace Anne.Model.Git
                 });
         }
 
-        public void Reset(ResetMode mode, string sha)
+        public void Revert(string commitSha)
         {
             _jobQueue.AddJob(
-                $"Reset: {mode} {sha}",
+                $"Revert: {commitSha}",
                 () =>
                 {
-                    var commit = Internal.Lookup<LibGit2Sharp.Commit>(sha);
+                    var commit = Internal.Lookup<LibGit2Sharp.Commit>(commitSha);
+                    Debug.Assert(commit != null);
+
+                    var author = Internal.Config.BuildSignature(DateTimeOffset.Now);
+
+                    Internal.Revert(commit, author);
+                });
+        }
+
+        public void Reset(ResetMode mode, string commitSha)
+        {
+            _jobQueue.AddJob(
+                $"Reset: {mode} {commitSha}",
+                () =>
+                {
+                    var commit = Internal.Lookup<LibGit2Sharp.Commit>(commitSha);
                     Debug.Assert(commit != null);
                     Internal.Reset(mode, commit);
                 });

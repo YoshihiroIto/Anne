@@ -163,13 +163,16 @@
                 <ContextMenu x:Key="DoneCommitContextMenu">
                     <MenuItem Command="{Binding ResetCommand}"
                               CommandParameter="{x:Static libGit2Sharp:ResetMode.Soft}"
-                              Header="[Reset] Soft" />
+                              Header="Reset - Soft" />
                     <MenuItem Command="{Binding ResetCommand}"
                               CommandParameter="{x:Static libGit2Sharp:ResetMode.Mixed}"
-                              Header="[Reset] Mixed" />
+                              Header="Reset - Mixed" />
                     <MenuItem Command="{Binding ResetCommand}"
                               CommandParameter="{x:Static libGit2Sharp:ResetMode.Hard}"
-                              Header="[Reset] Hard" />
+                              Header="Reset - Hard" />
+                              <Separator />
+                    <MenuItem Command="{Binding RevertCommand}"
+                              Header="Revert" />
                 </ContextMenu>
             </ListView.Resources>
 
