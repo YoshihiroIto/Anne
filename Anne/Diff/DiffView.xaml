@@ -20,13 +20,13 @@
 
         <DataTemplate x:Key="AsciiView" DataType="{x:Type interfaces:IFileDiffVm}">
             <StackPanel Orientation="Vertical">
-                <Label x:Name="PathLabel"
-                       Background="LightSteelBlue"
-                       Content="{Binding Path,
-                                         Mode=OneTime}"
-                       FontWeight="Bold"
-                       Padding="4,2"
-                       SnapsToDevicePixels="True" />
+                <TextBlock x:Name="PathLabel"
+                           Background="LightSteelBlue"
+                           FontWeight="Bold"
+                           Padding="4,2"
+                           SnapsToDevicePixels="True"
+                           Text="{Binding Path,
+                                          Mode=OneTime}" />
 
                 <diff:DiffTextEditor FontFamily="Consolas"
                                      FontSize="12"
@@ -51,13 +51,13 @@
 
         <DataTemplate x:Key="BinaryView" DataType="{x:Type interfaces:IFileDiffVm}">
             <StackPanel Orientation="Vertical">
-                <Label x:Name="PathLabel"
-                       Background="LightSteelBlue"
-                       Content="{Binding Path,
-                                         Mode=OneTime}"
-                       FontWeight="Bold"
-                       Padding="4,2"
-                       SnapsToDevicePixels="True" />
+                <TextBlock x:Name="PathLabel"
+                           Background="LightSteelBlue"
+                           FontWeight="Bold"
+                           Padding="4,2"
+                           SnapsToDevicePixels="True"
+                           Text="{Binding Path,
+                                          Mode=OneTime}" />
 
                 <TextBlock Text="Binary file" />
 
@@ -72,7 +72,7 @@
     </ItemsControl.Resources>
 
     <ItemsControl.ItemTemplateSelector>
-        <selectors:DiffTextEditorSelector Ascii="{StaticResource AsciiView}" Binary="{StaticResource BinaryView}"/>
+        <selectors:DiffTextEditorSelector Ascii="{StaticResource AsciiView}" Binary="{StaticResource BinaryView}" />
     </ItemsControl.ItemTemplateSelector>
 
     <ItemsControl.Template>
