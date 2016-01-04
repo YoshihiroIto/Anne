@@ -1,64 +1,70 @@
-﻿<ScrollViewer x:Class="Anne.Diff.DiffView"
+﻿<ItemsControl x:Class="Anne.Diff.DiffView"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:diff="clr-namespace:Anne.Diff"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-              xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
-              HorizontalScrollBarVisibility="Disabled"
-              VerticalScrollBarVisibility="Auto"
+              xmlns:interfaces="clr-namespace:Anne.Features.Interfaces"
+              BorderBrush="LightGray"
+              ItemsSource="{Binding Mode=OneWay}"
+              VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.ScrollUnit="Pixel"
+              VirtualizingPanel.VirtualizationMode="Recycling"
               d:DesignHeight="300"
               d:DesignWidth="300"
               mc:Ignorable="d">
-    <ScrollViewer.Resources>
+    <ItemsControl.Resources>
         <converters:PathStringToSyntaxHighlightingConverter x:Key="ToHighlighting" />
-    </ScrollViewer.Resources>
+    </ItemsControl.Resources>
 
-    <ItemsControl BorderBrush="LightGray"
-                  ItemsSource="{Binding Mode=OneWay}"
-                  ScrollViewer.CanContentScroll="True"
-                  VirtualizingPanel.IsVirtualizing="True"
-                  VirtualizingPanel.ScrollUnit="Pixel"
-                  VirtualizingPanel.VirtualizationMode="Recycling">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
+    <ItemsControl.Template>
+        <ControlTemplate>
+            <ScrollViewer CanContentScroll="True"
+                          HorizontalScrollBarVisibility="Disabled"
+                          PanningMode="Both"
+                          VerticalScrollBarVisibility="Auto">
+                <ItemsPresenter />
+            </ScrollViewer>
+        </ControlTemplate>
+    </ItemsControl.Template>
 
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                <StackPanel Orientation="Vertical">
-                    <Label Background="LightSteelBlue"
-                           Content="{Binding Path,
-                                             Mode=OneTime}"
-                           FontWeight="Bold"
-                           Padding="4,2"
-                           SnapsToDevicePixels="True" />
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <VirtualizingStackPanel />
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
 
-                    <diff:DiffTextEditor x:Name="DiffTextEditor"
-                                         FontFamily="Consolas"
-                                         FontSize="12"
-                                         HorizontalScrollBarVisibility="Hidden"
-                                         IsReadOnly="True"
-                                         SyntaxHighlighting="{Binding Path,
-                                                                      Converter={StaticResource ToHighlighting},
-                                                                      Mode=OneTime}"
-                                         Text="{Binding Diff,
-                                                        Mode=OneTime}"
-                                         VerticalScrollBarVisibility="Auto"
-                                         WordWrap="True" />
+    <ItemsControl.ItemTemplate>
+        <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
+            <StackPanel Orientation="Vertical" >
+                <Label Background="LightSteelBlue"
+                       Content="{Binding Path,
+                                         Mode=OneTime}"
+                       FontWeight="Bold"
+                       Padding="4,2"
+                       SnapsToDevicePixels="True" />
 
-                    <Line SnapsToDevicePixels="True"
-                          Stroke="LightGray"
-                          X1="0"
-                          X2="{Binding ElementName=DiffTextEditor,
-                                       Path=ActualWidth,
-                                       Mode=OneWay}" />
-                </StackPanel>
-                <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
-</ScrollViewer>
+                <diff:DiffTextEditor x:Name="DiffTextEditor"
+                                     FontFamily="Consolas"
+                                     FontSize="12"
+                                     HorizontalScrollBarVisibility="Hidden"
+                                     IsReadOnly="True"
+                                     SyntaxHighlighting="{Binding Path,
+                                                                  Converter={StaticResource ToHighlighting},
+                                                                  Mode=OneTime}"
+                                     Text="{Binding Diff,
+                                                    Mode=OneTime}"
+                                     VerticalScrollBarVisibility="Auto"
+                                     WordWrap="True" />
+
+                <Line SnapsToDevicePixels="True"
+                      Stroke="LightGray"
+                      X1="0"
+                      X2="{Binding ElementName=DiffTextEditor,
+                                   Path=ActualWidth,
+                                   Mode=OneWay}" />
+            </StackPanel>
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
