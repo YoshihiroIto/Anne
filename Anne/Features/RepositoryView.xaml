@@ -124,6 +124,7 @@
             <controls1:PromptComboBox DockPanel.Dock="Top"
                                       ItemsSource="{Binding Repositories,
                                                             Mode=OneWay}"
+                                      Prompt=""
                                       SelectedItem="{Binding SelectedRepository.Value}"
                                       WindowChrome.IsHitTestVisibleInChrome="True">
                 <controls1:PromptComboBox.ItemTemplate>
@@ -170,9 +171,8 @@
                     <MenuItem Command="{Binding ResetCommand}"
                               CommandParameter="{x:Static libGit2Sharp:ResetMode.Hard}"
                               Header="Reset - Hard" />
-                              <Separator />
-                    <MenuItem Command="{Binding RevertCommand}"
-                              Header="Revert" />
+                    <Separator />
+                    <MenuItem Command="{Binding RevertCommand}" Header="Revert" />
                 </ContextMenu>
             </ListView.Resources>
 
