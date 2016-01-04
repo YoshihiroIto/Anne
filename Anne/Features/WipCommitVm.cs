@@ -38,7 +38,7 @@ namespace Anne.Features
                 var files = _repos.FileStatus.WipFiles;
 
                 if (SelectedWipFiles.Count == 0)
-                    SelectedWipFiles = new[] {files.Value.FirstOrDefault()};
+                    SelectedWipFiles = files.Value.ToArray();
 
                 return files;
             }
