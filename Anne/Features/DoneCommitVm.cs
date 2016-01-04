@@ -113,8 +113,6 @@ namespace Anne.Features
             RevertCommand.Subscribe(mode => repos.Revert(model.Sha))
                 .AddTo(MultipleDisposable);
 
-
-
             CommitLabels = repos
                 .GetCommitLabels(model.Sha)
                 .Select(x => new CommitLabelVm(x))
@@ -122,10 +120,6 @@ namespace Anne.Features
 
             new AnonymousDisposable(() => CommitLabels.ForEach(x => x.Dispose()))
                 .AddTo(MultipleDisposable);
-
-
         }
-
-
     }
 }
