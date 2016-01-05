@@ -82,6 +82,7 @@ namespace Anne.Model.Git
                 Commits = new ReactiveProperty<IEnumerable<Commit>>(
                     Scheduler.Immediate,
                     Internal.Commits.QueryBy(filter)
+                        .Take(App.MaxCommitCount)
                         .Select(x => new Commit(this, x)).Memoize())
                     .AddTo(MultipleDisposable);
 
@@ -103,6 +104,7 @@ namespace Anne.Model.Git
 
                         var old = Commits.Value;
                         Commits.Value = Internal.Commits.QueryBy(filter)
+                            .Take(App.MaxCommitCount)
                             .Select(x => new Commit(this, x)).Memoize();
                         old.ForEach(x => x.Dispose());
                     })

@@ -8,6 +8,8 @@ namespace Anne.Model
     {
         public List<string> Repositories { get; set; } = new List<string>();
 
+        public int MaxCommitCount { get; set; } = int.MaxValue;
+
         public static AppConfig LoadFromFile(string filePath)
         {
             try

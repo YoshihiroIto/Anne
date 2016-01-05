@@ -16,7 +16,9 @@ namespace Anne.Model
         public ObservableCollection<Repository> Repositories { get; }
             = new ObservableCollection<Repository>();
 
-        private readonly AppConfig _config;
+        public static int MaxCommitCount => _config.MaxCommitCount;
+
+        private static AppConfig _config;
 
         private static string ConfigFilePath
         {
@@ -35,7 +37,7 @@ namespace Anne.Model
 
         public static void Destory()
         {
-            AppConfig.SaveToFile(ConfigFilePath, Instance._config);
+            AppConfig.SaveToFile(ConfigFilePath, _config);
 
             Instance.Repositories.ForEach(x => x.Dispose());
             Instance.Dispose();
