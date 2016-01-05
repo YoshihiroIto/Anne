@@ -232,7 +232,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="memo.md" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
