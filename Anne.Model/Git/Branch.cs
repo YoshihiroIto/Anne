@@ -66,6 +66,7 @@ namespace Anne.Model.Git
 
         public string TipSha => Internal.Tip.Sha;
         public string TrackingBranchSha => Internal.TrackedBranch.Tip.Sha;
+        public string CanonicalName => Internal.CanonicalName;
 
         private readonly LibGit2Sharp.Repository _repos;
         private readonly string _sourceCanonicalName;

@@ -176,7 +176,7 @@ namespace Anne.Features
         public void Revert(string commitSha) => _model.Revert(commitSha);
         public void SwitchBranch(string branchName) => _model.SwitchBranch(branchName);
         public void CheckoutBranch(string branchName) => _model.CheckoutBranch(branchName);
-        public void RemoveBranch(string branchName) => _model.RemoveBranch(branchName);
+        public void RemoveBranches(IEnumerable<string> branchCanonicalNames) => _model.RemoveBranches(branchCanonicalNames);
 
         public IEnumerable<CommitLabel> GetCommitLabels(string commitSha)
         {

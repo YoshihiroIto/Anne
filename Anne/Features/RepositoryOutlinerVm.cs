@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -16,13 +17,14 @@ namespace Anne.Features
         // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 
         public ReactiveProperty<RepositoryOutlinerItemVm> SelectedItem { get; }
+        public IList SelectedItems { get; set; } = new ObservableCollection<RepositoryOutlinerItemVm>();
 
         public ReactiveCommand SwitchBranchCommand { get; }
 
         private readonly RepositoryVm _repos;
 
         public RepositoryOutlinerVm(RepositoryVm repos)
-            : base(string.Empty, RepositoryOutlinerItemType.Root, null, repos)
+            : base(string.Empty, RepositoryOutlinerItemType.Root, null, repos, null)
         {
             Debug.Assert(repos != null);
             _repos = repos;
@@ -32,11 +34,11 @@ namespace Anne.Features
 
             // 各項目のルートノードを配置する
             _localBranch =
-                new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot, null, repos)
+                new RepositoryOutlinerItemVm("Local", RepositoryOutlinerItemType.LocalBranchRoot, null, repos, this)
                     .AddTo(MultipleDisposable);
 
             _remoteBranch =
-                new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot, null, repos)
+                new RepositoryOutlinerItemVm("Remote", RepositoryOutlinerItemType.RemoteBranchRoot, null, repos, this)
                     .AddTo(MultipleDisposable);
 
             Children.AddOnScheduler(_localBranch);
@@ -90,7 +92,7 @@ namespace Anne.Features
                         if (isRemote && isFirst)
                             type = RepositoryOutlinerItemType.RemoteBranchRepos;
 
-                        nextNode = new RepositoryOutlinerItemVm(f, type, null, _repos)
+                        nextNode = new RepositoryOutlinerItemVm(f, type, null, _repos, this)
                         {
                             IsExpanded = {Value = isFirst}
                         };
@@ -101,8 +103,21 @@ namespace Anne.Features
                     isFirst = false;
                 }
 
-                node.Children.Add(new RepositoryOutlinerItemVm(leaf, leafType, s, _repos));
+                node.Children.Add(new RepositoryOutlinerItemVm(leaf, leafType, s, _repos, this));
             });
+        }
+
+        public void RemoveSelectedBranches()
+        {
+            var targets =
+                SelectedItems
+                    .Cast<RepositoryOutlinerItemVm>()
+                    .Where(x => x.Branch != null)
+                    .Where(x => x.IsCurrent.Value == false)
+                    .Where(x => x.Branch.IsRemote.Value == false)
+                    .Select(x => x.Branch.CanonicalName.Value);
+
+            _repos.RemoveBranches(targets);
         }
 
         private void SwitchBranch()

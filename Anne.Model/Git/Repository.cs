@@ -279,15 +279,13 @@ namespace Anne.Model.Git
                 });
         }
 
-        public void RemoveBranch(string branchName)
+        public void RemoveBranches(IEnumerable<string> branchCanonicalNames)
         {
+            var names = branchCanonicalNames.ToArray();
+
             _jobQueue.AddJob(
-                "RemoveBranch",
-                () =>
-                {
-                    var srcBranch = Branches.FirstOrDefault(b => b.Name == branchName);
-                    srcBranch?.Remove();
-                });
+                "RemoveBranches",
+                () => names.ForEach(x => Branches.FirstOrDefault(b => b.CanonicalName == x)?.Remove()));
         }
 
         public void Pull()

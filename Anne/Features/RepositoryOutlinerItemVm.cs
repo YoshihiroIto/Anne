@@ -28,11 +28,15 @@ namespace Anne.Features
 
         public ReadOnlyReactiveProperty<string> HistoryDivergence { get; }
 
-        public ReactiveCommand RemoveBranchCommand { get; }
+        public ReactiveCommand RemoveSelectedBranchesCommand { get; }
 
-        public RepositoryOutlinerItemVm(string caption, RepositoryOutlinerItemType type, BranchVm branch, RepositoryVm repos)
+        private readonly RepositoryOutlinerVm _parent;
+
+        public RepositoryOutlinerItemVm(string caption, RepositoryOutlinerItemType type, BranchVm branch, RepositoryVm repos, RepositoryOutlinerVm parent)
         {
             Debug.Assert(repos != null);
+
+            _parent = parent;
 
             Type = type;
             Branch = branch;
@@ -66,14 +70,8 @@ namespace Anne.Features
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            RemoveBranchCommand = new ReactiveCommand().AddTo(MultipleDisposable);
-            RemoveBranchCommand.Subscribe(_ => RemoveBranch()).AddTo(MultipleDisposable);
-        }
-
-        private void RemoveBranch()
-        {
-            if (Branch.IsRemote.Value == false)
-                Branch.Remove();
+            RemoveSelectedBranchesCommand = new ReactiveCommand().AddTo(MultipleDisposable);
+            RemoveSelectedBranchesCommand.Subscribe(_ => _parent.RemoveSelectedBranches()).AddTo(MultipleDisposable);
         }
     }
 }

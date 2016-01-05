@@ -9,6 +9,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      BorderBrush="{StaticResource BorderBrushKey}"
                      d:DesignHeight="300"
+                     SelectedItems="{Binding SelectedItems}"
                      d:DesignWidth="300"
                      mc:Ignorable="d">
     <controls:TreeViewEx.Resources>
@@ -27,7 +28,7 @@
         </Style>
 
         <ContextMenu x:Key="LocalBranchContextMenu">
-            <MenuItem Command="{Binding RemoveBranchCommand, Mode=OneTime}" Header="Remove" />
+            <MenuItem Command="{Binding RemoveSelectedBranchesCommand, Mode=OneTime}" Header="Remove" />
         </ContextMenu>
     </controls:TreeViewEx.Resources>
 
