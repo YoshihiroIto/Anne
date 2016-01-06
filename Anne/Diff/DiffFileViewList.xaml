@@ -1,12 +1,9 @@
 ﻿<ItemsControl x:Class="Anne.Diff.DiffFileViewList"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:diff="clr-namespace:Anne.Diff"
-              xmlns:interfaces="clr-namespace:Anne.Features.Interfaces"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-              xmlns:selectors="clr-namespace:Anne.Diff.Selectors"
               BorderBrush="LightGray"
               ItemsSource="{Binding Mode=OneWay}"
               VirtualizingPanel.IsVirtualizing="True"
@@ -16,65 +13,11 @@
               d:DesignHeight="300"
               d:DesignWidth="300"
               mc:Ignorable="d">
-    <ItemsControl.Resources>
-        <converters:PathStringToSyntaxHighlightingConverter x:Key="ToHighlighting" />
-
-        <DataTemplate x:Key="AsciiView" DataType="{x:Type interfaces:IFileDiffVm}">
-            <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="PathLabel"
-                           Background="LightSteelBlue"
-                           FontWeight="Bold"
-                           Padding="4,2"
-                           SnapsToDevicePixels="True"
-                           Text="{Binding Path,
-                                          Mode=OneTime}" />
-
-                <diff:DiffTextEditor FontFamily="Consolas"
-                                     FontSize="12"
-                                     HorizontalScrollBarVisibility="Hidden"
-                                     IsReadOnly="True"
-                                     SyntaxHighlighting="{Binding Path,
-                                                                  Converter={StaticResource ToHighlighting},
-                                                                  Mode=OneTime}"
-                                     Text="{Binding Diff,
-                                                    Mode=OneTime}"
-                                     VerticalScrollBarVisibility="Auto"
-                                     WordWrap="True" />
-
-                <Line SnapsToDevicePixels="True"
-                      Stroke="LightGray"
-                      X1="0"
-                      X2="{Binding ElementName=PathLabel,
-                                   Path=ActualWidth,
-                                   Mode=OneWay}" />
-            </StackPanel>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <diff:DiffFileView />
         </DataTemplate>
-
-        <DataTemplate x:Key="BinaryView" DataType="{x:Type interfaces:IFileDiffVm}">
-            <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="PathLabel"
-                           Background="LightSteelBlue"
-                           FontWeight="Bold"
-                           Padding="4,2"
-                           SnapsToDevicePixels="True"
-                           Text="{Binding Path,
-                                          Mode=OneTime}" />
-
-                <TextBlock Text="Binary file" />
-
-                <Line SnapsToDevicePixels="True"
-                      Stroke="LightGray"
-                      X1="0"
-                      X2="{Binding ElementName=PathLabel,
-                                   Path=ActualWidth,
-                                   Mode=OneWay}" />
-            </StackPanel>
-        </DataTemplate>
-    </ItemsControl.Resources>
-
-    <ItemsControl.ItemTemplateSelector>
-        <selectors:DiffTextEditorSelector Ascii="{StaticResource AsciiView}" Binary="{StaticResource BinaryView}" />
-    </ItemsControl.ItemTemplateSelector>
+    </ItemsControl.ItemTemplate>
 
     <ItemsControl.Template>
         <ControlTemplate>

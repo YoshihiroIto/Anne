@@ -124,6 +124,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diff\DiffFileView.xaml.cs">
+      <DependentUpon>DiffFileView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Diff\DiffLinesCountView.xaml.cs">
       <DependentUpon>DiffLinesCountView.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,10 @@
     <Compile Include="Features\RepositoryView.xaml.cs">
       <DependentUpon>RepositoryView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Diff\DiffFileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Diff\DiffLinesCountView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

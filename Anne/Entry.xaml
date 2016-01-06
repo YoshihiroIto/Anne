@@ -1,6 +1,7 @@
 ﻿<Application x:Class="Anne.Entry"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -9,6 +10,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Light.xaml" />
                 <ResourceDictionary Source="Themes/Red.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <converters:PathStringToSyntaxHighlightingConverter x:Key="ToHighlighting" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
