@@ -140,8 +140,8 @@
     <Compile Include="Diff\DiffTextEditor.cs" />
     <Compile Include="Diff\DiffTextEditorHelper.cs" />
     <Compile Include="Diff\DiffTextEditorLeftMargin.cs" />
-    <Compile Include="Diff\DiffView.xaml.cs">
-      <DependentUpon>DiffView.xaml</DependentUpon>
+    <Compile Include="Diff\DiffFileView.xaml.cs">
+      <DependentUpon>DiffFileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\ChangeFileVm.cs" />
     <Compile Include="Diff\DiffTextEditorBackgroundRenderer.cs" />
@@ -163,7 +163,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Diff\DiffView.xaml">
+    <Page Include="Diff\DiffFileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

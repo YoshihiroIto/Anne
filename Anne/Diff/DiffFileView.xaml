@@ -1,4 +1,4 @@
-﻿<ItemsControl x:Class="Anne.Diff.DiffView"
+﻿<ItemsControl x:Class="Anne.Diff.DiffFileView"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
@@ -12,6 +12,7 @@
               VirtualizingPanel.IsVirtualizing="True"
               VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.VirtualizationMode="Recycling"
+              x:Name="This"
               d:DesignHeight="300"
               d:DesignWidth="300"
               mc:Ignorable="d">

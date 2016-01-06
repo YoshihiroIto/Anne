@@ -191,6 +191,6 @@
             BorderBrush="LightGray"
             BorderThickness="1,0,1,1"
             SnapsToDevicePixels="True">
-        <diff:DiffView DataContext="{Binding SelectedWipFiles, Mode=OneWay}" />
+        <diff:DiffFileView DataContext="{Binding SelectedWipFiles, Mode=OneWay}" />
     </Border>
 </Grid>
