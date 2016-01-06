@@ -3,8 +3,9 @@ using System.Linq;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using Anne.Foundation.Mvvm;
-using Anne.Model.Git;
+using LibGit2Sharp;
 using Reactive.Bindings;
+using Repository = Anne.Model.Git.Repository;
 
 namespace Anne.Features
 {
@@ -17,7 +18,9 @@ namespace Anne.Features
             Debug.Assert(repos != null);
 
             WipFiles = repos.FileStatus.WipFiles
-                .Select(x => x.Select(y => new WipFileVm(repos, y)))
+                .Select(x => x
+                    .Where(z => z.Status != ChangeKind.Unmodified)
+                    .Select(y => new WipFileVm(repos, y)))
                 .ToReadOnlyReactiveProperty();
         }
     }
