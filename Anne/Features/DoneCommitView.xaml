@@ -18,7 +18,9 @@
 
     <Grid.RowDefinitions>
         <RowDefinition Height="2*" />
+        <RowDefinition Height="Auto" />
         <RowDefinition Height="3*" />
+        <RowDefinition Height="Auto" />
         <RowDefinition Height="3*" />
     </Grid.RowDefinitions>
 
@@ -121,8 +123,13 @@
                  VerticalScrollBarVisibility="Auto" />
     </DockPanel>
 
+    <GridSplitter Grid.Row="1"
+                  Height="6"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center" />
+
     <!--  変更ファイル  -->
-    <ListView Grid.Row="1"
+    <ListView Grid.Row="2"
               AlternationCount="2"
               BorderBrush="LightGray"
               ItemsSource="{Binding ChangeFiles,
@@ -175,7 +182,12 @@
         </ListView.ItemContainerStyle>
     </ListView>
 
-    <Border Grid.Row="2"
+    <GridSplitter Grid.Row="3"
+                  Height="6"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center" />
+
+    <Border Grid.Row="4"
             Background="White"
             BorderBrush="LightGray"
             BorderThickness="1,0,1,1"
