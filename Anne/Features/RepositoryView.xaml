@@ -47,7 +47,7 @@
 
         <!--  コミットリスト  -->
         <DataTemplate x:Key="DoneCommitListItemTemplate" DataType="{x:Type features:DoneCommitVm}">
-            <StackPanel Height="20" Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding CommitLabels}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -57,14 +57,18 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Margin="0,0,2,0"
+                            <Border Margin="0,0,1,0"
                                     Background="{Binding Background.Value,
                                                          Mode=OneWay}"
                                     BorderBrush="Black"
                                     BorderThickness="1"
                                     SnapsToDevicePixels="True">
                                 <StackPanel Orientation="Horizontal">
-                                    <controls:CommitLabelMark Margin="2,2,0,1" Type="{Binding Type.Value, Mode=OneWay}" />
+                                    <controls:CommitLabelMark Width="12"
+                                                              Height="12"
+                                                              Margin="2,0,1,0"
+                                                              Type="{Binding Type.Value,
+                                                                             Mode=OneWay}" />
                                     <TextBlock Margin="0,0,3,0" Text="{Binding Name.Value, Mode=OneWay}" />
                                 </StackPanel>
                             </Border>
@@ -76,7 +80,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="WipCommitListItemTemplate" DataType="{x:Type features:WipCommitVm}">
-            <Grid Height="20">
+            <Grid>
                 <TextBlock VerticalAlignment="Center"
                            FontWeight="Bold"
                            Foreground="DarkGray"
