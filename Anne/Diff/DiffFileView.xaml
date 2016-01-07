@@ -10,29 +10,6 @@
            d:DesignHeight="300"
            d:DesignWidth="300"
            mc:Ignorable="d">
-    <DockPanel.Resources>
-        <selectors:DiffTextEditorSelector x:Key="Selector">
-            <selectors:DiffTextEditorSelector.Ascii>
-                <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
-                    <diff:DiffTextEditor FontFamily="Consolas"
-                                         FontSize="12"
-                                         HorizontalScrollBarVisibility="Hidden"
-                                         IsReadOnly="True"
-                                         SyntaxHighlighting="{Binding Path,
-                                                                      Mode=OneTime}"
-                                         Text="{Binding Diff,
-                                                        Mode=OneTime}"
-                                         VerticalScrollBarVisibility="Auto"
-                                         WordWrap="True" />
-                </DataTemplate>
-            </selectors:DiffTextEditorSelector.Ascii>
-            <selectors:DiffTextEditorSelector.Binary>
-                <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
-                    <TextBlock Text="Binary file" />
-                </DataTemplate>
-            </selectors:DiffTextEditorSelector.Binary>
-        </selectors:DiffTextEditorSelector>
-    </DockPanel.Resources>
 
     <TextBlock x:Name="PathLabel"
                Background="LightSteelBlue"
@@ -50,6 +27,30 @@
           X2="{Binding ElementName=PathLabel,
                        Path=ActualWidth,
                        Mode=OneWay}" />
-
-    <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource Selector}" />
+    
+    <ContentControl Content="{Binding}">
+        <ContentControl.ContentTemplateSelector>
+            <selectors:DiffTextEditorSelector>
+                <selectors:DiffTextEditorSelector.Ascii>
+                    <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
+                        <diff:DiffTextEditor FontFamily="Consolas"
+                                             FontSize="12"
+                                             HorizontalScrollBarVisibility="Hidden"
+                                             IsReadOnly="True"
+                                             SyntaxHighlighting="{Binding Path,
+                                                                          Mode=OneTime}"
+                                             Text="{Binding Diff,
+                                                            Mode=OneTime}"
+                                             VerticalScrollBarVisibility="Auto"
+                                             WordWrap="True" />
+                    </DataTemplate>
+                </selectors:DiffTextEditorSelector.Ascii>
+                <selectors:DiffTextEditorSelector.Binary>
+                    <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
+                        <TextBlock Text="Binary file" />
+                    </DataTemplate>
+                </selectors:DiffTextEditorSelector.Binary>
+            </selectors:DiffTextEditorSelector>
+        </ContentControl.ContentTemplateSelector>
+    </ContentControl>
 </DockPanel>
