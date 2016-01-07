@@ -6,7 +6,6 @@
       xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:features="clr-namespace:Anne.Features"
-      xmlns:git="clr-namespace:Anne.Model.Git;assembly=Anne.Model"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:libGit2Sharp="clr-namespace:LibGit2Sharp;assembly=LibGit2Sharp"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -25,25 +24,6 @@
     <Grid.Resources>
         <converters:StringToVisibilityConverter x:Key="WipVisiblity" NoWhiteSpace="Collapsed" />
         <converters:TypeOfConverter x:Key="TypeOf" />
-
-        <Style x:Key="CurrentMarkStyle" TargetType="{x:Type TextBlock}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsCurrent.Value, Mode=OneWay}" Value="True">
-                    <Setter Property="Text" Value="* " />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsCurrent.Value, Mode=OneWay}" Value="False">
-                    <Setter Property="Text" Value="  " />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <DataTemplate x:Key="BranchTemplate" DataType="{x:Type git:Branch}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource CurrentMarkStyle}" />
-                <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                <TextBlock Text="{Binding LocalName.Value, Mode=OneWay}" />
-            </StackPanel>
-        </DataTemplate>
 
         <!--  コミットリスト  -->
         <DataTemplate x:Key="DoneCommitListItemTemplate" DataType="{x:Type features:DoneCommitVm}">
@@ -95,10 +75,6 @@
             </Grid>
         </DataTemplate>
 
-        <selectors:CommitDataSelector x:Key="CommitListItemDataSelector"
-                                      Done="{StaticResource DoneCommitListItemTemplate}"
-                                      Wip="{StaticResource WipCommitListItemTemplate}" />
-
         <!--  コミットビュー  -->
         <DataTemplate x:Key="DoneCommitViewTemplate" DataType="{x:Type features:DoneCommitVm}">
             <features:DoneCommitView />
@@ -121,7 +97,6 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
-            <!--  ジョブリスト  -->
         </Grid.ColumnDefinitions>
 
         <DockPanel LastChildFill="True">
@@ -152,7 +127,6 @@
         <ListView Grid.Column="2"
                   AlternationCount="2"
                   BorderBrush="{StaticResource BorderBrushKey}"
-                  ItemTemplateSelector="{StaticResource CommitListItemDataSelector}"
                   ItemsSource="{Binding Commits,
                                         Mode=OneWay}"
                   ScrollViewer.CanContentScroll="True"
@@ -179,6 +153,10 @@
                     <MenuItem Command="{Binding RevertCommand}" Header="Revert" />
                 </ContextMenu>
             </ListView.Resources>
+
+            <ListView.ItemTemplateSelector>
+                <selectors:CommitDataSelector Done="{StaticResource DoneCommitListItemTemplate}" Wip="{StaticResource WipCommitListItemTemplate}" />
+            </ListView.ItemTemplateSelector>
 
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
