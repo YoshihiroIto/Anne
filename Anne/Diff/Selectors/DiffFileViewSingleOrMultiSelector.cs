@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections;
+using System.Windows;
 using System.Windows.Controls;
-using Anne.Features.Interfaces;
 
 namespace Anne.Diff.Selectors
 {
@@ -11,7 +11,7 @@ namespace Anne.Diff.Selectors
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            return Multi;
+            return item is IList ? Multi : Single;
         } 
     }
 }

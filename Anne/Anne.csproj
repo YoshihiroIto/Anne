@@ -132,6 +132,9 @@
     </Compile>
     <Compile Include="Diff\Selectors\DiffFileViewSingleOrMultiSelector.cs" />
     <Compile Include="Diff\Selectors\DiffTextEditorAsciiOrBinarySelector.cs" />
+    <Compile Include="Diff\SingleOrMultiDiffFileView.xaml.cs">
+      <DependentUpon>SingleOrMultiDiffFileView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Features\CommitLabelVm.cs" />
     <Compile Include="Features\RepositoryOutlinerItemVm.cs" />
     <Compile Include="Features\RepositoryOutlinerVm.cs" />
@@ -160,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Diff\DiffLinesCountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Diff\SingleOrMultiDiffFileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

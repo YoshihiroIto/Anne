@@ -109,10 +109,12 @@
     <Compile Include="DisposableChecker.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Externals\DiffMatchPatch.cs" />
+    <Compile Include="Externals\SelectedItemsBinding\IListItemConverter.cs" />
+    <Compile Include="Externals\SelectedItemsBinding\MultiSelectorBehaviours.cs" />
+    <Compile Include="Externals\SelectedItemsBinding\TwoListSynchronizer.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="GravatarLoader.cs" />
     <Compile Include="JobQueue.cs" />
-    <Compile Include="ListBoxBehaviour.cs" />
     <Compile Include="MultipleDisposableExtensions.cs" />
     <Compile Include="Mvvm\ModelBase.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />

@@ -1,0 +1,28 @@
+﻿<ContentControl x:Class="Anne.Diff.SingleOrMultiDiffFileView"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:diff="clr-namespace:Anne.Diff"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:selectors="clr-namespace:Anne.Diff.Selectors"
+                d:DesignHeight="300"
+                d:DesignWidth="300"
+                x:Name="This"
+                Content="{Binding ElementName=This, Path=DataContext}"
+                mc:Ignorable="d">
+    <ContentControl.ContentTemplateSelector>
+        <selectors:DiffFileViewSingleOrMultiSelector>
+            <selectors:DiffFileViewSingleOrMultiSelector.Single>
+                <DataTemplate>
+                    <diff:DiffFileView DataContext="{Binding Mode=OneWay}" />
+                </DataTemplate>
+            </selectors:DiffFileViewSingleOrMultiSelector.Single>
+
+            <selectors:DiffFileViewSingleOrMultiSelector.Multi>
+                <DataTemplate>
+                    <diff:DiffFileViewList DataContext="{Binding Mode=OneWay}" />
+                </DataTemplate>
+            </selectors:DiffFileViewSingleOrMultiSelector.Multi>
+        </selectors:DiffFileViewSingleOrMultiSelector>
+    </ContentControl.ContentTemplateSelector>
+</ContentControl>

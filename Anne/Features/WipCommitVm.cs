@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
@@ -31,26 +31,10 @@ namespace Anne.Features
         public ReactiveCommand CommitCommand { get; }
         public ReactiveCommand DiscardChangesCommand { get; }
 
-        public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles
-        {
-            get
-            {
-                var files = _repos.FileStatus.WipFiles;
+        public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles => _repos.FileStatus.WipFiles;
 
-                if (SelectedWipFiles.Count == 0)
-                    SelectedWipFiles = new[] {files.Value.FirstOrDefault()};
-
-                return files;
-            }
-        }
-
-        private IList _selectedWipFiles = new object[0];
-
-        public IList SelectedWipFiles
-        {
-            get { return _selectedWipFiles; }
-            set { SetProperty(ref _selectedWipFiles, value); }
-        }
+        public ObservableCollection<WipFileVm> SelectedWipFiles { get; }
+        public ReactiveProperty<object> DiffFileViewSource { get; }
 
         public ReadOnlyReactiveProperty<int> SummryRemaining { get; }
         public ReadOnlyReactiveProperty<SolidColorBrush> SummryRemainingBrush { get; }
@@ -65,6 +49,25 @@ namespace Anne.Features
         {
             Debug.Assert(repos != null);
             _repos = repos;
+
+
+            DiffFileViewSource = new ReactiveProperty<object>().AddTo(MultipleDisposable);
+
+            SelectedWipFiles = new ObservableCollection<WipFileVm>();
+            SelectedWipFiles.CollectionChangedAsObservable()
+                .Subscribe(_ =>
+                {
+                    var count = SelectedWipFiles.Count;
+
+                    if (count == 0)
+                        DiffFileViewSource.Value = WipFiles.Value.FirstOrDefault();
+                    else if (count == 1)
+                        DiffFileViewSource.Value = SelectedWipFiles.FirstOrDefault();
+                    else
+                        DiffFileViewSource.Value = SelectedWipFiles;
+                })
+                .AddTo(MultipleDisposable);
+
 
             SummryRemaining =
                 this.ObserveProperty(x => x.Summry)
@@ -99,7 +102,7 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             DiscardChangesCommand.Subscribe(_ =>
-                repos.DiscardChanges(SelectedWipFiles.Cast<WipFileVm>().Select(x => x.Path))
+                repos.DiscardChanges(SelectedWipFiles.Select(x => x.Path))
                 ).AddTo(MultipleDisposable);
 
             // IsAllSelected 関係
@@ -162,9 +165,7 @@ namespace Anne.Features
 
         public void ToggleStaging()
         {
-            SelectedWipFiles
-                .Cast<WipFileVm>()
-                .ForEach(f => f.IsInStaging.Value = !f.IsInStaging.Value);
+            SelectedWipFiles.ForEach(f => f.IsInStaging.Value = !f.IsInStaging.Value);
         }
     }
 }

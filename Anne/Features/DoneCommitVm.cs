@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -79,31 +78,44 @@ namespace Anne.Features
 
                 ChangeFiles.ObserveAddChanged().Subscribe(x =>
                 {
-                    if (SelectedChangeFiles.Count == 0)
-                        SelectedChangeFiles = new[] {x};
+                    if (SelectedChangeFiles.Any() == false)
+                        SelectedChangeFiles.Add(x);
                 }).AddTo(MultipleDisposable);
 
                 return _changeFiles;
             }
         }
 
-        private IList _selectedChangeFiles = new object[0];
-        public IList SelectedChangeFiles
-        {
-            get { return _selectedChangeFiles; }
-            set { SetProperty(ref _selectedChangeFiles, value); }
-        }
+        public ObservableCollection<ChangeFileVm> SelectedChangeFiles { get; }
+        public ReactiveProperty<object> DiffFileViewSource { get; }
 
         private readonly Model.Git.Commit _model;
 
-        public ReactiveCommand<ResetMode> ResetCommand { get; } 
-        public ReactiveCommand RevertCommand { get; } 
+        public ReactiveCommand<ResetMode> ResetCommand { get; }
+        public ReactiveCommand RevertCommand { get; }
         public ObservableCollection<CommitLabelVm> CommitLabels { get; }
 
         public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model)
         {
             Debug.Assert(model != null);
             _model = model;
+
+            DiffFileViewSource = new ReactiveProperty<object>().AddTo(MultipleDisposable);
+
+            SelectedChangeFiles = new ObservableCollection<ChangeFileVm>();
+            SelectedChangeFiles.CollectionChangedAsObservable()
+                .Subscribe(_ =>
+                {
+                    var count = SelectedChangeFiles.Count;
+
+                    if (count == 0)
+                        DiffFileViewSource.Value = ChangeFiles.FirstOrDefault();
+                    else if (count == 1)
+                        DiffFileViewSource.Value = SelectedChangeFiles.FirstOrDefault();
+                    else
+                        DiffFileViewSource.Value = SelectedChangeFiles;
+                })
+                .AddTo(MultipleDisposable);
 
             ResetCommand = new ReactiveCommand<ResetMode>().AddTo(MultipleDisposable);
             ResetCommand.Subscribe(mode => repos.Reset(mode, model.Sha))

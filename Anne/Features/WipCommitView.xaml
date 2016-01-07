@@ -2,13 +2,13 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
+      xmlns:behaviours="clr-namespace:FunctionalFun.UI.Behaviours;assembly=Anne.Foundation"
       xmlns:controls="http://schemes.grabacr.net/winfx/2014/controls"
       xmlns:controls1="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
       xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-      xmlns:foundation="clr-namespace:Anne.Foundation;assembly=Anne.Foundation"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       d:DesignHeight="600"
@@ -97,8 +97,7 @@
               VirtualizingPanel.IsVirtualizing="True"
               VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.VirtualizationMode="Recycling"
-              foundation:ListBoxBehaviour.SeletedItems="{Binding SelectedWipFiles,
-                                                                 Mode=TwoWay}">
+              behaviours:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedWipFiles}">
         <ListView.Template>
             <ControlTemplate TargetType="ItemsControl">
                 <Border BorderBrush="LightGray"
@@ -191,6 +190,7 @@
             BorderBrush="LightGray"
             BorderThickness="1,0,1,1"
             SnapsToDevicePixels="True">
-        <diff:DiffFileViewList DataContext="{Binding SelectedWipFiles, Mode=OneWay}" />
+        <!--<diff:DiffFileViewList DataContext="{Binding SelectedWipFiles, Mode=OneWay}" />-->
+        <diff:SingleOrMultiDiffFileView DataContext="{Binding DiffFileViewSource.Value, Mode=OneWay}" />
     </Border>
 </Grid>
