@@ -28,10 +28,10 @@
                        Path=ActualWidth,
                        Mode=OneWay}" />
     
-    <ContentControl Content="{Binding}">
+    <ContentControl Content="{Binding Mode=OneWay}">
         <ContentControl.ContentTemplateSelector>
-            <selectors:DiffTextEditorSelector>
-                <selectors:DiffTextEditorSelector.Ascii>
+            <selectors:DiffTextEditorAsciiOrBinarySelector>
+                <selectors:DiffTextEditorAsciiOrBinarySelector.Ascii>
                     <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
                         <diff:DiffTextEditor FontFamily="Consolas"
                                              FontSize="12"
@@ -44,13 +44,13 @@
                                              VerticalScrollBarVisibility="Auto"
                                              WordWrap="True" />
                     </DataTemplate>
-                </selectors:DiffTextEditorSelector.Ascii>
-                <selectors:DiffTextEditorSelector.Binary>
+                </selectors:DiffTextEditorAsciiOrBinarySelector.Ascii>
+                <selectors:DiffTextEditorAsciiOrBinarySelector.Binary>
                     <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
                         <TextBlock Text="Binary file" />
                     </DataTemplate>
-                </selectors:DiffTextEditorSelector.Binary>
-            </selectors:DiffTextEditorSelector>
+                </selectors:DiffTextEditorAsciiOrBinarySelector.Binary>
+            </selectors:DiffTextEditorAsciiOrBinarySelector>
         </ContentControl.ContentTemplateSelector>
     </ContentControl>
 </DockPanel>

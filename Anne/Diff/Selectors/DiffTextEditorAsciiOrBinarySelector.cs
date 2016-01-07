@@ -4,7 +4,7 @@ using Anne.Features.Interfaces;
 
 namespace Anne.Diff.Selectors
 {
-    public class DiffTextEditorSelector : DataTemplateSelector
+    public class DiffTextEditorAsciiOrBinarySelector : DataTemplateSelector
     {
         public DataTemplate Ascii { get; set; }
         public DataTemplate Binary { get; set; }
