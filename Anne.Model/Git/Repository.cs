@@ -63,6 +63,7 @@ namespace Anne.Model.Git
                 .AddTo(MultipleDisposable);
 
             Branches = Internal.Branches
+                .OrderBy(x => x.CanonicalName)
                 .ToReadOnlyReactiveCollection(
                     Internal.Branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
                     x => new Branch(x.CanonicalName, Internal),
