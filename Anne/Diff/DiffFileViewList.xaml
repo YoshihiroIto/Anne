@@ -9,7 +9,6 @@
               VirtualizingPanel.IsVirtualizing="True"
               VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.VirtualizationMode="Recycling"
-              x:Name="This"
               d:DesignHeight="300"
               d:DesignWidth="300"
               mc:Ignorable="d">
