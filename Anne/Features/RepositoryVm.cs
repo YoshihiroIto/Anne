@@ -164,7 +164,7 @@ namespace Anne.Features
             Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
                 .Select(x => x.EventArgs)
                 .ObserveOnUIDispatcher()
-                .Subscribe(e => ShowDialog(e.Exception))
+                .Subscribe(e => ShowDialog(e.Exception, e.Summry))
                 .AddTo(MultipleDisposable);
 
             InitializeCommands();
@@ -183,10 +183,13 @@ namespace Anne.Features
             return _model.GetCommitLabels(commitSha);
         }
 
-        private void ShowDialog(Exception e)
+        private void ShowDialog(Exception e, string summry)
         {
             Debug.Assert(e != null);
-            Messenger.Raise(new InformationMessage(e.Message, "Information", "Info"));
+
+            var message = string.IsNullOrEmpty(summry) ? e.Message : $"{summry}\n--\n{e.Message}}}";
+
+            Messenger.Raise(new InformationMessage(message, "Information", "Info"));
         }
 
         private void InitializeCommands()

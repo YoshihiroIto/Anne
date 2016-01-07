@@ -87,7 +87,7 @@ namespace Anne.Foundation
                             }
                             catch(Exception e)
                             {
-                                var args = new ExceptionEventArgs { Exception = e };
+                                var args = new ExceptionEventArgs { Exception = e, Summry = job.Summry};
 
                                 JobExecutingException?.Invoke(this, args);
 
