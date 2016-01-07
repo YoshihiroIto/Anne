@@ -56,26 +56,36 @@ namespace Anne.Model.Git
                         .Where(i => i.State != LibGit2Sharp.FileStatus.Ignored)
                         .Select(x =>
                         {
-                            var compare =
-                                _repos.Internal.Diff.Compare<Patch>(
-                                    _repos.Internal.Head.Tip.Tree,
-                                    DiffTargets.Index | DiffTargets.WorkingDirectory,
-                                    new[] {x.FilePath}
-                                    ).FirstOrDefault();
-
-                            var wipFile =  new WipFile(_repos, IsInStaging(x.State), x.FilePath);
-
-                            if (compare != null)
+                            try
                             {
-                                wipFile.Patch = compare.Patch;
-                                wipFile.LinesAdded = compare.LinesAdded;
-                                wipFile.LinesDeleted = compare.LinesDeleted;
-                                wipFile.Status = compare.Status;
-                                wipFile.IsBinary = compare.IsBinaryComparison;
+                                var compare =
+                                    _repos.Internal.Diff.Compare<Patch>(
+                                        _repos.Internal.Head.Tip.Tree,
+                                        DiffTargets.Index | DiffTargets.WorkingDirectory,
+                                        new[] {x.FilePath}
+                                        ).FirstOrDefault();
+
+                                if (compare != null)
+                                {
+                                    return
+                                        new WipFile(_repos, IsInStaging(x.State), x.FilePath)
+                                        {
+                                            Patch = compare.Patch,
+                                            LinesAdded = compare.LinesAdded,
+                                            LinesDeleted = compare.LinesDeleted,
+                                            Status = compare.Status,
+                                            IsBinary = compare.IsBinaryComparison
+                                        };
+                                }
+                            }
+                            catch
+                            {
+                                // ignored
                             }
 
-                            return wipFile;
+                            return null;
                         })
+                        .Where(x => x != null)
                         .ToObservableCollection();
 
                 if (newFiles.Select(x => x.Path).SequenceEqual(oldFiles.Select(x => x.Path)))
