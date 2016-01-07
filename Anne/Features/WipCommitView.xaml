@@ -175,7 +175,7 @@
 
         <ListView.ContextMenu>
             <ContextMenu>
-                <MenuItem Command="{Binding DiscardChangesCommand, Mode=OneTime}" Header="Discard changes" />
+                <MenuItem Command="{Binding DiscardChangesCommand, Mode=OneWay}" Header="Discard changes" />
             </ContextMenu>
         </ListView.ContextMenu>
     </ListView>

@@ -96,8 +96,8 @@ namespace Anne.Features
             CommitCommand.Subscribe(_ => repos.Commit((Summry + "\n\n" + Description).Trim()))
                 .AddTo(MultipleDisposable);
 
-            DiscardChangesCommand = this.ObserveProperty(x => x.SelectedWipFiles)
-                .Select(x => x.Count > 0)
+            DiscardChangesCommand = SelectedWipFiles.CollectionChangedAsObservable()
+                .Select(x => SelectedWipFiles.Any())
                 .ToReactiveCommand()
                 .AddTo(MultipleDisposable);
 
