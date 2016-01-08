@@ -84,6 +84,7 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             HistoryDivergence = model.HistoryDivergence
+                .Where(x => x != null)
                 .Select(x =>
                 {
                     var aheadBy = x.AheadBy ?? 0;

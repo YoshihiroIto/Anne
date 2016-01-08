@@ -30,7 +30,7 @@ namespace Anne.Model.Git
 
             UpdateWipFiles(null);
 
-            var watcher = new FileWatcher(repos.Path)
+            var watcher = new FileWatcher(repos.Path, true)
                 .AddTo(MultipleDisposable);
 
             new EventListener<FileSystemEventHandler>(

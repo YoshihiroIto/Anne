@@ -92,7 +92,7 @@ namespace Anne.Model.Git
             }
 
             {
-                var watcher = new FileWatcher(System.IO.Path.Combine(Path, @".git\refs"))
+                var watcher = new FileWatcher(System.IO.Path.Combine(Path, @".git\refs"), true)
                     .AddTo(MultipleDisposable);
 
                 new EventListener<FileSystemEventHandler>(
@@ -114,6 +114,19 @@ namespace Anne.Model.Git
                 watcher.Start();
             }
 
+            {
+                var watcher = new FileWatcher(System.IO.Path.Combine(Path, @".git\HEAD"), false)
+                    .AddTo(MultipleDisposable);
+
+                new EventListener<FileSystemEventHandler>(
+                    h => watcher.FileUpdated += h,
+                    h => watcher.FileUpdated -= h,
+                    (s, e) => UpdateBranchProps())
+                    .AddTo(MultipleDisposable);
+
+                watcher.Start();
+            }
+
             new AnonymousDisposable(() =>
                 _commitLabelDict.Values
                     .SelectMany(x => x)
@@ -123,17 +136,22 @@ namespace Anne.Model.Git
 
         public void UpdateHistoryDivergence()
         {
-            var currentBranch = Branches.FirstOrDefault(b => b.IsCurrent);
-            if (currentBranch != null)
+            try
             {
-                var trackingBranch =
-                    Internal.Lookup<LibGit2Sharp.Commit>(currentBranch.TrackingBranchSha);
+                var currentBranch = Branches.FirstOrDefault(b => b.IsCurrent);
+                if (currentBranch != null)
+                {
+                    var trackingBranch =
+                        Internal.Lookup<LibGit2Sharp.Commit>(currentBranch.TrackingBranchSha);
 
-                HistoryDivergence.Value =
-                    Internal.ObjectDatabase.CalculateHistoryDivergence(Internal.Head.Tip, trackingBranch);
+                    HistoryDivergence.Value =
+                        Internal.ObjectDatabase.CalculateHistoryDivergence(Internal.Head.Tip, trackingBranch);
+                }
             }
-            else
+            catch
+            {
                 HistoryDivergence.Value = null;
+            }
         }
 
         private void UpdateBranchProps()

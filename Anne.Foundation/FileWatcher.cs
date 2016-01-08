@@ -13,15 +13,29 @@ namespace Anne.Foundation
         private readonly MultipleDisposable _disposable = new MultipleDisposable();
         private readonly FileSystemWatcher _watcher;
 
-        public FileWatcher(string path)
+        public FileWatcher(string path, bool isDirectory)
         {
-            _watcher = new FileSystemWatcher(path)
+            string dirname;
+            string filename;
+
+            if (isDirectory)
             {
-                Filter = string.Empty,
-                IncludeSubdirectories = true,
+                dirname = path;
+                filename = string.Empty;
+            }
+            else
+            {
+                dirname = Path.GetDirectoryName(path) ?? string.Empty;
+                filename = Path.GetFileName(path) ?? string.Empty;
+            }
+
+            _watcher = new FileSystemWatcher(dirname, filename)
+            {
+                IncludeSubdirectories = isDirectory,
+                Filter = isDirectory ? "*.*" : string.Empty,
                 NotifyFilter =
                     NotifyFilters.FileName |
-                    NotifyFilters.DirectoryName |
+                    (isDirectory ? NotifyFilters.DirectoryName : 0) |
                     NotifyFilters.LastWrite
             }.AddTo(_disposable);
 
@@ -37,7 +51,7 @@ namespace Anne.Foundation
 
         public void Start()
         {
-            _watcher.EnableRaisingEvents = true;         
+            _watcher.EnableRaisingEvents = true;
         }
 
         public void Dispose()
