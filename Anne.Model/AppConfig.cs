@@ -16,7 +16,7 @@ namespace Anne.Model
             {
                 using (var reader = new StreamReader(filePath))
                 {
-                    return new Deserializer().Deserialize<AppConfig>(reader);
+                    return new Deserializer().Deserialize<AppConfig>(reader) ?? new AppConfig();
                 }
             }
             catch

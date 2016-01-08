@@ -4,8 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
-using Reactive.Bindings.Extensions;
-using StatefulModel;
 
 namespace Anne.Model
 {
@@ -47,8 +45,7 @@ namespace Anne.Model
         {
             _config = AppConfig.LoadFromFile(ConfigFilePath);
 
-            new AnonymousDisposable(() => Repositories.ForEach(x => x.Dispose()))
-                .AddTo(MultipleDisposable);
+            MultipleDisposable.Add(() => Repositories.ForEach(x => x.Dispose()));
 
             _config.Repositories.ForEach(r => Repositories.Add(new Repository(r)));
         }

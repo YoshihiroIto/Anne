@@ -3,13 +3,15 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:behaviors="clr-namespace:Livet.Behaviors;assembly=Livet2"
                       xmlns:controls="http://schemes.grabacr.net/winfx/2014/controls"
+                      xmlns:controls1="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:features="clr-namespace:Anne.Features"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
                       xmlns:windows="clr-namespace:Anne.Windows"
-                      Title="{Binding Title.Value, Mode=OneWay}"
+                      Title="{Binding Title.Value,
+                                      Mode=OneWay}"
                       Width="1400"
                       Height="800"
                       ResizeMode="CanResize"
@@ -66,5 +68,12 @@
         </Grid>
 
         <features:RepositoryView Grid.Row="1" DataContext="{Binding SelectedRepository.Value, Mode=OneWay}" />
+
+        <controls1:FpsDisplay Grid.Row="1"
+                              Width="150"
+                              Height="150"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Bottom"
+                              IsHitTestVisible="False" />
     </Grid>
 </controls:MetroWindow>

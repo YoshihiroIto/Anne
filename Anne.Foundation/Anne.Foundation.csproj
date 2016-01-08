@@ -88,6 +88,9 @@
   <ItemGroup>
     <Compile Include="CommitLabelType.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controls\FpsDisplay.xaml.cs">
+      <DependentUpon>FpsDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RepositoryOutlinerItemMark.xaml.cs">
       <DependentUpon>RepositoryOutlinerItemMark.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\FpsDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\RepositoryOutlinerItemMark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
