@@ -26,52 +26,52 @@
         <converters:TypeOfConverter x:Key="TypeOf" />
 
         <!--  コミットリスト  -->
-        <DataTemplate x:Key="DoneCommitListItemTemplate" DataType="{x:Type features:DoneCommitVm}">
-            <StackPanel Orientation="Horizontal">
-                <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding CommitLabels}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+        <DataTemplate x:Key="DoneCommitListLabelItemTemplate" DataType="{x:Type features:DoneCommitVm}">
+            <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding CommitLabels}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Margin="0,0,1,0"
-                                    Background="{Binding Background.Value,
-                                                         Mode=OneWay}"
-                                    BorderBrush="Black"
-                                    BorderThickness="1"
-                                    SnapsToDevicePixels="True">
-                                <StackPanel Orientation="Horizontal">
-                                    <controls:CommitLabelMark Width="12"
-                                                              Height="12"
-                                                              Margin="2,0,1,0"
-                                                              Type="{Binding Type.Value,
-                                                                             Mode=OneWay}" />
-                                    <TextBlock Margin="0,0,3,0" Text="{Binding Name.Value, Mode=OneWay}" />
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneTime}" />
-            </StackPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,1,0"
+                                Background="{Binding Background.Value,
+                                                     Mode=OneTime}"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                SnapsToDevicePixels="True">
+                            <StackPanel Orientation="Horizontal">
+                                <controls:CommitLabelMark Width="12"
+                                                          Height="12"
+                                                          Margin="2,0,1,0"
+                                                          Type="{Binding Type.Value,
+                                                                         Mode=OneWay}" />
+                                <!-- todo:更新が遅くなる
+                                <TextBlock Margin="0,0,3,0" Text="{Binding Name.Value, Mode=OneWay}"/>
+                                -->
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+        <DataTemplate x:Key="DoneCommitListCommentItemTemplate" DataType="{x:Type features:DoneCommitVm}">
+            <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneTime}" />
         </DataTemplate>
 
-        <DataTemplate x:Key="WipCommitListItemTemplate" DataType="{x:Type features:WipCommitVm}">
+        <DataTemplate x:Key="WipCommitListLabelItemTemplate" DataType="{x:Type features:WipCommitVm}" />
+        <DataTemplate x:Key="WipCommitListCommentItemTemplate" DataType="{x:Type features:WipCommitVm}">
             <Grid>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneTime}" />
                 <TextBlock VerticalAlignment="Center"
                            FontWeight="Bold"
                            Foreground="DarkGray"
                            Text="Work In Progress"
                            Visibility="{Binding Summry,
-                                                Converter={StaticResource WipVisiblity},
-                                                Mode=OneWay}" />
-                <TextBlock VerticalAlignment="Center"
-                           FontWeight="Bold"
-                           Text="{Binding Summry,
-                                          Mode=OneWay}" />
+                                                Mode=OneWay,
+                                                Converter={StaticResource WipVisiblity}}" />
             </Grid>
         </DataTemplate>
 
@@ -154,9 +154,26 @@
                 </ContextMenu>
             </ListView.Resources>
 
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="200" Header="Label">
+                        <GridViewColumn.CellTemplateSelector>
+                            <selectors:CommitDataSelector Done="{StaticResource DoneCommitListLabelItemTemplate}" Wip="{StaticResource WipCommitListLabelItemTemplate}" />
+                        </GridViewColumn.CellTemplateSelector>
+                    </GridViewColumn>
+                    <GridViewColumn Width="Auto" Header="Comment">
+                        <GridViewColumn.CellTemplateSelector>
+                            <selectors:CommitDataSelector Done="{StaticResource DoneCommitListCommentItemTemplate}" Wip="{StaticResource WipCommitListCommentItemTemplate}" />
+                        </GridViewColumn.CellTemplateSelector>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+
+            <!--
             <ListView.ItemTemplateSelector>
                 <selectors:CommitDataSelector Done="{StaticResource DoneCommitListItemTemplate}" Wip="{StaticResource WipCommitListItemTemplate}" />
             </ListView.ItemTemplateSelector>
+            -->
 
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
