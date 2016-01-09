@@ -35,8 +35,6 @@ namespace Anne.Features
 
         public ReactiveProperty<RepositoryOutlinerVm> Outliner { get; }
 
-        public ReadOnlyReactiveProperty<string> HistoryDivergence { get; }
-
         public ReactiveCommand FetchCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PushCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PullCommand { get; } = new ReactiveCommand();
@@ -81,29 +79,6 @@ namespace Anne.Features
                 .ToReadOnlyReactiveCollection()
                 .ToFilteredReadOnlyObservableCollection(x => x.IsRemote)
                 .ToReadOnlyReactiveCollection(x => new BranchVm(this, x))
-                .AddTo(MultipleDisposable);
-
-            HistoryDivergence = model.HistoryDivergence
-                .Where(x => x != null)
-                .Select(x =>
-                {
-                    var aheadBy = x.AheadBy ?? 0;
-                    var behindBy = x.BehindBy ?? 0;
-
-                    var sb = new StringBuilder();
-                    {
-                        if (aheadBy != 0)
-                            sb.Append($"{aheadBy}↑");
-
-                        if ((aheadBy != 0) && (behindBy != 0))
-                            sb.Append("   ");
-
-                        if (behindBy != 0)
-                            sb.Append($"{behindBy}↓");
-                    }
-                    return sb.ToString();
-                })
-                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             // アウトライナー

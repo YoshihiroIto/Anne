@@ -85,6 +85,9 @@ namespace Anne.Model.Git
 
         public void UpdateProps()
         {
+            if (Internal == null)
+                return;
+
             Name = Internal.FriendlyName;
             IsRemote = Internal.IsRemote;
             IsCurrent = Internal.IsCurrentRepositoryHead;

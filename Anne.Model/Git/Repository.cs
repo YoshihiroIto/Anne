@@ -32,15 +32,15 @@ namespace Anne.Model.Git
         // ファイルステータス
         public FileStatus FileStatus { get; }
 
-        public ReactiveProperty<HistoryDivergence> HistoryDivergence { get; }
-            = new ReactiveProperty<HistoryDivergence>();
-
         //
         public string Path { get; }
 
         // 内部状態
         internal LibGit2Sharp.Repository Internal { get; }
         private readonly JobQueue _jobQueue = new JobQueue();
+
+        private readonly ReactiveCollection<LibGit2Sharp.Branch> _branchesPool
+            = new ReactiveCollection<LibGit2Sharp.Branch>(Scheduler.Immediate);
 
         public Repository(string path)
         {
@@ -62,12 +62,8 @@ namespace Anne.Model.Git
                 .Subscribe(e => JobExecutingException?.Invoke(this, e))
                 .AddTo(MultipleDisposable);
 
-            Branches = Internal.Branches
-                .OrderBy(x => x.CanonicalName)
-                .ToReadOnlyReactiveCollection(
-                    Internal.Branches.ToCollectionChanged<LibGit2Sharp.Branch>(),
-                    x => new Branch(x.CanonicalName, Internal),
-                    Scheduler.Immediate)
+            Branches = _branchesPool
+                .ToReadOnlyReactiveCollection(x => new Branch(x.CanonicalName, Internal), Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
             var filter = new CommitFilter
@@ -77,8 +73,8 @@ namespace Anne.Model.Git
             };
 
             {
-                UpdateHistoryDivergence();
-                UpdateCommitLabelDict();
+                UpdateBranches();
+                UpdateCommitLabelDict(Branches.ToArray());
 
                 Commits = new ReactiveProperty<IEnumerable<Commit>>(
                     Scheduler.Immediate,
@@ -100,8 +96,8 @@ namespace Anne.Model.Git
                     h => watcher.FileUpdated -= h,
                     (s, e) =>
                     {
-                        UpdateHistoryDivergence();
-                        UpdateCommitLabelDict();
+                        UpdateBranches();
+                        UpdateCommitLabelDict(Branches.ToArray());
 
                         var old = Commits.Value;
                         Commits.Value = Internal.Commits.QueryBy(filter)
@@ -121,7 +117,7 @@ namespace Anne.Model.Git
                 new EventListener<FileSystemEventHandler>(
                     h => watcher.FileUpdated += h,
                     h => watcher.FileUpdated -= h,
-                    (s, e) => UpdateBranchProps())
+                    (s, e) => UpdateBranchProps(Branches.ToArray()))
                     .AddTo(MultipleDisposable);
 
                 watcher.Start();
@@ -134,35 +130,35 @@ namespace Anne.Model.Git
                 ).AddTo(MultipleDisposable);
         }
 
-        public void UpdateHistoryDivergence()
+        private void UpdateBranches()
         {
-            try
-            {
-                var currentBranch = Branches.FirstOrDefault(b => b.IsCurrent);
-                if (currentBranch != null)
-                {
-                    var trackingBranch =
-                        Internal.Lookup<LibGit2Sharp.Commit>(currentBranch.TrackingBranchSha);
+            _branchesPool
+                .Where(x => Internal.Branches.Any(y => y.CanonicalName == x.CanonicalName) == false)
+                .ToArray()
+                .ForEach(x => _branchesPool.Remove(x));
 
-                    HistoryDivergence.Value =
-                        Internal.ObjectDatabase.CalculateHistoryDivergence(Internal.Head.Tip, trackingBranch);
-                }
-            }
-            catch
-            {
-                HistoryDivergence.Value = null;
-            }
+            Internal.Branches
+                .Where(x => _branchesPool.Any(y => y.CanonicalName == x.CanonicalName) == false)
+                .ToArray()
+                .ForEach(x =>
+                {
+                    var insertIndex = _branchesPool.MakeInsertIndex(
+                        x,
+                        (l, r) => Comparer<string>.Default.Compare(l.CanonicalName, r.CanonicalName));
+
+                    _branchesPool.Insert(insertIndex, x);
+                });
         }
 
-        private void UpdateBranchProps()
+        private void UpdateBranchProps(Branch[] branches)
         {
-            Branches.ForEach(x => x.UpdateProps());
+            branches.ForEach(x => x.UpdateProps());
         }
 
         private Dictionary<string /*commitSha*/, List<CommitLabel> /*label*/> _commitLabelDict =
             new Dictionary<string, List<CommitLabel>>();
 
-        private void UpdateCommitLabelDict()
+        private void UpdateCommitLabelDict(Branch[] branches)
         {
             _commitLabelDict.Values
                 .SelectMany(x => x)
@@ -170,7 +166,7 @@ namespace Anne.Model.Git
 
             _commitLabelDict = new Dictionary<string, List<CommitLabel>>();
 
-            Branches.ForEach(b =>
+            branches.ForEach(b =>
             {
                 if (_commitLabelDict.ContainsKey(b.TipSha) == false)
                     _commitLabelDict[b.TipSha] = new List<CommitLabel>();
@@ -278,25 +274,29 @@ namespace Anne.Model.Git
 
         public void SwitchBranch(string branchName)
         {
+            var branches = Branches.ToArray();
+
             _jobQueue.AddJob(
                 $"SwitchBanch: {branchName}",
                 () =>
                 {
-                    var branch = Branches.FirstOrDefault(b => b.Name == branchName);
+                    var branch = Branches.ToArray().FirstOrDefault(b => b.Name == branchName);
                     branch?.Switch();
-                    UpdateBranchProps();
+                    UpdateBranchProps(branches);
                 });
         }
 
         public void CheckoutBranch(string branchName)
         {
+            var branches = Branches.ToArray();
+
             _jobQueue.AddJob(
                 "CheckoutBranch",
                 () =>
                 {
-                    var srcBranch = Branches.FirstOrDefault(b => b.Name == branchName);
+                    var srcBranch = Branches.ToArray().FirstOrDefault(b => b.Name == branchName);
                     srcBranch?.Checkout();
-                    UpdateBranchProps();
+                    UpdateBranchProps(branches);
                 });
         }
 
@@ -306,7 +306,7 @@ namespace Anne.Model.Git
 
             _jobQueue.AddJob(
                 "RemoveBranches",
-                () => names.ForEach(x => Branches.FirstOrDefault(b => b.CanonicalName == x)?.Remove()));
+                () => names.ForEach(x => Branches.ToArray().FirstOrDefault(b => b.CanonicalName == x)?.Remove()));
         }
 
         public void Pull()

@@ -72,24 +72,6 @@
                 </Grid>
 
                 <TextBlock Text="{Binding Caption.Value, Mode=OneWay}" />
-
-                <TextBlock Margin="4,0"
-                           Background="Gray"
-                           Foreground="WhiteSmoke"
-                           Padding="2,0"
-                           SnapsToDevicePixels="True"
-                           Text="{Binding HistoryDivergence.Value,
-                                          Mode=OneWay}">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding HistoryDivergence.Value, Mode=OneWay}" Value="">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
             </StackPanel>
         </HierarchicalDataTemplate>
     </controls:TreeViewEx.ItemTemplate>
@@ -108,4 +90,3 @@
         </Style>
     </controls:TreeViewEx.ItemContainerStyle>
 </controls:TreeViewEx>
-

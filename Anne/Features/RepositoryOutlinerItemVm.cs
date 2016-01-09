@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive.Linq;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
@@ -25,8 +24,6 @@ namespace Anne.Features
         public BranchVm Branch { get; }
 
         public ReactiveProperty<bool> IsCurrent { get; }
-
-        public ReadOnlyReactiveProperty<string> HistoryDivergence { get; }
 
         public ReactiveCommand RemoveSelectedBranchesCommand { get; }
 
@@ -63,11 +60,6 @@ namespace Anne.Features
 
             Children.AddTo(MultipleDisposable);
             new AnonymousDisposable(() => Children.ForEach(x => x.Dispose()))
-                .AddTo(MultipleDisposable);
-
-            HistoryDivergence = repos.HistoryDivergence
-                .Select(h => IsCurrent.Value ? h : string.Empty)
-                .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
             RemoveSelectedBranchesCommand = new ReactiveCommand().AddTo(MultipleDisposable);
