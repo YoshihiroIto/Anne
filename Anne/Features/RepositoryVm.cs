@@ -116,11 +116,18 @@ namespace Anne.Features
             SelectedLocalBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
             SelectedRemoteBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
 
+            // 未選択時に最初のコミットを選択する
+            SelectedCommit
+                .Where(c => c == null)
+                .Subscribe(_ => SelectedCommit.Value = Commits.Value.FirstOrDefault())
+                .AddTo(MultipleDisposable);
+
             Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
                 .Select(x => x.EventArgs)
                 .ObserveOnUIDispatcher()
                 .Subscribe(e => ShowDialog(e.Exception, e.Summry))
                 .AddTo(MultipleDisposable);
+
 
             InitializeCommands();
         }
