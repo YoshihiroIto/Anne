@@ -65,7 +65,7 @@
                     Content="Commit"
                     IsTabStop="True"
                     SnapsToDevicePixels="True" />
-            <CheckBox Margin="6,0,0,2"
+            <CheckBox Margin="2,0,0,0"
                       IsChecked="{Binding IsAllSelected.Value}"
                       IsThreeState="True" />
         </StackPanel>
@@ -161,15 +161,9 @@
         </i:Interaction.Triggers>
 
         <ListView.ItemContainerStyle>
-            <Style TargetType="ListViewItem">
+            <Style TargetType="ListViewItem" BasedOn="{StaticResource FlatListViewItemStyle}">
                 <EventSetter Event="KeyDown" Handler="ListViewItem_KeyDown" />
                 <Setter Property="IsSelected" Value="{Binding IsSelected.Value}" />
-
-                <Style.Triggers>
-                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                        <Setter Property="Background" Value="#F8F8F8" />
-                    </Trigger>
-                </Style.Triggers>
             </Style>
         </ListView.ItemContainerStyle>
 

@@ -171,13 +171,7 @@
             </DataTemplate>
         </ListView.ItemTemplate>
         <ListView.ItemContainerStyle>
-            <Style TargetType="ListViewItem">
-                <Style.Triggers>
-                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                        <Setter Property="Background" Value="#F8F8F8" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+            <Style BasedOn="{StaticResource FlatListViewItemStyle}" TargetType="ListViewItem" />
         </ListView.ItemContainerStyle>
     </ListView>
 

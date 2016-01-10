@@ -44,11 +44,11 @@
         <converters:TypeOfConverter x:Key="TypeOf" />
         <converters:StringToVisibilityConverter x:Key="WipVisiblity" NoWhiteSpace="Collapsed" />
 
-        <!--  WIP  -->
+        <!--  Region WIP  -->
         <DataTemplate x:Key="WipCommitListLabelItemTemplate" DataType="{x:Type features:WipCommitVm}" />
         <DataTemplate x:Key="WipCommitListGraphItemTemplate" DataType="{x:Type features:WipCommitVm}" />
         <DataTemplate x:Key="WipCommitListCommentItemTemplate" DataType="{x:Type features:WipCommitVm}">
-            <Grid Margin="-6,0">
+            <Grid Margin="-5,0">
                 <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneWay}" />
                 <TextBlock VerticalAlignment="Center"
                            FontWeight="Bold"
@@ -59,10 +59,11 @@
                                                 Converter={StaticResource WipVisiblity}}" />
             </Grid>
         </DataTemplate>
+        <!--  EndRegion  -->
 
-        <!--  Done  -->
+        <!--  Region Done  -->
         <DataTemplate x:Key="DoneCommitListLabelItemTemplate" DataType="{x:Type features:DoneCommitVm}">
-            <ItemsControl Margin="-6,0"
+            <ItemsControl Margin="-5,0"
                           VerticalAlignment="Center"
                           ItemsSource="{Binding CommitLabels}">
                 <ItemsControl.ItemsPanel>
@@ -99,7 +100,7 @@
         <DataTemplate x:Key="DoneCommitListGraphItemTemplate" DataType="{x:Type features:WipCommitVm}" />
 
         <DataTemplate x:Key="DoneCommitListCommentItemTemplate" DataType="{x:Type features:DoneCommitVm}">
-            <TextBlock Margin="-6,0"
+            <TextBlock Margin="-5,0"
                        VerticalAlignment="Center"
                        Text="{Binding Summry,
                                       Mode=OneTime}"
@@ -113,6 +114,8 @@
                 </TextBlock.ToolTip>
             </TextBlock>
         </DataTemplate>
+        <!--  EndRegion  -->
+
     </ListView.Resources>
 
     <ListView.View>
@@ -144,20 +147,17 @@
     </ListView.ItemsPanel>
 
     <ListView.ItemContainerStyle>
-        <Style TargetType="ListViewItem">
+        <Style TargetType="ListViewItem" BasedOn="{StaticResource FlatMultiColumnListViewItemStyle}">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
 
             <Style.Triggers>
                 <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource TypeOf}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Mode=OneWay}" Value="{x:Type features:WipCommitVm}">
                     <Setter Property="ContextMenu" Value="{StaticResource WipCommitContextMenu}" />
                 </DataTrigger>
+
                 <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource TypeOf}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Mode=OneWay}" Value="{x:Type features:DoneCommitVm}">
                     <Setter Property="ContextMenu" Value="{StaticResource DoneCommitContextMenu}" />
                 </DataTrigger>
-
-                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                    <Setter Property="Background" Value="#F8F8F8" />
-                </Trigger>
             </Style.Triggers>
         </Style>
     </ListView.ItemContainerStyle>
