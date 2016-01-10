@@ -57,7 +57,18 @@
             </ItemsControl>
         </DataTemplate>
         <DataTemplate x:Key="DoneCommitListCommentItemTemplate" DataType="{x:Type features:DoneCommitVm}">
-            <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneTime}" />
+            <TextBlock VerticalAlignment="Center"
+                       Text="{Binding Summry,
+                                      Mode=OneTime}"
+                       TextTrimming="CharacterEllipsis"
+                       ToolTipService.InitialShowDelay="1">
+                <TextBlock.ToolTip>
+                    <TextBlock FontWeight="Bold"
+                               Foreground="Black"
+                               Text="{Binding TrimmedMessage,
+                                              Mode=OneTime}" />
+                </TextBlock.ToolTip>
+            </TextBlock>
         </DataTemplate>
 
         <DataTemplate x:Key="WipCommitListLabelItemTemplate" DataType="{x:Type features:WipCommitVm}" />
@@ -152,6 +163,7 @@
                     <Separator />
                     <MenuItem Command="{Binding RevertCommand}" Header="Revert" />
                 </ContextMenu>
+
             </ListView.Resources>
 
             <ListView.View>
@@ -171,12 +183,6 @@
                 </GridView>
             </ListView.View>
 
-            <!--
-            <ListView.ItemTemplateSelector>
-                <selectors:CommitDataSelector Done="{StaticResource DoneCommitListItemTemplate}" Wip="{StaticResource WipCommitListItemTemplate}" />
-            </ListView.ItemTemplateSelector>
-            -->
-
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
@@ -185,6 +191,8 @@
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource TypeOf}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Mode=OneWay}" Value="{x:Type features:WipCommitVm}">
                             <Setter Property="ContextMenu" Value="{StaticResource WipCommitContextMenu}" />

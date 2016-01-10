@@ -19,6 +19,7 @@ namespace Anne.Features
         public string Summry => MessageShort;
 
         public string Message => _model.Message;
+        public string TrimmedMessage => _model.Message.Trim();
         public string MessageShort => _model.MessageShort;
         public string Parents => string.Join(", ", _model.ParentShaShorts);
         public string Hash => $"{_model.Sha} [{_model.ShaShort}]";
