@@ -24,7 +24,6 @@ namespace Anne.Features
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
         public ReactiveProperty<ReadOnlyReactiveCollection<ICommitVm>> Commits { get; }
-        //public ReactiveProperty<ReactiveCollection<ICommitVm>> Commits { get; }
         
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
