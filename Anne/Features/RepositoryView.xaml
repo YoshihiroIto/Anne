@@ -62,7 +62,7 @@
         <DataTemplate x:Key="WipCommitListLabelItemTemplate" DataType="{x:Type features:WipCommitVm}" />
         <DataTemplate x:Key="WipCommitListCommentItemTemplate" DataType="{x:Type features:WipCommitVm}">
             <Grid>
-                <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneTime}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneWay}" />
                 <TextBlock VerticalAlignment="Center"
                            FontWeight="Bold"
                            Foreground="DarkGray"
