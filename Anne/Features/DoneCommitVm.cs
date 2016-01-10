@@ -77,6 +77,8 @@ namespace Anne.Features
                     _changeFiles = _model.ChangeFiles
                         .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
                         .AddTo(MultipleDisposable);
+
+                    MultipleDisposable.Add(() => _changeFiles.ForEach(x => x.Dispose()));
                 }
                 catch(Exception e)
                 {
