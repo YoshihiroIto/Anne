@@ -13,6 +13,7 @@ namespace Anne.Features
         public string Path => _model.Path;
         public string Diff { get; set; }
         public DiffLine[] DiffLines { get; set;  }
+
         public int LinesAdded => _model.LinesAdded;
         public int LinesDeleted => _model.LinesDeleted;
         public ChangeKind Status => _model.Status;

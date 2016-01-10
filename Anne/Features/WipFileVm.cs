@@ -16,12 +16,13 @@ namespace Anne.Features
         // IFileDiffVm
         public string Path => _model.Path;
         public string Diff { get; set; }
+        public DiffLine[] DiffLines { get; set; }
+
         public int LinesAdded => _model.LinesAdded;
         public int LinesDeleted => _model.LinesDeleted;
         public ChangeKind Status => _model.Status;
         public bool IsBinary => _model.IsBinary;
 
-        public DiffLine[] DiffLines { get; set; }
         public ReactiveProperty<bool> IsInStaging { get; }
 
         private readonly WipFile _model;

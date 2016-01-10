@@ -10,6 +10,13 @@ namespace Anne.Model.Git
             internal set { SetProperty(ref _isInStaging, value); }
         }
 
+        public void CopyFrom(WipFile source)
+        {
+            IsInStaging = source.IsInStaging;
+
+            base.CopyFrom(source);
+        }
+
         private bool _isInStaging;
 
         private readonly Repository _repos;

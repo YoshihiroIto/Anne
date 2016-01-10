@@ -89,7 +89,7 @@ namespace Anne.Model.Git
                 if (newFiles.Select(x => x.Path).SequenceEqual(oldFiles.Select(x => x.Path)))
                 {
                     oldFiles.Zip(newFiles, (o, n) => new {Old = o, New = n})
-                        .ForEach(x => x.Old.IsInStaging = x.New.IsInStaging);
+                        .ForEach(x => x.Old.CopyFrom(x.New));
 
                     newFiles.ForEach(c => c.Dispose());
                 }
