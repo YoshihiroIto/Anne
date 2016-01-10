@@ -58,8 +58,7 @@ namespace Anne.Model.Git
             _repos = repos;
             Internal = src;
 
-            new AnonymousDisposable(() => _changeFiles?.ForEach(f => f.Dispose()))
-                .AddTo(MultipleDisposable);
+            MultipleDisposable.Add(() => _changeFiles?.ForEach(f => f.Dispose()));
         }
 
         private IEnumerable<ChangeFile> MakeFileDiffs()

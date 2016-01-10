@@ -59,8 +59,8 @@ namespace Anne.Features
                 type == RepositoryOutlinerItemType.RemoteBranchRoot;
 
             Children.AddTo(MultipleDisposable);
-            new AnonymousDisposable(() => Children.ForEach(x => x.Dispose()))
-                .AddTo(MultipleDisposable);
+
+            MultipleDisposable.Add(() => Children.ForEach(x => x.Dispose()));
 
             RemoveSelectedBranchesCommand = new ReactiveCommand().AddTo(MultipleDisposable);
             RemoveSelectedBranchesCommand.Subscribe(_ => _parent.RemoveSelectedBranches()).AddTo(MultipleDisposable);

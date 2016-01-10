@@ -25,8 +25,7 @@ namespace Anne.Model.Git
             Debug.Assert(repos != null);
             _repos = repos;
 
-            new AnonymousDisposable(() => WipFiles.Value.ForEach(c => c.Dispose()))
-                .AddTo(MultipleDisposable);
+            MultipleDisposable.Add(() => WipFiles.Value.ForEach(c => c.Dispose()));
 
             UpdateWipFiles(null);
 

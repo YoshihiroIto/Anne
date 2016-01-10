@@ -130,8 +130,7 @@ namespace Anne.Features
                 .Select(x => new CommitLabelVm(x))
                 .ToObservableCollection();
 
-            new AnonymousDisposable(() => CommitLabels.ForEach(x => x.Dispose()))
-                .AddTo(MultipleDisposable);
+            MultipleDisposable.Add(() => CommitLabels.ForEach(x => x.Dispose()));
         }
     }
 }

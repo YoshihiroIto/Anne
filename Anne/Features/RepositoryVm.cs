@@ -84,8 +84,7 @@ namespace Anne.Features
             // アウトライナー
             Outliner = new ReactiveProperty<RepositoryOutlinerVm>(new RepositoryOutlinerVm(this))
                 .AddTo(MultipleDisposable);
-            new AnonymousDisposable(() => Outliner.Value.Dispose())
-                .AddTo(MultipleDisposable);
+            MultipleDisposable.Add(() => Outliner.Value.Dispose());
 
             // ファイルステータス
             FileStatus = new FileStatusVm(model)
@@ -108,8 +107,7 @@ namespace Anne.Features
                 });
             }).AddTo(MultipleDisposable);
 
-            new AnonymousDisposable(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()))
-                .AddTo(MultipleDisposable);
+            MultipleDisposable.Add(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()));
 
             // todo:_model.Commits と FileStatus.WipFiles をマージする
             FileStatus.WipFiles.Subscribe(wipFileVms =>

@@ -83,8 +83,7 @@ namespace Anne.Model.Git
                         .Select(x => new Commit(this, x)).Memoize())
                     .AddTo(MultipleDisposable);
 
-                new AnonymousDisposable(() => Commits.Value.ForEach(x => x.Dispose()))
-                    .AddTo(MultipleDisposable);
+                MultipleDisposable.Add(() => Commits.Value.ForEach(x => x.Dispose()));
             }
 
             {
@@ -123,11 +122,11 @@ namespace Anne.Model.Git
                 watcher.Start();
             }
 
-            new AnonymousDisposable(() =>
+            MultipleDisposable.Add(() =>
                 _commitLabelDict.Values
                     .SelectMany(x => x)
                     .ForEach(x => x.Dispose())
-                ).AddTo(MultipleDisposable);
+                );
         }
 
         private void UpdateBranches()

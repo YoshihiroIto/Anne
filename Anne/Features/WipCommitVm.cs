@@ -137,8 +137,7 @@ namespace Anne.Features
                     })
                     .AddTo(MultipleDisposable);
 
-                new AnonymousDisposable(() => _isInStageingDisposer?.Dispose())
-                    .AddTo(MultipleDisposable);
+                MultipleDisposable.Add(() => _isInStageingDisposer?.Dispose());
             }
         }
 
