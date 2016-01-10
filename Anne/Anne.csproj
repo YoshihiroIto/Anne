@@ -119,9 +119,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TreeViewEx">
-      <HintPath>..\TreeViewEx\TreeViewEx.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -281,6 +278,10 @@
     <ProjectReference Include="..\Anne.Model\Anne.Model.csproj">
       <Project>{4f0c4980-8c8f-43cb-8540-01a07fa5b3fa}</Project>
       <Name>Anne.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Externals\TreeViewEx\TreeViewEx\TreeViewEx.csproj">
+      <Project>{2854814f-ea3c-41d4-aa94-460c4694f430}</Project>
+      <Name>TreeViewEx</Name>
     </ProjectReference>
     <ProjectReference Include="..\libgit2sharp\LibGit2Sharp\LibGit2Sharp.csproj">
       <Project>{ee6ed99f-cb12-4683-b055-d28fc7357a34}</Project>
