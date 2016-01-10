@@ -91,10 +91,9 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             // コミット
-            var wip = FileStatus.ObserveProperty(x => x.WipFiles);
-            var commits = _model.ObserveProperty(x => x.Commits);
+            var observeCommit = _model.ObserveProperty(x => x.Commits);
 
-            Commits = wip.CombineLatest(commits, (x, y) => 0)
+            Commits = FileStatus.WipFiles.CombineLatest(observeCommit, (x, y) => 0)
                 .Do(_ => Commits?.Value?.Dispose())
                 .Select(_ =>
                 {
