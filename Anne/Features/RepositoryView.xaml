@@ -9,7 +9,7 @@
       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
       xmlns:selectors="clr-namespace:Anne.Features.Selectors"
       d:DesignHeight="300"
-      d:DesignWidth="1000"
+      d:DesignWidth="1200"
       mc:Ignorable="d">
     <i:Interaction.Triggers>
         <messaging:InteractionMessageTrigger MessageKey="Info" Messenger="{Binding Messenger, Mode=OneTime}">
@@ -34,12 +34,11 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
         <DockPanel LastChildFill="True">
@@ -77,12 +76,5 @@
                         Content="{Binding SelectedCommit.Value,
                                           Mode=OneWay}"
                         ContentTemplateSelector="{StaticResource CommitViewDataSelector}" />
-
-        <!-- <!&#45;&#45;  テスト用  &#45;&#45;> -->
-        <!-- <DockPanel Grid.Column="5" LastChildFill="True" Width="120"> -->
-        <!--     <!&#45;&#45;  ジョブ  &#45;&#45;> -->
-        <!--     <TextBlock DockPanel.Dock="Top" Text="{Binding WorkingJob.Value}" /> -->
-        <!--     <ListView ItemsSource="{Binding JobSummries, Mode=OneWay}" /> -->
-        <!-- </DockPanel> -->
     </Grid>
 </Grid>
