@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Linq;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
@@ -23,7 +23,9 @@ namespace Anne.Features
         public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
-        public ReactiveCollection<ICommitVm> Commits { get; }
+        public ReactiveProperty<ReadOnlyReactiveCollection<ICommitVm>> Commits { get; }
+        //public ReactiveProperty<ReactiveCollection<ICommitVm>> Commits { get; }
+        
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
 
@@ -89,44 +91,27 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             // コミット
-            Commits = new ReactiveCollection<ICommitVm>()
+            var wip = FileStatus.ObserveProperty(x => x.WipFiles);
+            var commits = _model.ObserveProperty(x => x.Commits);
+
+            Commits = wip.CombineLatest(commits, (x, y) => 0)
+                .Do(_ => Commits?.Value?.Dispose())
+                .Select(_ =>
+                {
+                    var allCommits = new ObservableCollection<ICommitVm>();
+                    {
+                        if (FileStatus.WipFiles.Value.Any())
+                            allCommits.Add(new WipCommitVm(this));
+
+                        _model.Commits.Select(y => (ICommitVm)new DoneCommitVm(this, y)).ForEach(y => allCommits.Add(y));
+                    }
+
+                    return allCommits.ToReadOnlyReactiveCollection();
+                })
+                .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            _model.Commits.Subscribe(src =>
-            {
-                var old = Commits.ToArray();
-
-                Commits.AddRangeOnScheduler(src.Select(x => new DoneCommitVm(this, x)));
-
-                old.ForEach(o =>
-                {
-                    Commits.RemoveOnScheduler(o);
-                    (o as IDisposable)?.Dispose();
-                });
-            }).AddTo(MultipleDisposable);
-
-            MultipleDisposable.Add(() => Commits?.OfType<IDisposable>().ForEach(x => x.Dispose()));
-
-            // todo:_model.Commits と FileStatus.WipFiles をマージする
-            FileStatus.WipFiles.Subscribe(wipFileVms =>
-            {
-                var frontItem = Commits.FirstOrDefault();
-
-                if (wipFileVms.Any())
-                {
-                    if (frontItem == null || frontItem is DoneCommitVm)
-                        Commits.InsertOnScheduler(0, new WipCommitVm(this));
-                }
-                else
-                {
-                    var vm = frontItem as WipCommitVm;
-                    if (vm != null)
-                    {
-                        Commits.RemoveAtOnScheduler(0);
-                        vm.Dispose();
-                    }
-                }
-            });
+            MultipleDisposable.Add(() =>  Commits?.Value?.Dispose());
 
             // 選択アイテム
             SelectedCommit = new ReactiveProperty<ICommitVm>().AddTo(MultipleDisposable);

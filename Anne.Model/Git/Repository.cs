@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,16 @@ namespace Anne.Model.Git
         public ReadOnlyReactiveCollection<Branch> Branches { get; }
 
         // コミット
-        public ReactiveProperty<IEnumerable<Commit>> Commits { get; }
+        private ObservableCollection<Commit> _commits;
+        public ObservableCollection<Commit> Commits
+        {
+            get { return _commits; }
+            set
+            {
+                _commits?.ForEach(x => x.Dispose());
+                SetProperty(ref _commits, value);
+            }
+        }
 
         // ジョブキュー
         public ReactiveCollection<string> JobSummries => _jobQueue.JobSummries;
@@ -75,14 +85,13 @@ namespace Anne.Model.Git
                 UpdateBranches();
                 UpdateCommitLabelDict(Branches.ToArray());
 
-                Commits = new ReactiveProperty<IEnumerable<Commit>>(
-                    Scheduler.Immediate,
+                Commits =
                     Internal.Commits.QueryBy(filter)
                         .Take(App.MaxCommitCount)
-                        .Select(x => new Commit(this, x)).Memoize())
-                    .AddTo(MultipleDisposable);
+                        .Select(x => new Commit(this, x))
+                        .ToObservableCollection();
 
-                MultipleDisposable.Add(() => Commits.Value.ForEach(x => x.Dispose()));
+                MultipleDisposable.Add(() => Commits.ForEach(x => x.Dispose()));
             }
 
             {
@@ -97,11 +106,10 @@ namespace Anne.Model.Git
                         UpdateBranches();
                         UpdateCommitLabelDict(Branches.ToArray());
 
-                        var old = Commits.Value;
-                        Commits.Value = Internal.Commits.QueryBy(filter)
+                        Commits = Internal.Commits.QueryBy(filter)
                             .Take(App.MaxCommitCount)
-                            .Select(x => new Commit(this, x)).Memoize();
-                        old.ForEach(x => x.Dispose());
+                            .Select(x => new Commit(this, x))
+                            .ToObservableCollection();
                     })
                     .AddTo(MultipleDisposable);
 

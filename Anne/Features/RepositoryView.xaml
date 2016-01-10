@@ -48,9 +48,7 @@
                                                           Margin="2,0,1,0"
                                                           Type="{Binding Type.Value,
                                                                          Mode=OneWay}" />
-                                <!-- todo:更新が遅くなる
                                 <TextBlock Margin="0,0,3,0" Text="{Binding Name.Value, Mode=OneWay}"/>
-                                -->
                             </StackPanel>
                         </Border>
                     </DataTemplate>
@@ -127,7 +125,7 @@
         <ListView Grid.Column="2"
                   AlternationCount="2"
                   BorderBrush="{StaticResource BorderBrushKey}"
-                  ItemsSource="{Binding Commits,
+                  ItemsSource="{Binding Commits.Value,
                                         Mode=OneWay}"
                   ScrollViewer.CanContentScroll="True"
                   SelectedItem="{Binding SelectedCommit.Value}"
