@@ -1,9 +1,9 @@
-[submodule "Livet2"]
-    path =  Livet2
-    url=https://github.com/YoshihiroIto/Livet2.git
-[submodule "libgit2sharp"]
-	path = libgit2sharp
-	url = https://github.com/YoshihiroIto/libgit2sharp
 [submodule "Externals/TreeViewEx"]
 	path = Externals/TreeViewEx
 	url = https://github.com/YoshihiroIto/TreeViewEx
+[submodule "Externals/Livet2"]
+	path = Externals/Livet2
+	url = https://github.com/YoshihiroIto/Livet2
+[submodule "Externals/libgit2sharp"]
+	path = Externals/libgit2sharp
+	url = https://github.com/YoshihiroIto/libgit2sharp

@@ -5,22 +5,19 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anne", "Anne\Anne.csproj", "{7BB68E6B-C994-4F22-B8F7-AF3097B81E6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Livet2", "Livet2\src\Livet2\Livet2.csproj", "{A6FEFDDC-D4D9-4BB9-ADEE-8AFC6F008E53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Livet2", "Externals\Livet2\src\Livet2\Livet2.csproj", "{A6FEFDDC-D4D9-4BB9-ADEE-8AFC6F008E53}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anne.Model", "Anne.Model\Anne.Model.csproj", "{4F0C4980-8C8F-43CB-8540-01A07FA5B3FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anne.Foundation", "Anne.Foundation\Anne.Foundation.csproj", "{8AA5C1D9-FBB3-42D6-AB8D-2451B2C0E3BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibGit2Sharp", "libgit2sharp\LibGit2Sharp\LibGit2Sharp.csproj", "{EE6ED99F-CB12-4683-B055-D28FC7357A34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibGit2Sharp", "Externals\libgit2sharp\LibGit2Sharp\LibGit2Sharp.csproj", "{EE6ED99F-CB12-4683-B055-D28FC7357A34}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{A741E9AF-5C80-4E03-B519-086E333A50F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeViewEx", "Externals\TreeViewEx\TreeViewEx\TreeViewEx.csproj", "{2854814F-EA3C-41D4-AA94-460C4694F430}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
