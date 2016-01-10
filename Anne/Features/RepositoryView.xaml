@@ -8,6 +8,7 @@
       xmlns:features="clr-namespace:Anne.Features"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:libGit2Sharp="clr-namespace:LibGit2Sharp;assembly=LibGit2Sharp"
+      xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:messaging="clr-namespace:Livet.Behaviors.Messaging;assembly=Livet2"
       xmlns:selectors="clr-namespace:Anne.Features.Selectors"
@@ -48,7 +49,7 @@
                                                           Margin="2,0,1,0"
                                                           Type="{Binding Type.Value,
                                                                          Mode=OneWay}" />
-                                <TextBlock Margin="0,0,3,0" Text="{Binding Name.Value, Mode=OneWay}"/>
+                                <TextBlock Margin="0,0,3,0" Text="{Binding Name.Value, Mode=OneWay}" />
                             </StackPanel>
                         </Border>
                     </DataTemplate>
@@ -132,7 +133,8 @@
                   SelectionMode="Single"
                   VirtualizingPanel.IsVirtualizing="True"
                   VirtualizingPanel.ScrollUnit="Pixel"
-                  VirtualizingPanel.VirtualizationMode="Recycling">
+                  VirtualizingPanel.VirtualizationMode="Recycling"
+                  listViewLayout:ListViewLayoutManager.Enabled="true">
             <ListView.Resources>
                 <ContextMenu x:Key="WipCommitContextMenu">
                     <MenuItem Header="WipCommitVm" />
@@ -159,7 +161,9 @@
                             <selectors:CommitDataSelector Done="{StaticResource DoneCommitListLabelItemTemplate}" Wip="{StaticResource WipCommitListLabelItemTemplate}" />
                         </GridViewColumn.CellTemplateSelector>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto" Header="Comment">
+                    <GridViewColumn Width="Auto"
+                                    Header="Comment"
+                                    listViewLayout:RangeColumn.IsFillColumn="true">
                         <GridViewColumn.CellTemplateSelector>
                             <selectors:CommitDataSelector Done="{StaticResource DoneCommitListCommentItemTemplate}" Wip="{StaticResource WipCommitListCommentItemTemplate}" />
                         </GridViewColumn.CellTemplateSelector>
