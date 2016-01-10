@@ -102,7 +102,7 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             DiscardChangesCommand.Subscribe(_ =>
-                repos.DiscardChanges(SelectedWipFiles.Select(x => x.Path))
+                repos.DiscardChanges(SelectedWipFiles.Select(x => x.Path.Value))
                 ).AddTo(MultipleDisposable);
 
             // IsAllSelected 関係

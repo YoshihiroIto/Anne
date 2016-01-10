@@ -13,7 +13,7 @@ namespace Anne.Diff
     public class DiffTextEditorLeftMargin : AbstractMargin
     {
         private readonly DiffTextEditor _editor;
-        private DiffLine[] DiffLines => ((IFileDiffVm) _editor?.DataContext)?.DiffLines;
+        private DiffLine[] DiffLines => ((IFileDiffVm) _editor?.DataContext)?.DiffLines.Value;
 
         private const double IndexWidth = 40;
         private const double LineTypeWidth = 16;

@@ -17,8 +17,8 @@
                FontWeight="Bold"
                Padding="4,2"
                SnapsToDevicePixels="True"
-               Text="{Binding Path,
-                              Mode=OneTime}" />
+               Text="{Binding Path.Value,
+                              Mode=OneWay}" />
 
     <Line DockPanel.Dock="Bottom"
           SnapsToDevicePixels="True"
@@ -37,10 +37,10 @@
                                              FontSize="12"
                                              HorizontalScrollBarVisibility="Hidden"
                                              IsReadOnly="True"
-                                             SyntaxHighlighting="{Binding Path,
-                                                                          Mode=OneTime}"
-                                             Text="{Binding Diff,
-                                                            Mode=OneTime}"
+                                             SyntaxHighlighting="{Binding Path.Value,
+                                                                          Mode=OneWay}"
+                                             Text="{Binding Diff.Value,
+                                                            Mode=OneWay}"
                                              VerticalScrollBarVisibility="Auto"
                                              WordWrap="True" />
                     </DataTemplate>

@@ -1,34 +1,48 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Reactive.Linq;
 using Anne.Diff;
 using Anne.Features.Interfaces;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 using LibGit2Sharp;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace Anne.Features
 {
     public class ChangeFileVm : ViewModelBase, IFileDiffVm
     {
         // IFileDiffVm
-        public string Path => _model.Path;
-        public string Diff { get; set; }
-        public DiffLine[] DiffLines { get; set;  }
-
-        public int LinesAdded => _model.LinesAdded;
-        public int LinesDeleted => _model.LinesDeleted;
-        public ChangeKind Status => _model.Status;
-        public bool IsBinary => _model.IsBinary; 
-
-        private readonly ChangeFile _model;
+        public ReactiveProperty<string> Path { get; }
+        public ReactiveProperty<string> Diff { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<DiffLine[]> DiffLines { get; } = new ReactiveProperty<DiffLine[]>();
+        public ReactiveProperty<int> LinesAdded { get; }
+        public ReactiveProperty<int> LinesDeleted { get; }
+        public ReactiveProperty<ChangeKind> Status { get; }
+        public ReactiveProperty<bool> IsBinary { get; }
 
         public ChangeFileVm(ChangeFile model)
         {
             Debug.Assert(model != null);
 
-            _model = model;
+            Path = model.ObserveProperty(x => x.Path).ToReactiveProperty().AddTo(MultipleDisposable);
+            Diff.AddTo(MultipleDisposable);
+            DiffLines.AddTo(MultipleDisposable);
 
-            if (_model.IsBinary == false)
-                this.MakeDiff(_model.Patch);
+            LinesAdded = model.ObserveProperty(x => x.LinesAdded).ToReactiveProperty().AddTo(MultipleDisposable);
+            LinesDeleted = model.ObserveProperty(x => x.LinesDeleted).ToReactiveProperty().AddTo(MultipleDisposable);
+            Status = model.ObserveProperty(x => x.Status).ToReactiveProperty().AddTo(MultipleDisposable);
+            IsBinary = model.ObserveProperty(x => x.IsBinary).ToReactiveProperty().AddTo(MultipleDisposable);
+
+            IsBinary
+                .Where(i => i == false)
+                .Subscribe(_ => this.MakeDiff(model.Patch))
+                .AddTo(MultipleDisposable);
+
+            model.ObserveProperty(x => x.Patch)
+                .Subscribe(this.MakeDiff)
+                .AddTo(MultipleDisposable);
         }
     }
 }

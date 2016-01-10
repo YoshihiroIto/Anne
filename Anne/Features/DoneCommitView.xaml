@@ -162,10 +162,10 @@
                     <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
                     <controls:FileStatusMark Width="14"
                                              Height="14"
-                                             Status="{Binding Status,
+                                             Status="{Binding Status.Value,
                                                               Mode=OneTime}" />
-                    <TextBlock Margin="4,0,0,0" Text="{Binding Path, Mode=OneTime}" />
-                    <diff:DiffLinesCountView Margin="8,0,0,0" Visibility="{Binding IsBinary, Mode=OneTime, Converter={StaticResource VisibilityConverter}}" />
+                    <TextBlock Margin="4,0,0,0" Text="{Binding Path.Value, Mode=OneTime}" />
+                    <diff:DiffLinesCountView Margin="8,0,0,0" Visibility="{Binding IsBinary.Value, Mode=OneTime, Converter={StaticResource VisibilityConverter}}" />
                     <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
                 </StackPanel>
             </DataTemplate>

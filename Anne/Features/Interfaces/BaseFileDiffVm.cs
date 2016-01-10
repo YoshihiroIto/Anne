@@ -5,25 +5,21 @@ using System.Text;
 using Anne.Diff;
 using DiffMatchPatch;
 using ParseDiff;
-using Reactive.Bindings;
 
 namespace Anne.Features.Interfaces
 {
-    public interface IFileDiffVm
+    public class BaseFileDiffVm
     {
-        ReactiveProperty<string> Path { get; }
-        ReactiveProperty<string> Diff { get; }
-        ReactiveProperty<DiffLine[]> DiffLines { get; }
+        public ReactiveProperty<string> Path { get; }
+        public ReactiveProperty<string> Diff { get; }
+        public ReactiveProperty<DiffLine[]> DiffLines { get; }
 
-        ReactiveProperty<int> LinesAdded { get; }
-        ReactiveProperty<int> LinesDeleted { get; }
-        ReactiveProperty<LibGit2Sharp.ChangeKind> Status { get; }
-        ReactiveProperty<bool> IsBinary { get; }
-    }
+        public ReactiveProperty<int> LinesAdded { get; }
+        public ReactiveProperty<int> LinesDeleted { get; }
+        public ReactiveProperty<LibGit2Sharp.ChangeKind> Status { get; }
+        public ReactiveProperty<bool> IsBinary { get; }
 
-    public static class FileDiffExtensions
-    {
-        public static void MakeDiff(this IFileDiffVm self, string patch)
+        public void MakeDiff(string patch)
         {
             var sb = new StringBuilder();
             {
@@ -37,7 +33,7 @@ namespace Anne.Features.Interfaces
                         foreach (var chunck in fileDiffs.Chunks)
                         {
                             sb.AppendLine(chunck.Content.TrimEnd('\r', '\n'));
-                            diffLinesTemp.Add(new DiffLine { LineType = DiffLine.LineTypes.ChunckTag });
+                            diffLinesTemp.Add(new DiffLine {LineType = DiffLine.LineTypes.ChunckTag});
 
                             var oldIndex = chunck.OldStart - 1;
                             var newIndex = chunck.NewStart - 1;
@@ -62,14 +58,14 @@ namespace Anne.Features.Interfaces
                                         break;
                                 }
 
-                                var diffLine = 
+                                var diffLine =
                                     new DiffLine
                                     {
                                         OldIndex = oldIndex,
                                         NewIndex = newIndex,
-                                        LineType = (DiffLine.LineTypes)l.Type,
+                                        LineType = (DiffLine.LineTypes) l.Type,
                                         Index = l.Index,
-                                        Content = l.Content.Substring(1) 
+                                        Content = l.Content.Substring(1)
                                     };
 
                                 diffLinesTemp.Add(diffLine);
@@ -105,10 +101,10 @@ namespace Anne.Features.Interfaces
                     diffLinesTemp.Clear();
                 }
 
-                self.DiffLines.Value = diffLinesTemp.ToArray();
+                DiffLines = diffLinesTemp.ToArray();
             }
 
-            self.Diff.Value = sb.ToString().TrimEnd('\r', '\n');
+            Diff = sb.ToString().TrimEnd('\r', '\n');
         }
 
         private static void MakeContentDiffs(Dictionary<int, DiffLine[]> addDeletePairs)

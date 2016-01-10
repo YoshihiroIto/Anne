@@ -12,7 +12,7 @@ namespace Anne.Diff
         public KnownLayer Layer => KnownLayer.Background;
 
         private readonly DiffTextEditor _editor;
-        private DiffLine[] DiffLines => ((IFileDiffVm) _editor?.DataContext)?.DiffLines;
+        private DiffLine[] DiffLines => ((IFileDiffVm) _editor?.DataContext)?.DiffLines.Value;
 
         public DiffTextEditorBackgroundRenderer(DiffTextEditor editor)
         {

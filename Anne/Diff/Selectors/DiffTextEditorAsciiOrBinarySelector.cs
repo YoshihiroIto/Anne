@@ -15,7 +15,7 @@ namespace Anne.Diff.Selectors
             if (fileDiff == null)
                 return null;
 
-            return fileDiff.IsBinary ? Binary : Ascii;
+            return fileDiff.IsBinary.Value ? Binary : Ascii;
         } 
     }
 }

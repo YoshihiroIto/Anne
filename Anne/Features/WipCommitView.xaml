@@ -124,19 +124,19 @@
                                               Height="14"
                                               Margin="4,0,0,0"
                                               VerticalAlignment="Center"
-                                              Status="{Binding Status,
+                                              Status="{Binding Status.Value,
                                                                Mode=OneWay}" />
 
                     <TextBlock Margin="4,0,0,0"
                                VerticalAlignment="Center"
                                DockPanel.Dock="Left"
-                               Text="{Binding Path,
+                               Text="{Binding Path.Value,
                                               Mode=OneWay}" />
 
                     <diff:DiffLinesCountView Margin="8,0,0,0"
                                              VerticalAlignment="Center"
                                              DockPanel.Dock="Left"
-                                             Visibility="{Binding IsBinary,
+                                             Visibility="{Binding IsBinary.Value,
                                                                   Mode=OneWay,
                                                                   Converter={StaticResource DiffLinesCountVisibility}}" />
 
