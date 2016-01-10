@@ -72,9 +72,17 @@ namespace Anne.Features
                 if (_changeFiles != null)
                     return _changeFiles;
 
-                _changeFiles = _model.ChangeFiles
-                    .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
-                    .AddTo(MultipleDisposable);
+                try
+                {
+                    _changeFiles = _model.ChangeFiles
+                        .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
+                        .AddTo(MultipleDisposable);
+                }
+                catch(Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return null;
+                }
 
                 ChangeFiles.ObserveAddChanged().Subscribe(x =>
                 {
