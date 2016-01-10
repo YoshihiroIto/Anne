@@ -108,11 +108,15 @@ namespace Anne.Model.Git
 
         private static readonly LibGit2Sharp.FileStatus[] IsInStagings =
         {
+#if false
             LibGit2Sharp.FileStatus.NewInIndex,
             LibGit2Sharp.FileStatus.DeletedFromIndex,
             LibGit2Sharp.FileStatus.ModifiedInIndex,
             LibGit2Sharp.FileStatus.RenamedInIndex,
             LibGit2Sharp.FileStatus.TypeChangeInIndex
+#else
+            LibGit2Sharp.FileStatus.Staged
+#endif
         };
     }
 }
