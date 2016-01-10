@@ -11,7 +11,6 @@ using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using StatefulModel;
 using StatefulModel.EventListeners;
 
 namespace Anne.Model.Git

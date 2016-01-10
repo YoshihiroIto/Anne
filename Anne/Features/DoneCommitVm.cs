@@ -10,7 +10,6 @@ using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using StatefulModel;
 
 namespace Anne.Features
 {

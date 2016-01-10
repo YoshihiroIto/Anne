@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reactive.Linq;
-using System.Text;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
@@ -15,7 +14,6 @@ using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
-using StatefulModel;
 using Repository = Anne.Model.Git.Repository;
 
 namespace Anne.Features

@@ -5,7 +5,6 @@ using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using StatefulModel;
 
 namespace Anne.Features
 {

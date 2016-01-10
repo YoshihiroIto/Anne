@@ -6,8 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
-using Reactive.Bindings.Extensions;
-using StatefulModel;
 
 namespace Anne.Model.Git
 {
