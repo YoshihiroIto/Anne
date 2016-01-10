@@ -1,0 +1,146 @@
+﻿<ListView x:Class="Anne.Features.RepositoryCommitListView"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:controls="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
+          xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:features="clr-namespace:Anne.Features"
+          xmlns:libGit2Sharp="clr-namespace:LibGit2Sharp;assembly=LibGit2Sharp"
+          xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:selectors="clr-namespace:Anne.Features.Selectors"
+          AlternationCount="2"
+          BorderBrush="{StaticResource BorderBrushKey}"
+          ItemsSource="{Binding Commits.Value,
+                                Mode=OneWay}"
+          ScrollViewer.CanContentScroll="True"
+          SelectedItem="{Binding SelectedCommit.Value}"
+          SelectionMode="Single"
+          VirtualizingPanel.IsVirtualizing="True"
+          VirtualizingPanel.ScrollUnit="Pixel"
+          VirtualizingPanel.VirtualizationMode="Recycling"
+          d:DesignHeight="300"
+          d:DesignWidth="300"
+          listViewLayout:ListViewLayoutManager.Enabled="true"
+          mc:Ignorable="d">
+    <ListView.Resources>
+        <ContextMenu x:Key="WipCommitContextMenu">
+            <MenuItem Header="WipCommitVm" />
+        </ContextMenu>
+        <ContextMenu x:Key="DoneCommitContextMenu">
+            <MenuItem Command="{Binding ResetCommand}"
+                      CommandParameter="{x:Static libGit2Sharp:ResetMode.Soft}"
+                      Header="Reset - Soft" />
+            <MenuItem Command="{Binding ResetCommand}"
+                      CommandParameter="{x:Static libGit2Sharp:ResetMode.Mixed}"
+                      Header="Reset - Mixed" />
+            <MenuItem Command="{Binding ResetCommand}"
+                      CommandParameter="{x:Static libGit2Sharp:ResetMode.Hard}"
+                      Header="Reset - Hard" />
+            <Separator />
+            <MenuItem Command="{Binding RevertCommand}" Header="Revert" />
+        </ContextMenu>
+
+        <converters:TypeOfConverter x:Key="TypeOf" />
+        <converters:StringToVisibilityConverter x:Key="WipVisiblity" NoWhiteSpace="Collapsed" />
+
+        <DataTemplate x:Key="DoneCommitListLabelItemTemplate" DataType="{x:Type features:DoneCommitVm}">
+            <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding CommitLabels}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,1,0"
+                                Background="{Binding Background.Value,
+                                                     Mode=OneTime}"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                SnapsToDevicePixels="True">
+                            <StackPanel Orientation="Horizontal">
+                                <controls:CommitLabelMark Width="12"
+                                                          Height="12"
+                                                          Margin="2,0,1,0"
+                                                          Type="{Binding Type.Value,
+                                                                         Mode=OneWay}" />
+                                <TextBlock Margin="0,0,3,0" Text="{Binding Name.Value, Mode=OneWay}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+        <DataTemplate x:Key="DoneCommitListCommentItemTemplate" DataType="{x:Type features:DoneCommitVm}">
+            <TextBlock VerticalAlignment="Center"
+                       Text="{Binding Summry,
+                                      Mode=OneTime}"
+                       TextTrimming="CharacterEllipsis"
+                       ToolTipService.InitialShowDelay="1">
+                <TextBlock.ToolTip>
+                    <TextBlock FontWeight="Bold"
+                               Foreground="Black"
+                               Text="{Binding TrimmedMessage,
+                                              Mode=OneTime}" />
+                </TextBlock.ToolTip>
+            </TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="WipCommitListLabelItemTemplate" DataType="{x:Type features:WipCommitVm}" />
+        <DataTemplate x:Key="WipCommitListCommentItemTemplate" DataType="{x:Type features:WipCommitVm}">
+            <Grid>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneWay}" />
+                <TextBlock VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Foreground="DarkGray"
+                           Text="Work In Progress"
+                           Visibility="{Binding Summry,
+                                                Mode=OneWay,
+                                                Converter={StaticResource WipVisiblity}}" />
+            </Grid>
+        </DataTemplate>
+    </ListView.Resources>
+
+    <ListView.View>
+        <GridView>
+            <GridViewColumn Width="200" Header="Label">
+                <GridViewColumn.CellTemplateSelector>
+                    <selectors:CommitDataSelector Done="{StaticResource DoneCommitListLabelItemTemplate}" Wip="{StaticResource WipCommitListLabelItemTemplate}" />
+                </GridViewColumn.CellTemplateSelector>
+            </GridViewColumn>
+            <GridViewColumn Width="Auto"
+                            Header="Comment"
+                            listViewLayout:RangeColumn.IsFillColumn="true">
+                <GridViewColumn.CellTemplateSelector>
+                    <selectors:CommitDataSelector Done="{StaticResource DoneCommitListCommentItemTemplate}" Wip="{StaticResource WipCommitListCommentItemTemplate}" />
+                </GridViewColumn.CellTemplateSelector>
+            </GridViewColumn>
+        </GridView>
+    </ListView.View>
+
+    <ListView.ItemsPanel>
+        <ItemsPanelTemplate>
+            <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+        </ItemsPanelTemplate>
+    </ListView.ItemsPanel>
+
+    <ListView.ItemContainerStyle>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource TypeOf}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Mode=OneWay}" Value="{x:Type features:WipCommitVm}">
+                    <Setter Property="ContextMenu" Value="{StaticResource WipCommitContextMenu}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource TypeOf}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Mode=OneWay}" Value="{x:Type features:DoneCommitVm}">
+                    <Setter Property="ContextMenu" Value="{StaticResource DoneCommitContextMenu}" />
+                </DataTrigger>
+
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="#F8F8F8" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </ListView.ItemContainerStyle>
+</ListView>
