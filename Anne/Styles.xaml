@@ -43,7 +43,6 @@
             </Setter>
         </Style.Setters>
     </Style>
-
     <Style x:Key="FlatListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Style.Setters>
             <Setter Property="Template">

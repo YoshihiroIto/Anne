@@ -9,7 +9,6 @@ using LibGit2Sharp;
 
 namespace Anne.Model.Git
 {
-    // ※プロパティは変わることがないので変更通知は送らない
     public class Commit : ModelBase
     {
         public string Message => Internal.Message;
@@ -25,7 +24,6 @@ namespace Anne.Model.Git
         public DateTimeOffset When => Internal.Author.When;
 
         private ObservableCollection<ChangeFile> _changeFiles = new ObservableCollection<ChangeFile>();
-
         public ObservableCollection<ChangeFile> ChangeFiles
         {
             set { SetProperty(ref _changeFiles, value); }
@@ -35,11 +33,24 @@ namespace Anne.Model.Git
                 if (_isFileDiffsMakeDone == false)
                 {
                     _isFileDiffsMakeDone = true;
-                    Task.Run(() => MakeFileDiffs().ForEach(x => ChangeFiles.Add(x)));
+
+                    IsChangeFilesBuilding = true;
+                    Task.Run(() =>
+                    {
+                        MakeFileDiffs().ForEach(x => ChangeFiles.Add(x));
+                        IsChangeFilesBuilding = false;
+                    });
                 }
 
                 return _changeFiles;
             }
+        }
+
+        private bool _isChangeFilesBuilding;
+        public bool IsChangeFilesBuilding
+        {
+            get { return _isChangeFilesBuilding; }
+            set { SetProperty(ref _isChangeFilesBuilding, value); }
         }
 
         private volatile bool _isFileDiffsMakeDone;

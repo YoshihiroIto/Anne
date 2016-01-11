@@ -99,6 +99,8 @@ namespace Anne.Features
         public ObservableCollection<ChangeFileVm> SelectedChangeFiles { get; }
         public ReactiveProperty<object> DiffFileViewSource { get; }
 
+        public ReadOnlyReactiveProperty<bool> IsChangeFilesBuilding { get; }
+
         private readonly Model.Git.Commit _model;
 
         public ReactiveCommand<ResetMode> ResetCommand { get; }
@@ -111,6 +113,11 @@ namespace Anne.Features
             _model = model;
 
             DiffFileViewSource = new ReactiveProperty<object>().AddTo(MultipleDisposable);
+
+            IsChangeFilesBuilding =
+                model.ObserveProperty(x => x.IsChangeFilesBuilding)
+                    .ToReadOnlyReactiveProperty()
+                    .AddTo(MultipleDisposable);
 
             SelectedChangeFiles = new ObservableCollection<ChangeFileVm>();
             SelectedChangeFiles.CollectionChangedAsObservable()

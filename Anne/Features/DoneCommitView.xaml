@@ -7,6 +7,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:wpfSpark="clr-namespace:WPFSpark;assembly=WPFSpark"
       d:DesignHeight="600"
       d:DesignWidth="300"
       mc:Ignorable="d">
@@ -174,6 +175,28 @@
             <Style BasedOn="{StaticResource FlatListViewItemStyle}" TargetType="ListViewItem" />
         </ListView.ItemContainerStyle>
     </ListView>
+
+    <!--  構築中  -->
+    <wpfSpark:FluidProgressBar Grid.Row="2"
+                               ClipToBounds="True"
+                               Foreground="{StaticResource AccentBrushKey}">
+        <wpfSpark:FluidProgressBar.Style>
+            <Style TargetType="{x:Type wpfSpark:FluidProgressBar}">
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsChangeFilesBuilding.Value, Mode=OneWay}" Value="True" />
+                            <Condition Binding="{Binding ChangeFiles.Count, Mode=OneWay}" Value="0" />
+                        </MultiDataTrigger.Conditions>
+
+                        <Setter Property="Visibility" Value="Visible" />
+                    </MultiDataTrigger>
+                </Style.Triggers>
+
+                <Setter Property="Visibility" Value="Collapsed" />
+            </Style>
+        </wpfSpark:FluidProgressBar.Style>
+    </wpfSpark:FluidProgressBar>
 
     <GridSplitter Grid.Row="3"
                   Height="6"
