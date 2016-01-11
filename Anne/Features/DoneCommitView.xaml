@@ -133,6 +133,7 @@
     <ListView Grid.Row="2"
               AlternationCount="2"
               BorderBrush="LightGray"
+              Grid.IsSharedSizeScope="True"
               ItemsSource="{Binding ChangeFiles,
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
@@ -162,10 +163,9 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="DiffLinesCount" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-
 
                     <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
                     <controls:FileStatusMark Grid.Column="0"
@@ -173,14 +173,16 @@
                                              Height="14"
                                              Status="{Binding Status.Value,
                                                               Mode=OneTime}" />
-                    <Grid Grid.Column="1" Margin="4,0,0,0">
-                        <controls:PathTextBlock PathText="{Binding Path.Value, Mode=OneTime}" />
-                    </Grid>
-                    <diff:DiffLinesCountView Grid.Column="2"
-                                             Margin="8,0,0,0"
+
+                    <diff:DiffLinesCountView Grid.Column="1"
+                                             Margin="4,0,0,0"
                                              Visibility="{Binding IsBinary.Value,
                                                                   Mode=OneTime,
                                                                   Converter={StaticResource VisibilityConverter}}" />
+
+                    <Grid Grid.Column="2" Margin="4,0,0,0">
+                        <controls:PathTextBlock PathText="{Binding Path.Value, Mode=OneTime}" />
+                    </Grid>
                     <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
                 </Grid>
             </DataTemplate>
