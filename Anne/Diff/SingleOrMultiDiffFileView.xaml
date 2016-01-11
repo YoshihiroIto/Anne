@@ -5,10 +5,13 @@
                 xmlns:diff="clr-namespace:Anne.Diff"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:selectors="clr-namespace:Anne.Diff.Selectors"
+                x:Name="This"
+                Content="{Binding ElementName=This,
+                                  Path=DataContext}"
+                Focusable="False"
+                IsTabStop="False"
                 d:DesignHeight="300"
                 d:DesignWidth="300"
-                x:Name="This"
-                Content="{Binding ElementName=This, Path=DataContext}"
                 mc:Ignorable="d">
     <ContentControl.ContentTemplateSelector>
         <selectors:DiffFileViewSingleOrMultiSelector>

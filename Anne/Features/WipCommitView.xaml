@@ -39,9 +39,9 @@
             </Grid.ColumnDefinitions>
 
             <controls:PromptTextBox BorderThickness="1,1,1,0"
-                                    IsTabStop="True"
                                     Prompt="Summry"
                                     SnapsToDevicePixels="True"
+                                    TabIndex="0"
                                     Text="{Binding Summry,
                                                    UpdateSourceTrigger=PropertyChanged}" />
 
@@ -63,18 +63,19 @@
                     Command="{Binding CommitCommand,
                                       Mode=OneTime}"
                     Content="Commit"
-                    IsTabStop="True"
-                    SnapsToDevicePixels="True" />
+                    SnapsToDevicePixels="True"
+                    TabIndex="2" />
             <CheckBox Margin="2,0,0,0"
                       IsChecked="{Binding IsAllSelected.Value}"
-                      IsThreeState="True" />
+                      IsThreeState="True"
+                      TabIndex="3" />
         </StackPanel>
 
         <controls:PromptTextBox VerticalContentAlignment="Top"
                                 AcceptsReturn="True"
-                                IsTabStop="True"
                                 Prompt="Description"
                                 SnapsToDevicePixels="True"
+                                TabIndex="1"
                                 Text="{Binding Description,
                                                UpdateSourceTrigger=PropertyChanged}"
                                 TextWrapping="Wrap"
@@ -95,6 +96,7 @@
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
               SelectionMode="Extended"
+              TabIndex="4"
               VirtualizingPanel.IsVirtualizing="True"
               VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.VirtualizationMode="Recycling"
@@ -193,7 +195,6 @@
             BorderBrush="LightGray"
             BorderThickness="1,0,1,1"
             SnapsToDevicePixels="True">
-        <!--<diff:DiffFileViewList DataContext="{Binding SelectedWipFiles, Mode=OneWay}" />-->
         <diff:SingleOrMultiDiffFileView DataContext="{Binding DiffFileViewSource.Value, Mode=OneWay}" />
     </Border>
 </Grid>

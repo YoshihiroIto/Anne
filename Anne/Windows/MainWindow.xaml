@@ -13,7 +13,7 @@
                       Title="{Binding Title.Value,
                                       Mode=OneWay}"
                       Width="1600"
-                      Height="900"
+                      Height="800"
                       ResizeMode="CanResize"
                       ToolTipService.InitialShowDelay="50"
                       WindowStartupLocation="CenterScreen"
@@ -65,7 +65,10 @@
                    IsHitTestVisible="False"
                    Padding="0" />
 
-            <controls:SystemButtons Grid.Column="2" VerticalAlignment="Top" />
+            <controls:SystemButtons Grid.Column="2"
+                                    VerticalAlignment="Top"
+                                    Focusable="False"
+                                    IsTabStop="False" />
         </Grid>
 
         <features:RepositoryView Grid.Row="1" DataContext="{Binding SelectedRepository.Value, Mode=OneWay}" />

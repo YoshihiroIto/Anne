@@ -32,6 +32,18 @@ namespace Anne.Windows
                 .AddTo(MultipleDisposable);
 
             SelectedRepository.Value = Repositories.FirstOrDefault();
+
+// 現在のフォーカスを持っているコントロールを表示する
+#if false
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    Livet.DispatcherHelper.UIDispatcher.Invoke(() => Debug.WriteLine(Keyboard.FocusedElement));
+                    Thread.Sleep(1000);
+                }
+            });
+#endif
         }
     }
 }

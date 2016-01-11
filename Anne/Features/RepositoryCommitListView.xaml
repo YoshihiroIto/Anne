@@ -65,6 +65,8 @@
         <DataTemplate x:Key="DoneCommitListLabelItemTemplate" DataType="{x:Type features:DoneCommitVm}">
             <ItemsControl Margin="-5,0"
                           VerticalAlignment="Center"
+                          Focusable="False"
+                          IsTabStop="False"
                           ItemsSource="{Binding CommitLabels}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

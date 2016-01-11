@@ -94,4 +94,18 @@
             <Setter Property="FontWeight" Value="Bold" />
         </Style.Setters>
     </Style>
+
+    <Style TargetType="{x:Type ContentControl}">
+        <Style.Setters>
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Focusable" Value="False" />
+        </Style.Setters>
+    </Style>
+
+    <Style TargetType="{x:Type GridSplitter}">
+        <Style.Setters>
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Focusable" Value="False" />
+        </Style.Setters>
+    </Style>
 </ResourceDictionary>

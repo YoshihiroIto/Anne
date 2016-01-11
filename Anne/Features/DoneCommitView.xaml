@@ -39,6 +39,8 @@
                     <Setter Property="BorderBrush" Value="{x:Null}" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="IsTabStop" Value="False" />
+                    <Setter Property="Focusable" Value="False" />
                 </Style>
             </Grid.Resources>
 
@@ -117,8 +119,10 @@
                  Background="{x:Null}"
                  BorderBrush="{x:Null}"
                  BorderThickness="0"
+                 Focusable="False"
                  HorizontalScrollBarVisibility="Hidden"
                  IsReadOnly="True"
+                 IsTabStop="False"
                  Text="{Binding Message,
                                 Mode=OneTime}"
                  VerticalScrollBarVisibility="Auto" />
