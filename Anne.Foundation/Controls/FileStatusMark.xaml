@@ -46,5 +46,9 @@
                                           Renamed="{StaticResource RenamedTemplate}" />
     </Viewbox.Resources>
 
-    <ContentControl Content="{Binding Status, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:FileStatusMark}}}" ContentTemplateSelector="{StaticResource FileStatusMarkSelector}" />
+    <ContentControl Content="{Binding Status,
+                                      RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type controls:FileStatusMark}}}"
+                    ContentTemplateSelector="{StaticResource FileStatusMarkSelector}"
+                    SnapsToDevicePixels="False" />
 </Viewbox>

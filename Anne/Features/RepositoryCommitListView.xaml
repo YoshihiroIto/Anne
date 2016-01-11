@@ -83,7 +83,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <controls:CommitLabelMark Width="12"
                                                           Height="12"
-                                                          Margin="1,1,1,0"
+                                                          Margin="1"
                                                           Type="{Binding Type.Value,
                                                                          Mode=OneWay}" />
                                 <TextBlock Margin="0,0,3,0"

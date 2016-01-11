@@ -24,9 +24,13 @@
         </DataTemplate>
 
         <selectors:CommitLabelMarkSelector x:Key="CommitLabelMarkSelector"
-                                          Local="{StaticResource LocalTemplate}"
-                                          Remote="{StaticResource RemoteTemplate}" />
+                                           Local="{StaticResource LocalTemplate}"
+                                           Remote="{StaticResource RemoteTemplate}" />
     </Viewbox.Resources>
 
-    <ContentControl Content="{Binding Type, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:CommitLabelMark}}}" ContentTemplateSelector="{StaticResource CommitLabelMarkSelector}" />
+    <ContentControl Content="{Binding Type,
+                                      RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type controls:CommitLabelMark}}}"
+                    ContentTemplateSelector="{StaticResource CommitLabelMarkSelector}"
+                    SnapsToDevicePixels="False" />
 </Viewbox>

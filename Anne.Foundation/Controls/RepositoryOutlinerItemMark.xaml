@@ -49,5 +49,9 @@
                                                       RemoteBranchRepos="{StaticResource LocalBranchRepos}" />
     </Viewbox.Resources>
 
-    <ContentControl Content="{Binding Type, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:RepositoryOutlinerItemMark}}}" ContentTemplateSelector="{StaticResource RepositoryOutlinerItemMarkSelector}" />
+    <ContentControl Content="{Binding Type,
+                                      RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type controls:RepositoryOutlinerItemMark}}}"
+                    ContentTemplateSelector="{StaticResource RepositoryOutlinerItemMarkSelector}"
+                    SnapsToDevicePixels="False" />
 </Viewbox>
