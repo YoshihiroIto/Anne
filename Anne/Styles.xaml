@@ -4,6 +4,8 @@
 
     <Style x:Key="FlatMultiColumnListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Style.Setters>
+            <Setter Property="Margin" Value="0,0,0,-1"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
@@ -45,6 +47,8 @@
     </Style>
     <Style x:Key="FlatListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Style.Setters>
+            <Setter Property="Margin" Value="0,0,0,-1"/>
+            
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
