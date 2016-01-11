@@ -19,7 +19,7 @@
                                               False="Visible"
                                               True="Collapsed" />
         <converters:BoolToVisibilityConverter x:Key="DiscardButtonVisibility"
-                                              False="Hidden"
+                                              False="Collapsed"
                                               True="Visible" />
     </Grid.Resources>
 
@@ -103,7 +103,7 @@
                 <Border BorderBrush="LightGray"
                         BorderThickness="1"
                         SnapsToDevicePixels="True">
-                    <ScrollViewer Background="White">
+                    <ScrollViewer Background="White" HorizontalScrollBarVisibility="Disabled">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </Border>
@@ -116,41 +116,52 @@
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <DockPanel Background="Transparent" LastChildFill="False">
-                    <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                    <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsInStaging.Value}" />
+                <Grid Height="20" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                    <controls1:FileStatusMark Width="14"
+                    <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
+                    <CheckBox Grid.Column="0" IsChecked="{Binding IsInStaging.Value}" />
+
+                    <controls1:FileStatusMark Grid.Column="1"
+                                              Width="14"
                                               Height="14"
                                               Margin="4,0,0,0"
                                               VerticalAlignment="Center"
                                               Status="{Binding Status.Value,
                                                                Mode=OneWay}" />
 
-                    <TextBlock Margin="4,0,0,0"
-                               VerticalAlignment="Center"
-                               DockPanel.Dock="Left"
-                               Text="{Binding Path.Value,
-                                              Mode=OneWay}" />
+                    <Grid Grid.Column="2">
+                        <controls1:PathTextBlock Margin="4,0,0,0"
+                                                 VerticalAlignment="Center"
+                                                 PathText="{Binding Path.Value,
+                                                                    Mode=OneWay}" />
+                    </Grid>
 
-                    <diff:DiffLinesCountView Margin="8,0,0,0"
+                    <diff:DiffLinesCountView Grid.Column="3"
+                                             Margin="8,0,0,0"
                                              VerticalAlignment="Center"
-                                             DockPanel.Dock="Left"
                                              Visibility="{Binding IsBinary.Value,
                                                                   Mode=OneWay,
                                                                   Converter={StaticResource DiffLinesCountVisibility}}" />
 
-                    <Button VerticalAlignment="Center"
+                    <Button Grid.Column="4"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
                             Command="{Binding DiscardChangesCommand,
                                               Mode=OneTime}"
                             Content="Discard"
-                            DockPanel.Dock="Right"
                             Visibility="{Binding DataContext.IsSelected.Value,
                                                  Converter={StaticResource DiscardButtonVisibility},
                                                  RelativeSource={RelativeSource FindAncestor,
-                                                                                AncestorType={x:Type DockPanel}}}" />
+                                                                                AncestorType={x:Type Grid}}}" />
                     <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
-                </DockPanel>
+                </Grid>
             </DataTemplate>
         </ListView.ItemTemplate>
 
@@ -161,7 +172,7 @@
         </i:Interaction.Triggers>
 
         <ListView.ItemContainerStyle>
-            <Style TargetType="ListViewItem" BasedOn="{StaticResource FlatListViewItemStyle}">
+            <Style BasedOn="{StaticResource FlatListViewItemStyle}" TargetType="ListViewItem">
                 <EventSetter Event="KeyDown" Handler="ListViewItem_KeyDown" />
                 <Setter Property="IsSelected" Value="{Binding IsSelected.Value}" />
             </Style>

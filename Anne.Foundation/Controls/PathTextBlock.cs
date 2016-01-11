@@ -44,6 +44,7 @@ namespace Anne.Foundation.Controls
         {
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+            SizeChanged += (s, e) => UpdateText(ActualWidth);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
