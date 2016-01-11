@@ -15,6 +15,7 @@
                       Width="1600"
                       Height="900"
                       ResizeMode="CanResize"
+                      ToolTipService.InitialShowDelay="50"
                       WindowStartupLocation="CenterScreen"
                       mc:Ignorable="d">
     <i:Interaction.Triggers>
