@@ -84,4 +84,10 @@
             </Setter>
         </Style.Setters>
     </Style>
+
+    <Style TargetType="{x:Type ToolTip}">
+        <Style.Setters>
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style.Setters>
+    </Style>
 </ResourceDictionary>

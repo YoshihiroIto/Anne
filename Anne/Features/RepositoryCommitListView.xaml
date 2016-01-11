@@ -106,15 +106,11 @@
                                       Mode=OneTime}"
                        TextTrimming="CharacterEllipsis">
                 <TextBlock.ToolTip>
-                    <TextBlock FontWeight="Bold"
-                               Foreground="Black"
-                               Text="{Binding TrimmedMessage,
-                                              Mode=OneTime}" />
+                    <TextBlock Text="{Binding TrimmedMessage, Mode=OneTime}" />
                 </TextBlock.ToolTip>
             </TextBlock>
         </DataTemplate>
         <!--  EndRegion  -->
-
     </ListView.Resources>
 
     <ListView.View>
