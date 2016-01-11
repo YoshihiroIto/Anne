@@ -146,7 +146,7 @@
                 <Border BorderBrush="LightGray"
                         BorderThickness="1"
                         SnapsToDevicePixels="True">
-                    <ScrollViewer Background="White">
+                    <ScrollViewer Background="White" HorizontalScrollBarVisibility="Disabled">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </Border>
@@ -159,16 +159,30 @@
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Horizontal">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+
                     <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                    <controls:FileStatusMark Width="14"
+                    <controls:FileStatusMark Grid.Column="0"
+                                             Width="14"
                                              Height="14"
                                              Status="{Binding Status.Value,
                                                               Mode=OneTime}" />
-                    <TextBlock Margin="4,0,0,0" Text="{Binding Path.Value, Mode=OneTime}" />
-                    <diff:DiffLinesCountView Margin="8,0,0,0" Visibility="{Binding IsBinary.Value, Mode=OneTime, Converter={StaticResource VisibilityConverter}}" />
+                    <Grid Grid.Column="1" Margin="4,0,0,0">
+                        <controls:PathTextBlock PathText="{Binding Path.Value, Mode=OneTime}" />
+                    </Grid>
+                    <diff:DiffLinesCountView Grid.Column="2"
+                                             Margin="8,0,0,0"
+                                             Visibility="{Binding IsBinary.Value,
+                                                                  Mode=OneTime,
+                                                                  Converter={StaticResource VisibilityConverter}}" />
                     <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
-                </StackPanel>
+                </Grid>
             </DataTemplate>
         </ListView.ItemTemplate>
         <ListView.ItemContainerStyle>

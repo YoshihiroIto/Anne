@@ -136,11 +136,8 @@
                                               Status="{Binding Status.Value,
                                                                Mode=OneWay}" />
 
-                    <Grid Grid.Column="2">
-                        <controls1:PathTextBlock Margin="4,0,0,0"
-                                                 VerticalAlignment="Center"
-                                                 PathText="{Binding Path.Value,
-                                                                    Mode=OneWay}" />
+                    <Grid Grid.Column="2" Margin="4,0,0,0">
+                        <controls1:PathTextBlock VerticalAlignment="Center" PathText="{Binding Path.Value, Mode=OneWay}" />
                     </Grid>
 
                     <diff:DiffLinesCountView Grid.Column="3"
