@@ -123,6 +123,7 @@
                  IsTabStop="False"
                  Text="{Binding Message,
                                 Mode=OneTime}"
+                 TextWrapping="Wrap"
                  VerticalScrollBarVisibility="Auto" />
     </DockPanel>
 
