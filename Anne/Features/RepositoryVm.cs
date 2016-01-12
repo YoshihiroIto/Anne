@@ -149,7 +149,7 @@ namespace Anne.Features
         {
             Debug.Assert(e != null);
 
-            var message = string.IsNullOrEmpty(summry) ? e.Message : $"{summry}\n--\n{e.Message}}}";
+            var message = string.IsNullOrEmpty(summry) ? e.Message : $"{summry}\n--\n{e.Message}";
 
             Messenger.Raise(new InformationMessage(message, "Information", "Info"));
         }
