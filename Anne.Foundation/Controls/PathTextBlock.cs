@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace Anne.Foundation.Controls
@@ -95,9 +97,23 @@ namespace Anne.Foundation.Controls
             }
 
             if (string.IsNullOrEmpty(text))
-                text = "???";
+            {
+                Inlines.Clear();
+                Text = "???";
+            }
 
-            Text = text;
+            // ディレクトリ部とファイル部を分離し色分けする
+            {
+                var dirname = Path.GetDirectoryName(text) ?? string.Empty;
+                var filename = Path.GetFileName(text);
+
+                if (dirname.Length > 0)
+                    dirname += @"\";
+
+                Inlines.Clear();
+                Inlines.Add(new Run(dirname) { Foreground = Brushes.LightSlateGray });
+                Inlines.Add(new Run(filename) { Foreground = Brushes.Black });
+            }
         }
     }
 }
