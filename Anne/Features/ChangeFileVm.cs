@@ -41,6 +41,7 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             model.ObserveProperty(x => x.Patch)
+                .Where(_ => IsBinary.Value == false)
                 .Subscribe(this.MakeDiff)
                 .AddTo(MultipleDisposable);
         }

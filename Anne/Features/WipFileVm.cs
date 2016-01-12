@@ -52,11 +52,8 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             model.ObserveProperty(x => x.Patch)
-                .Subscribe(p =>
-                {
-                    if (IsBinary.Value == false)
-                        this.MakeDiff(p);
-                })
+                .Where(_ => IsBinary.Value == false)
+                .Subscribe(this.MakeDiff)
                 .AddTo(MultipleDisposable);
 
             #region IsInStaging, IsInStagingFromModel
