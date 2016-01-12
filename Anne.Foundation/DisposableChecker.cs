@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Windows;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ namespace Anne.Foundation
 {
     public static class DisposableChecker
     {
-        private static readonly HashSet<IDisposable> Disposables = new HashSet<IDisposable>();
+        private static readonly ConcurrentDictionary<IDisposable, int> Disposables = new ConcurrentDictionary<IDisposable, int>();
 
         [Conditional("DEBUG")]
         public static void Start()
@@ -29,7 +29,12 @@ namespace Anne.Foundation
         {
             Debug.Assert(disposable != null);
 
-            Disposables.Add(disposable);
+            if (Disposables.ContainsKey(disposable))
+            {
+                MessageBox.Show("Found multiple addition.");
+            }
+
+            Disposables[disposable] = 0;
         }
 
         [Conditional("DEBUG")]
@@ -38,13 +43,14 @@ namespace Anne.Foundation
             Debug.Assert(disposable != null);
 
 #if false
-            if (Disposables.Contains(disposable) == false)
+            if (Disposables.ContainsKey(disposable) == false)
             {
                 MessageBox.Show("Found multiple diposing.");
             }
 #endif
-              
-            Disposables.Remove(disposable);
+
+            int dummy;
+            Disposables.TryRemove(disposable, out dummy);
         }
     }
 }
