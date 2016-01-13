@@ -12,7 +12,7 @@
            d:DesignWidth="300"
            mc:Ignorable="d">
 
-    <controls:PathTextBlock Background="LightSteelBlue"
+    <controls:PathTextBlock Background="#DEB0C4"
                              DockPanel.Dock="Top"
                              FontWeight="Bold"
                              Padding="4,2"
