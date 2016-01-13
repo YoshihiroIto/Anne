@@ -26,6 +26,7 @@ namespace Anne.Foundation
 
         private readonly Queue<Job> _jobs = new Queue<Job>();
         private bool _isActive;
+        private bool _isDisposed;
 
         private readonly object _syncObj = new object();
 
@@ -83,11 +84,19 @@ namespace Anne.Foundation
                         }
                     }
                 }
-            }).ContinueWith(_ => RunJob());
+            }).ContinueWith(_ =>
+            {
+                if (_isDisposed)
+                    return;
+
+                RunJob();
+            });
         }
 
         public void Dispose()
         {
+            _isDisposed = true;
+
             WorkingJob.Dispose();
             JobSummries.Dispose();
         }
