@@ -12,17 +12,7 @@ namespace Anne.Foundation.Controls
 {
     public class PathTextBlock : TextBlock
     {
-        // http://www.k-brand.gr.jp/log/002168 を参考にしました
-
-        [DllImport("shlwapi.dll", CharSet = CharSet.Auto)]
-        private static extern bool PathCompactPathEx([Out] StringBuilder pszOut, string szPath, int cchMax, int dwFlags);
-
-        private static string TruncatePath(string path, int length)
-        {
-            var sb = new StringBuilder(length + 1);
-            PathCompactPathEx(sb, path, length + 1, 0);
-            return sb.ToString();
-        }
+        #region PathText
 
         public string PathText
         {
@@ -41,6 +31,62 @@ namespace Anne.Foundation.Controls
 
                     self.UpdateText(self.ActualWidth);
                 }));
+
+        #endregion
+
+        #region DirnameForeground
+
+        public Brush DirnameForeground
+        {
+            get { return (Brush) GetValue(DirnameForegroundProperty); }
+            set { SetValue(DirnameForegroundProperty, value); }
+        }
+
+        public static readonly DependencyProperty DirnameForegroundProperty =
+            DependencyProperty.Register(
+                "DirnameForeground",
+                typeof (Brush),
+                typeof (PathTextBlock),
+                new FrameworkPropertyMetadata
+                {
+                    DefaultValue = Brushes.LightSlateGray,
+                    BindsTwoWayByDefault = true
+                });
+
+        #endregion
+
+        #region FilenameForeground
+
+        public Brush FilenameForeground
+        {
+            get { return (Brush) GetValue(FilenameForegroundProperty); }
+            set { SetValue(FilenameForegroundProperty, value); }
+        }
+
+        public static readonly DependencyProperty FilenameForegroundProperty =
+            DependencyProperty.Register(
+                "FilenameForeground",
+                typeof (Brush),
+                typeof (PathTextBlock),
+                new FrameworkPropertyMetadata
+                {
+                    DefaultValue = Brushes.Black,
+                    BindsTwoWayByDefault = true
+                });
+
+        #endregion
+
+        // http://www.k-brand.gr.jp/log/002168 を参考にしました
+
+        [DllImport("shlwapi.dll", CharSet = CharSet.Auto)]
+        private static extern bool PathCompactPathEx([Out] StringBuilder pszOut, string szPath, int cchMax, int dwFlags);
+
+        private static string TruncatePath(string path, int length)
+        {
+            var sb = new StringBuilder(length + 1);
+            PathCompactPathEx(sb, path, length + 1, 0);
+            return sb.ToString();
+        }
 
         public PathTextBlock()
         {
@@ -111,8 +157,8 @@ namespace Anne.Foundation.Controls
                     dirname += @"\";
 
                 Inlines.Clear();
-                Inlines.Add(new Run(dirname) { Foreground = Brushes.LightSlateGray });
-                Inlines.Add(new Run(filename) { Foreground = Brushes.Black });
+                Inlines.Add(new Run(dirname) {Foreground = DirnameForeground});
+                Inlines.Add(new Run(filename) {Foreground = FilenameForeground});
             }
         }
     }

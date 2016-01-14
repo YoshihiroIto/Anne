@@ -13,12 +13,14 @@
            mc:Ignorable="d">
 
     <controls:PathTextBlock Background="#DEB0C4"
-                             DockPanel.Dock="Top"
-                             FontWeight="Bold"
-                             Padding="4,2"
-                             PathText="{Binding Path.Value,
-                                                Mode=OneWay}"
-                             SnapsToDevicePixels="True" />
+                            DirnameForeground="#C0AB4848"
+                            DockPanel.Dock="Top"
+                            FilenameForeground="#442211"
+                            FontWeight="Bold"
+                            Padding="4,2"
+                            PathText="{Binding Path.Value,
+                                               Mode=OneWay}"
+                            SnapsToDevicePixels="True" />
 
     <Line DockPanel.Dock="Bottom"
           SnapsToDevicePixels="True"
