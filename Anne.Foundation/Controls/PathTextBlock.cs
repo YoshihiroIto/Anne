@@ -156,9 +156,26 @@ namespace Anne.Foundation.Controls
                 if (dirname.Length > 0)
                     dirname += @"\";
 
-                Inlines.Clear();
-                Inlines.Add(new Run(dirname) {Foreground = DirnameForeground});
-                Inlines.Add(new Run(filename) {Foreground = FilenameForeground});
+                if (Inlines.Count != 2)
+                {
+                    Inlines.Clear();
+                    Inlines.Add(new Run(dirname) { Foreground = DirnameForeground });
+                    Inlines.Add(new Run(filename) { Foreground = FilenameForeground });
+                }
+                else
+                {
+                    var first = Inlines.FirstInline as Run;
+                    var last = Inlines.LastInline as Run;
+
+                    Debug.Assert(first != null);
+                    Debug.Assert(last != null);
+
+                    if (first.Text != dirname)
+                        first.Text = dirname;
+
+                    if (last.Text != filename)
+                        last.Text = filename;
+                }
             }
         }
     }
