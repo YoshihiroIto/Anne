@@ -15,9 +15,9 @@
       d:DesignWidth="300"
       mc:Ignorable="d">
     <Grid.Resources>
-        <converters:BoolToVisibilityConverter x:Key="DiffLinesCountVisibility"
-                                              False="Visible"
-                                              True="Collapsed" />
+        <!-- <converters:BoolToVisibilityConverter x:Key="DiffLinesCountVisibility" -->
+        <!--                                       False="Visible" -->
+        <!--                                       True="Collapsed" /> -->
         <converters:BoolToVisibilityConverter x:Key="DiscardButtonVisibility"
                                               False="Collapsed"
                                               True="Visible" />
@@ -139,12 +139,12 @@
                                               Status="{Binding Status.Value,
                                                                Mode=OneWay}" />
 
-                    <diff:DiffLinesCountView Grid.Column="2"
-                                             Margin="4,0,0,0"
-                                             VerticalAlignment="Center"
-                                             Visibility="{Binding IsBinary.Value,
-                                                                  Mode=OneWay,
-                                                                  Converter={StaticResource DiffLinesCountVisibility}}" />
+                    <!-- <diff:DiffLinesCountView Grid.Column="2" -->
+                    <!--                          Margin="4,0,0,0" -->
+                    <!--                          VerticalAlignment="Center" -->
+                    <!--                          Visibility="{Binding IsBinary.Value, -->
+                    <!--                                               Mode=OneWay, -->
+                    <!--                                               Converter={StaticResource DiffLinesCountVisibility}}" /> -->
 
                     <Grid Grid.Column="3" Margin="4,0,0,0">
                         <controls1:PathTextBlock VerticalAlignment="Center" PathText="{Binding Path.Value, Mode=OneWay}" />
