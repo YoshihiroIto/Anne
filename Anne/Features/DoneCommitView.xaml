@@ -120,7 +120,7 @@
                  HorizontalScrollBarVisibility="Hidden"
                  IsReadOnly="True"
                  IsTabStop="False"
-                 Text="{Binding Message,
+                 Text="{Binding TrimmedMessage,
                                 Mode=OneTime}"
                  TextWrapping="Wrap"
                  VerticalScrollBarVisibility="Auto" />
