@@ -12,13 +12,14 @@ namespace Anne.Features.Interfaces
     public interface IFileDiffVm
     {
         ReactiveProperty<string> Path { get; }
-        ReactiveProperty<string> Diff { get; }
         ReactiveProperty<DiffLine[]> DiffLines { get; }
 
         ReactiveProperty<int> LinesAdded { get; }
         ReactiveProperty<int> LinesDeleted { get; }
         ReactiveProperty<LibGit2Sharp.ChangeKind> Status { get; }
         ReactiveProperty<bool> IsBinary { get; }
+
+        string Diff { get; set; }
     }
 
     public static class FileDiffExtensions
@@ -108,7 +109,7 @@ namespace Anne.Features.Interfaces
                 self.DiffLines.Value = diffLinesTemp.ToArray();
             }
 
-            self.Diff.Value = sb.ToString().TrimEnd('\r', '\n');
+            self.Diff = sb.ToString().TrimEnd('\r', '\n');
         }
 
         private static void MakeContentDiffs(Dictionary<int, DiffLine[]> addDeletePairs)

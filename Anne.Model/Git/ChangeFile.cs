@@ -1,4 +1,7 @@
-﻿using Anne.Foundation.Mvvm;
+﻿using System.Diagnostics;
+using System.Linq;
+using Anne.Foundation.Mvvm;
+using LibGit2Sharp;
 
 namespace Anne.Model.Git
 {
@@ -12,23 +15,41 @@ namespace Anne.Model.Git
 
         public string Patch
         {
-            get { return _patch; }
+            get
+            {
+                if (_isGeneratedPatch == false)
+                    MakePatch();
+
+                return _patch;
+            }
             set { SetProperty(ref _patch, value); }
         }
 
         public int LinesAdded
         {
-            get { return _linesAdded; }
+            get
+            {
+                if (_isGeneratedPatch == false)
+                    MakePatch();
+
+                return _linesAdded;
+            }
             set { SetProperty(ref _linesAdded, value); }
         }
 
         public int LinesDeleted
         {
-            get { return _linesDeleted; }
+            get
+            {
+                if (_isGeneratedPatch == false)
+                    MakePatch();
+
+                return _linesDeleted;
+            }
             set { SetProperty(ref _linesDeleted, value); }
         }
 
-        public LibGit2Sharp.ChangeKind Status
+        public ChangeKind Status
         {
             get { return _status; }
             set { SetProperty(ref _status, value); }
@@ -36,7 +57,13 @@ namespace Anne.Model.Git
 
         public bool IsBinary
         {
-            get { return _isBinary; }
+            get
+            {
+                if (_isGeneratedPatch == false)
+                    MakePatch();
+
+                return _isBinary;
+            }
             set { SetProperty(ref _isBinary, value); }
         }
 
@@ -50,13 +77,58 @@ namespace Anne.Model.Git
             IsBinary = source.IsBinary;
         }
 
+        public ChangeFile()
+        {
+            _isGeneratedPatch = true;
+        }
+
+        public ChangeFile(Repository repos, Tree oldTree, Tree newTree)
+        {
+            _repos = repos;
+            _oldTree = oldTree;
+            _newTree = newTree;
+            _isGeneratedPatch = false;
+        }
+
         // ReSharper disable InconsistentNaming
         protected string _path;
         protected string _patch;
         protected int _linesAdded;
         protected int _linesDeleted;
-        protected LibGit2Sharp.ChangeKind _status;
+        protected ChangeKind _status;
         protected bool _isBinary;
         // ReSharper restore InconsistentNaming
+
+        private void MakePatch()
+        {
+            if (_repos == null)
+                return;
+
+            var diff = _repos.Internal.Diff.Compare<Patch>(_oldTree, _newTree, new[] { Path }).FirstOrDefault();
+            Debug.Assert(diff != null);
+
+            _isBinary = diff.IsBinaryComparison;
+            _linesAdded = diff.LinesAdded;
+            _linesDeleted = diff.LinesDeleted;
+            _patch = diff.Patch;
+
+            _repos = null;
+            _oldTree = null;
+            _newTree = null;
+
+            _isGeneratedPatch = true;
+
+            // ReSharper disable ExplicitCallerInfoArgument
+            RaisePropertyChanged(nameof(IsBinary));
+            RaisePropertyChanged(nameof(LinesAdded));
+            RaisePropertyChanged(nameof(LinesDeleted));
+            RaisePropertyChanged(nameof(Patch));
+            // ReSharper restore ExplicitCallerInfoArgument
+        }
+
+        private bool _isGeneratedPatch;
+        private Repository _repos;
+        private Tree _oldTree;
+        private Tree _newTree;
     }
 }

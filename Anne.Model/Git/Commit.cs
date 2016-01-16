@@ -24,6 +24,7 @@ namespace Anne.Model.Git
         public DateTimeOffset When => Internal.Author.When;
 
         private ObservableCollection<ChangeFile> _changeFiles = new ObservableCollection<ChangeFile>();
+
         public ObservableCollection<ChangeFile> ChangeFiles
         {
             set { SetProperty(ref _changeFiles, value); }
@@ -37,7 +38,7 @@ namespace Anne.Model.Git
                     IsChangeFilesBuilding = true;
                     Task.Run(() =>
                     {
-                        MakeFileDiffs().ForEach(x => ChangeFiles.Add(x));
+                        FileDiffs.ForEach(x => ChangeFiles.Add(x));
                         IsChangeFilesBuilding = false;
                     });
                 }
@@ -47,6 +48,7 @@ namespace Anne.Model.Git
         }
 
         private bool _isChangeFilesBuilding;
+
         public bool IsChangeFilesBuilding
         {
             get { return _isChangeFilesBuilding; }
@@ -70,31 +72,23 @@ namespace Anne.Model.Git
             MultipleDisposable.Add(() => _changeFiles?.ForEach(f => f.Dispose()));
         }
 
-        private IEnumerable<ChangeFile> MakeFileDiffs()
+        private IEnumerable<ChangeFile> FileDiffs
         {
-            IEnumerable<ChangeFile> fileDiffs = null;
-
-            _repos.ExecuteJobSync(
-                "MakeFileDiffs()",
-                () =>
+            get
+            {
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                foreach (var parent in Internal.Parents)
                 {
-                    fileDiffs = Internal.Parents
-                        .SelectMany(p => _repos.Internal.Diff.Compare<Patch>(p.Tree, Internal.Tree))
-                        .Select(c =>
-                            new ChangeFile
-                            {
-                                Path = c.Path,
-                                Patch = c.Patch,
-                                LinesAdded = c.LinesAdded,
-                                LinesDeleted = c.LinesDeleted,
-                                Status = c.Status,
-                                IsBinary = c.IsBinaryComparison
-                            }
-                        );
-                });
-
-            Debug.Assert(fileDiffs != null);
-            return fileDiffs;
+                    foreach (var diff in _repos.Internal.Diff.Compare<TreeChanges>(parent.Tree, Internal.Tree))
+                    {
+                        yield return new ChangeFile(_repos, parent.Tree, Internal.Tree)
+                        {
+                            Path = diff.Path,
+                            Status = diff.Status,
+                        };
+                    }
+                }
+            }
         }
     }
 }

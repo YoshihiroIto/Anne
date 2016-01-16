@@ -138,7 +138,6 @@
       <DependentUpon>DiffLinesCountView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Diff\Selectors\DiffFileViewSingleOrMultiSelector.cs" />
-    <Compile Include="Diff\Selectors\DiffTextEditorAsciiOrBinarySelector.cs" />
     <Compile Include="Diff\SingleOrMultiDiffFileView.xaml.cs">
       <DependentUpon>SingleOrMultiDiffFileView.xaml</DependentUpon>
     </Compile>

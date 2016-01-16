@@ -16,12 +16,18 @@ namespace Anne.Features
     {
         // IFileDiffVm
         public ReactiveProperty<string> Path { get; }
-        public ReactiveProperty<string> Diff { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<DiffLine[]> DiffLines { get; } = new ReactiveProperty<DiffLine[]>();
         public ReactiveProperty<int> LinesAdded { get; }
         public ReactiveProperty<int> LinesDeleted { get; }
         public ReactiveProperty<ChangeKind> Status { get; }
         public ReactiveProperty<bool> IsBinary { get; }
+
+        private string _diff;
+        public string Diff
+        {
+            get { return _diff; }
+            set { SetProperty(ref _diff, value); }
+        }
 
         public ReactiveProperty<bool> IsInStaging { get; }
 
@@ -38,7 +44,7 @@ namespace Anne.Features
             Debug.Assert(model != null);
 
             Path = model.ObserveProperty(x => x.Path).ToReactiveProperty().AddTo(MultipleDisposable);
-            Diff.AddTo(MultipleDisposable);
+            //Diff.AddTo(MultipleDisposable);
             DiffLines.AddTo(MultipleDisposable);
 
             LinesAdded = model.ObserveProperty(x => x.LinesAdded).ToReactiveProperty().AddTo(MultipleDisposable);

@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:behaviours="clr-namespace:FunctionalFun.UI.Behaviours;assembly=Anne.Foundation"
       xmlns:controls="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
-      xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

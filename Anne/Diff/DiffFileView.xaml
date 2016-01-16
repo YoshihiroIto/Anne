@@ -6,11 +6,44 @@
            xmlns:diff="clr-namespace:Anne.Diff"
            xmlns:interfaces="clr-namespace:Anne.Features.Interfaces"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-           xmlns:selectors="clr-namespace:Anne.Diff.Selectors"
            LastChildFill="True"
            d:DesignHeight="300"
            d:DesignWidth="300"
            mc:Ignorable="d">
+    <DockPanel.Resources>
+        <Style x:Key="AsciiOrBinary" TargetType="{x:Type ContentControl}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsBinary.Value, Mode=OneWay}" Value="False">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
+                                <diff:DiffTextEditor FontFamily="Consolas"
+                                                     FontSize="12"
+                                                     HorizontalScrollBarVisibility="Hidden"
+                                                     IsReadOnly="True"
+                                                     SyntaxHighlighting="{Binding Path.Value,
+                                                                                  Mode=OneWay}"
+                                                     Text="{Binding Diff,
+                                                                    Mode=OneWay}"
+                                                     VerticalScrollBarVisibility="Auto"
+                                                     WordWrap="True" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding Path=IsBinary.Value, Mode=OneWay}" Value="True">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
+                                <TextBlock Text="Binary file" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </DockPanel.Resources>
 
     <controls:PathTextBlock Background="#DEB0C4"
                             DirnameForeground="#C0AB4848"
@@ -30,29 +63,7 @@
                        Path=ActualWidth,
                        Mode=OneWay}" />
 
-    <ContentControl x:Name="DiffTextEditor" Content="{Binding Mode=OneWay}">
-        <ContentControl.ContentTemplateSelector>
-            <selectors:DiffTextEditorAsciiOrBinarySelector>
-                <selectors:DiffTextEditorAsciiOrBinarySelector.Ascii>
-                    <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
-                        <diff:DiffTextEditor FontFamily="Consolas"
-                                             FontSize="12"
-                                             HorizontalScrollBarVisibility="Hidden"
-                                             IsReadOnly="True"
-                                             SyntaxHighlighting="{Binding Path.Value,
-                                                                          Mode=OneWay}"
-                                             Text="{Binding Diff.Value,
-                                                            Mode=OneWay}"
-                                             VerticalScrollBarVisibility="Auto"
-                                             WordWrap="True" />
-                    </DataTemplate>
-                </selectors:DiffTextEditorAsciiOrBinarySelector.Ascii>
-                <selectors:DiffTextEditorAsciiOrBinarySelector.Binary>
-                    <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
-                        <TextBlock Text="Binary file" />
-                    </DataTemplate>
-                </selectors:DiffTextEditorAsciiOrBinarySelector.Binary>
-            </selectors:DiffTextEditorAsciiOrBinarySelector>
-        </ContentControl.ContentTemplateSelector>
-    </ContentControl>
+    <ContentControl x:Name="DiffTextEditor"
+                    Content="{Binding Mode=OneWay}"
+                    Style="{StaticResource AsciiOrBinary}" />
 </DockPanel>
