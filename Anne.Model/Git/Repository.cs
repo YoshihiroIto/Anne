@@ -138,7 +138,10 @@ namespace Anne.Model.Git
 
         public LibGit2Sharp.Commit FindCommitBySha(string commitSha)
         {
-            return Internal.Lookup<LibGit2Sharp.Commit>(commitSha);
+            var commit = Internal.Lookup<LibGit2Sharp.Commit>(commitSha);
+            Debug.Assert(commit != null);
+
+            return commit;
         }
 
         private void UpdateBranches()
@@ -262,9 +265,7 @@ namespace Anne.Model.Git
                 $"Revert: {commitSha}",
                 () =>
                 {
-                    var commit = Internal.Lookup<LibGit2Sharp.Commit>(commitSha);
-                    Debug.Assert(commit != null);
-
+                    var commit = FindCommitBySha(commitSha);
                     var author = Internal.Config.BuildSignature(DateTimeOffset.Now);
 
                     Internal.Revert(commit, author);
@@ -277,8 +278,7 @@ namespace Anne.Model.Git
                 $"Reset: {mode} {commitSha}",
                 () =>
                 {
-                    var commit = Internal.Lookup<LibGit2Sharp.Commit>(commitSha);
-                    Debug.Assert(commit != null);
+                    var commit = FindCommitBySha(commitSha);
                     Internal.Reset(mode, commit);
                 });
         }
