@@ -107,15 +107,48 @@ namespace Anne.Features
 
         public ReadOnlyReactiveProperty<bool> IsChangeFilesBuilding { get; }
 
+        private readonly RepositoryVm _repos;
         private readonly Model.Git.Commit _model;
 
-        public ReactiveCommand<ResetMode> ResetCommand { get; }
-        public ReactiveCommand RevertCommand { get; }
+        private ReactiveCommand<ResetMode> _resetCommand;
+        public ReactiveCommand<ResetMode> ResetCommand
+        {
+            get
+            {
+                if (_resetCommand != null)
+                    return _resetCommand;
+
+                _resetCommand = new ReactiveCommand<ResetMode>().AddTo(MultipleDisposable);
+                _resetCommand.Subscribe(mode => _repos.Reset(mode, _model.Sha))
+                    .AddTo(MultipleDisposable);
+
+                return _resetCommand;
+            }
+        }
+
+        private ReactiveCommand _revertCommand;
+
+        public ReactiveCommand RevertCommand
+        {
+            get
+            {
+                if (_revertCommand != null)
+                    return _revertCommand;
+
+                _revertCommand = new ReactiveCommand().AddTo(MultipleDisposable);
+                _revertCommand.Subscribe(mode => _repos.Revert(_model.Sha))
+                    .AddTo(MultipleDisposable);
+
+                return _revertCommand;
+            }
+        }
+
         public ObservableCollection<CommitLabelVm> CommitLabels { get; }
 
         public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model)
         {
             Debug.Assert(model != null);
+            _repos = repos;
             _model = model;
 
             IsChangeFilesBuilding =
@@ -136,14 +169,6 @@ namespace Anne.Features
                     else
                         DiffFileViewSource = SelectedChangeFiles;
                 })
-                .AddTo(MultipleDisposable);
-
-            ResetCommand = new ReactiveCommand<ResetMode>().AddTo(MultipleDisposable);
-            ResetCommand.Subscribe(mode => repos.Reset(mode, model.Sha))
-                .AddTo(MultipleDisposable);
-
-            RevertCommand = new ReactiveCommand().AddTo(MultipleDisposable);
-            RevertCommand.Subscribe(mode => repos.Revert(model.Sha))
                 .AddTo(MultipleDisposable);
 
             CommitLabels = repos
