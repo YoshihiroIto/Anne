@@ -76,6 +76,7 @@
         <controls1:FpsDisplay Grid.Row="1"
                               Width="150"
                               Height="150"
+                              Margin="0,0,0,24"
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
                               IsHitTestVisible="False" />

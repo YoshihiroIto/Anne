@@ -302,7 +302,7 @@ namespace Anne.Model.Git
             var branches = Branches.ToArray();
 
             _jobQueue.AddJob(
-                "CheckoutBranch",
+                $"CheckoutBranch: {branchName}",
                 () =>
                 {
                     var srcBranch = Branches.ToArray().FirstOrDefault(b => b.Name == branchName);
