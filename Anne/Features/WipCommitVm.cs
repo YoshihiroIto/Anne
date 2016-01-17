@@ -34,7 +34,13 @@ namespace Anne.Features
         public ReadOnlyReactiveProperty<IEnumerable<WipFileVm>> WipFiles => _repos.FileStatus.WipFiles;
 
         public ObservableCollection<WipFileVm> SelectedWipFiles { get; }
-        public ReactiveProperty<object> DiffFileViewSource { get; }
+
+        private object _diffFileViewSource;
+        public object DiffFileViewSource
+        {
+            get { return _diffFileViewSource; }
+            set { SetProperty(ref _diffFileViewSource, value); }
+        }
 
         public ReadOnlyReactiveProperty<int> SummryRemaining { get; }
         public ReadOnlyReactiveProperty<SolidColorBrush> SummryRemainingBrush { get; }
@@ -50,9 +56,6 @@ namespace Anne.Features
             Debug.Assert(repos != null);
             _repos = repos;
 
-
-            DiffFileViewSource = new ReactiveProperty<object>().AddTo(MultipleDisposable);
-
             SelectedWipFiles = new ObservableCollection<WipFileVm>();
             SelectedWipFiles.CollectionChangedAsObservable()
                 .Subscribe(_ =>
@@ -60,11 +63,11 @@ namespace Anne.Features
                     var count = SelectedWipFiles.Count;
 
                     if (count == 0)
-                        DiffFileViewSource.Value = WipFiles.Value.FirstOrDefault();
+                        DiffFileViewSource = WipFiles.Value.FirstOrDefault();
                     else if (count == 1)
-                        DiffFileViewSource.Value = SelectedWipFiles.FirstOrDefault();
+                        DiffFileViewSource = SelectedWipFiles.FirstOrDefault();
                     else
-                        DiffFileViewSource.Value = SelectedWipFiles;
+                        DiffFileViewSource = SelectedWipFiles;
                 })
                 .AddTo(MultipleDisposable);
 

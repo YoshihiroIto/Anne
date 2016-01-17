@@ -195,6 +195,6 @@
             BorderBrush="LightGray"
             BorderThickness="1,0,1,1"
             SnapsToDevicePixels="True">
-        <diff:SingleOrMultiDiffFileView DataContext="{Binding DiffFileViewSource.Value, Mode=OneWay}" />
+        <diff:SingleOrMultiDiffFileView DataContext="{Binding DiffFileViewSource, Mode=OneWay}" />
     </Border>
 </Grid>

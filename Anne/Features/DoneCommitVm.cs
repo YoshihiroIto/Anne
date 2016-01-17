@@ -97,7 +97,13 @@ namespace Anne.Features
         }
 
         public ObservableCollection<ChangeFileVm> SelectedChangeFiles { get; }
-        public ReactiveProperty<object> DiffFileViewSource { get; }
+
+        private object _diffFileViewSource;
+        public object DiffFileViewSource
+        {
+            get { return _diffFileViewSource; }
+            set { SetProperty(ref _diffFileViewSource, value); }
+        }
 
         public ReadOnlyReactiveProperty<bool> IsChangeFilesBuilding { get; }
 
@@ -112,8 +118,6 @@ namespace Anne.Features
             Debug.Assert(model != null);
             _model = model;
 
-            DiffFileViewSource = new ReactiveProperty<object>().AddTo(MultipleDisposable);
-
             IsChangeFilesBuilding =
                 model.ObserveProperty(x => x.IsChangeFilesBuilding)
                     .ToReadOnlyReactiveProperty()
@@ -126,11 +130,11 @@ namespace Anne.Features
                     var count = SelectedChangeFiles.Count;
 
                     if (count == 0)
-                        DiffFileViewSource.Value = ChangeFiles.FirstOrDefault();
+                        DiffFileViewSource = ChangeFiles.FirstOrDefault();
                     else if (count == 1)
-                        DiffFileViewSource.Value = SelectedChangeFiles.FirstOrDefault();
+                        DiffFileViewSource = SelectedChangeFiles.FirstOrDefault();
                     else
-                        DiffFileViewSource.Value = SelectedChangeFiles;
+                        DiffFileViewSource = SelectedChangeFiles;
                 })
                 .AddTo(MultipleDisposable);
 
