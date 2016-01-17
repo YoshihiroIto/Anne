@@ -87,8 +87,8 @@
     <Label MinWidth="500"
            HorizontalAlignment="Left"
            VerticalAlignment="Bottom"
-           Background="#E0E0E0E0"
-           BorderBrush="#E0C0C0C0"
+           Background="#E0E0E0"
+           BorderBrush="#C0C0C0"
            Foreground="DimGray"
            BorderThickness="0,1,1,0"
            Content="{Binding WorkingJob.Value,
