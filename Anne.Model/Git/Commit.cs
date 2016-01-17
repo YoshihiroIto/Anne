@@ -11,17 +11,17 @@ namespace Anne.Model.Git
 {
     public class Commit : ModelBase
     {
-        public string Message => _internal.Message;
-        public string MessageShort => _internal.MessageShort;
+        public string Message => Internal.Message;
+        public string MessageShort => Internal.MessageShort;
 
-        public string Sha => _internal.Sha;
-        public string ShaShort => _internal.Sha.Substring(0, 7);
-        public IEnumerable<string> ParentShas => _internal.Parents.Select(x => x.Sha);
-        public IEnumerable<string> ParentShaShorts => _internal.Parents.Select(x => x.Sha.Substring(0, 7));
+        public string Sha { get; }
+        public string ShaShort => Sha.Substring(0, 7);
+        public IEnumerable<string> ParentShas => Internal.Parents.Select(x => x.Sha);
+        public IEnumerable<string> ParentShaShorts => Internal.Parents.Select(x => x.Sha.Substring(0, 7));
 
-        public string AutherName => _internal.Author.Name;
-        public string AutherEmail => _internal.Author.Email;
-        public DateTimeOffset When => _internal.Author.When;
+        public string AutherName => Internal.Author.Name;
+        public string AutherEmail => Internal.Author.Email;
+        public DateTimeOffset When => Internal.Author.When;
 
         private ObservableCollection<ChangeFile> _changeFiles = new ObservableCollection<ChangeFile>();
 
@@ -57,15 +57,16 @@ namespace Anne.Model.Git
 
         private volatile bool _isFileDiffsMakeDone;
         private readonly Repository _repos;
-        private readonly LibGit2Sharp.Commit _internal;
 
-        public Commit(Repository repos, LibGit2Sharp.Commit src)
+        private LibGit2Sharp.Commit Internal => _repos.FindCommitBySha(Sha);
+
+        public Commit(Repository repos, string commitSha)
         {
             Debug.Assert(repos != null);
-            Debug.Assert(src != null);
+            Debug.Assert(commitSha != null);
 
             _repos = repos;
-            _internal = src;
+            Sha = commitSha;
 
             MultipleDisposable.Add(() => _changeFiles?.ForEach(f => f.Dispose()));
         }
@@ -74,12 +75,15 @@ namespace Anne.Model.Git
         {
             get
             {
+                // internalは都度作るのでここで一度作り使い回す
+                var commit = Internal;
+
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (var parent in _internal.Parents)
+                foreach (var parent in commit.Parents)
                 {
-                    foreach (var diff in _repos.Internal.Diff.Compare<TreeChanges>(parent.Tree, _internal.Tree))
+                    foreach (var diff in _repos.Internal.Diff.Compare<TreeChanges>(parent.Tree, commit.Tree))
                     {
-                        yield return new ChangeFile(_repos, parent.Tree, _internal.Tree)
+                        yield return new ChangeFile(_repos, parent.Tree, commit.Tree)
                         {
                             Path = diff.Path,
                             Status = diff.Status,

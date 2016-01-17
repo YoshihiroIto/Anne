@@ -88,7 +88,7 @@ namespace Anne.Model.Git
                 Commits =
                     Internal.Commits.QueryBy(filter)
                         .Take(App.MaxCommitCount)
-                        .Select(x => new Commit(this, x))
+                        .Select(x => new Commit(this, x.Sha))
                         .ToObservableCollection();
 
                 MultipleDisposable.Add(() => Commits.ForEach(x => x.Dispose()));
@@ -108,7 +108,7 @@ namespace Anne.Model.Git
 
                         Commits = Internal.Commits.QueryBy(filter)
                             .Take(App.MaxCommitCount)
-                            .Select(x => new Commit(this, x))
+                            .Select(x => new Commit(this, x.Sha))
                             .ToObservableCollection();
                     })
                     .AddTo(MultipleDisposable);
@@ -134,6 +134,11 @@ namespace Anne.Model.Git
                     .SelectMany(x => x)
                     .ForEach(x => x.Dispose())
                 );
+        }
+
+        public LibGit2Sharp.Commit FindCommitBySha(string commitSha)
+        {
+            return Internal.Lookup<LibGit2Sharp.Commit>(commitSha);
         }
 
         private void UpdateBranches()
