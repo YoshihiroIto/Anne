@@ -77,7 +77,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,1,0"
-                                Background="{Binding Background.Value,
+                                Background="{Binding Background,
                                                      Mode=OneTime}"
                                 BorderBrush="Black"
                                 BorderThickness="1"
@@ -86,11 +86,11 @@
                                 <controls:CommitLabelMark Width="12"
                                                           Height="12"
                                                           Margin="1"
-                                                          Type="{Binding Type.Value,
+                                                          Type="{Binding Type,
                                                                          Mode=OneWay}" />
                                 <TextBlock Margin="0,0,3,0"
                                            FontSize="9"
-                                           Text="{Binding Name.Value,
+                                           Text="{Binding Name,
                                                           Mode=OneWay}" />
                             </StackPanel>
                         </Border>
