@@ -23,7 +23,7 @@
                                                      IsReadOnly="True"
                                                      SyntaxHighlighting="{Binding Path.Value,
                                                                                   Mode=OneWay}"
-                                                     Text="{Binding Diff,
+                                                     Text="{Binding Diff.Value,
                                                                     Mode=OneWay}"
                                                      VerticalScrollBarVisibility="Auto"
                                                      WordWrap="True" />

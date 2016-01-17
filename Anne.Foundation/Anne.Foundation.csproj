@@ -126,6 +126,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Externals\WrappingStream.cs" />
     <Compile Include="RepositoryOutlinerItemType.cs" />
+    <Compile Include="SavingMemoryString.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Anne.Diff;
 using Anne.Features.Interfaces;
+using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 using LibGit2Sharp;
@@ -19,16 +20,16 @@ namespace Anne.Features
         public ReactiveProperty<ChangeKind> Status { get; }
         public ReactiveProperty<bool> IsBinary { get; }
 
-        private string _diff;
+        private SavingMemoryString _diff;
 
-        public string Diff
+        public SavingMemoryString Diff
         {
             get
             {
                 if (_diff == null)
                 {
                     if (IsBinary.Value)
-                        _diff = string.Empty;
+                        _diff = new SavingMemoryString();
                     else
                     {
                         this.MakeDiff(_model.Patch);

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Anne.Diff;
+using Anne.Foundation;
 using DiffMatchPatch;
 using ParseDiff;
 using Reactive.Bindings;
@@ -19,7 +20,7 @@ namespace Anne.Features.Interfaces
         ReactiveProperty<LibGit2Sharp.ChangeKind> Status { get; }
         ReactiveProperty<bool> IsBinary { get; }
 
-        string Diff { get; set; }
+        SavingMemoryString Diff { get; set; }
     }
 
     public static class FileDiffExtensions
@@ -109,7 +110,7 @@ namespace Anne.Features.Interfaces
                 self.DiffLines.Value = diffLinesTemp.ToArray();
             }
 
-            self.Diff = sb.ToString().TrimEnd('\r', '\n');
+            self.Diff = new SavingMemoryString(sb.ToString().TrimEnd('\r', '\n'));
         }
 
         private static void MakeContentDiffs(Dictionary<int, DiffLine[]> addDeletePairs)

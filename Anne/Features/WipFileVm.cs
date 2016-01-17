@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reactive.Linq;
 using Anne.Diff;
 using Anne.Features.Interfaces;
+using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 using LibGit2Sharp;
@@ -22,8 +23,8 @@ namespace Anne.Features
         public ReactiveProperty<ChangeKind> Status { get; }
         public ReactiveProperty<bool> IsBinary { get; }
 
-        private string _diff;
-        public string Diff
+        private SavingMemoryString _diff;
+        public SavingMemoryString Diff
         {
             get { return _diff; }
             set { SetProperty(ref _diff, value); }
