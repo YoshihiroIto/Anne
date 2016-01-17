@@ -73,7 +73,7 @@
                       HorizontalAlignment="Center" />
 
         <ContentControl Grid.Column="4"
-                        Content="{Binding SelectedCommit.Value,
+                        Content="{Binding SelectedCommitDelay.Value,
                                           Mode=OneWay}"
                         ContentTemplateSelector="{StaticResource CommitViewDataSelector}" />
     </Grid>

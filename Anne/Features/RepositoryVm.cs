@@ -29,6 +29,8 @@ namespace Anne.Features
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
 
         public ReactiveProperty<ICommitVm> SelectedCommit { get; }
+        public ReadOnlyReactiveProperty<ICommitVm> SelectedCommitDelay { get; }
+
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
@@ -115,6 +117,11 @@ namespace Anne.Features
             SelectedCommit = new ReactiveProperty<ICommitVm>().AddTo(MultipleDisposable);
             SelectedLocalBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
             SelectedRemoteBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
+
+            SelectedCommitDelay = SelectedCommit
+                .Sample(TimeSpan.FromMilliseconds(150))
+                .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
 
             // 未選択時に最初のコミットを選択する
             SelectedCommit
