@@ -30,7 +30,10 @@ namespace Anne.Features
                     if (IsBinary.Value)
                         _diff = string.Empty;
                     else
+                    {
                         this.MakeDiff(_model.Patch);
+                        _model = null;
+                    }
                 }
 
                 return _diff;
@@ -39,7 +42,7 @@ namespace Anne.Features
             set { SetProperty(ref _diff, value); }
         }
 
-        private readonly ChangeFile _model;
+        private ChangeFile _model;
 
         public ChangeFileVm(ChangeFile model)
         {
