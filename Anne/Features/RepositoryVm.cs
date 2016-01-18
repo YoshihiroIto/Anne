@@ -114,19 +114,17 @@ namespace Anne.Features
             MultipleDisposable.Add(() =>  Commits?.Value?.Dispose());
 
             // 選択アイテム
-            SelectedCommit = new ReactiveProperty<ICommitVm>().AddTo(MultipleDisposable);
             SelectedLocalBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
             SelectedRemoteBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
+
+            SelectedCommit = Commits
+                .Select(_ => Commits.Value?.FirstOrDefault())
+                .ToReactiveProperty()
+                .AddTo(MultipleDisposable);
 
             SelectedCommitDelay = SelectedCommit
                 .Sample(TimeSpan.FromMilliseconds(150))
                 .ToReadOnlyReactiveProperty()
-                .AddTo(MultipleDisposable);
-
-            // 未選択時に最初のコミットを選択する
-            SelectedCommit
-                .Where(c => c == null)
-                .Subscribe(_ => SelectedCommit.Value = Commits.Value.FirstOrDefault())
                 .AddTo(MultipleDisposable);
 
             Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
@@ -134,7 +132,6 @@ namespace Anne.Features
                 .ObserveOnUIDispatcher()
                 .Subscribe(e => ShowDialog(e.Exception, e.Summry))
                 .AddTo(MultipleDisposable);
-
 
             InitializeCommands();
         }
