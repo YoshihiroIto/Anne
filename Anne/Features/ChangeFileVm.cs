@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Anne.Diff;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
@@ -32,9 +33,22 @@ namespace Anne.Features
                         _diff = new SavingMemoryString();
                     else
                     {
-                        this.MakeDiff(_model.Patch);
-                        _model.Patch = string.Empty;    // 用済み
-                        _model = null;
+
+                        if (_isDiffMaking)
+                            return null;
+
+                        _isDiffMaking = true;
+                        Task.Run(() =>
+                        {
+                            if (_model.IsBinary == false)
+                                this.MakeDiff(_model.Patch);
+
+                            _model.Patch = string.Empty; // 用済み
+                            _model = null;
+
+                            _isDiffMaking = false;
+                            RaisePropertyChanged();
+                        });
                     }
                 }
 
@@ -43,6 +57,9 @@ namespace Anne.Features
 
             set { SetProperty(ref _diff, value); }
         }
+
+        private bool _isDiffMaking;
+
 
         private ChangeFile _model;
 
@@ -59,7 +76,8 @@ namespace Anne.Features
             DiffLines.AddTo(MultipleDisposable);
             //
             LinesAdded = model.ObserveProperty(x => x.LinesAdded, false).ToReactiveProperty().AddTo(MultipleDisposable);
-            LinesDeleted = model.ObserveProperty(x => x.LinesDeleted, false).ToReactiveProperty().AddTo(MultipleDisposable);
+            LinesDeleted =
+                model.ObserveProperty(x => x.LinesDeleted, false).ToReactiveProperty().AddTo(MultipleDisposable);
             IsBinary = model.ObserveProperty(x => x.IsBinary, false).ToReactiveProperty().AddTo(MultipleDisposable);
         }
     }
