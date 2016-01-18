@@ -105,7 +105,8 @@
             <TextBlock Margin="-5,0"
                        VerticalAlignment="Center"
                        Text="{Binding Summry,
-                                      Mode=OneTime}">
+                                      Mode=OneTime}"
+                       TextTrimming="CharacterEllipsis">
                 <TextBlock.ToolTip>
                     <TextBlock Text="{Binding TrimmedMessage, Mode=OneTime}" />
                 </TextBlock.ToolTip>
