@@ -73,13 +73,15 @@
 
         <GridSplitter Grid.Column="1"
                       Width="8"
-                      HorizontalAlignment="Center" />
+                      HorizontalAlignment="Center"
+                      ShowsPreview="True" />
 
         <features:RepositoryCommitListView Grid.Column="2" />
 
         <GridSplitter Grid.Column="3"
                       Width="8"
-                      HorizontalAlignment="Center" />
+                      HorizontalAlignment="Center"
+                      ShowsPreview="True" />
 
         <ContentControl Grid.Column="4"
                         Content="{Binding SelectedCommitDelay.Value,
