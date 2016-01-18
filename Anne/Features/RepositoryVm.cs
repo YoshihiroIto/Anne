@@ -123,7 +123,7 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             SelectedCommitDelay = SelectedCommit
-                .Sample(TimeSpan.FromMilliseconds(150))
+                //.Sample(TimeSpan.FromMilliseconds(150))
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 

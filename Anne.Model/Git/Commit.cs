@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
@@ -38,6 +39,8 @@ namespace Anne.Model.Git
                     IsChangeFilesBuilding = true;
                     Task.Run(() =>
                     {
+                        Thread.Sleep(50);
+
                         FileDiffs.ForEach(x => ChangeFiles.Add(x));
                         IsChangeFilesBuilding = false;
                     });
