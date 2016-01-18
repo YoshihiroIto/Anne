@@ -37,7 +37,7 @@
                                                 WhiteSpace="Collapsed" />
     </Grid.Resources>
 
-    <Grid>
+    <Grid x:Name="Columns">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
             <ColumnDefinition Width="Auto" />

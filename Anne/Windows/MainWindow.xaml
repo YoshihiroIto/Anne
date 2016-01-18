@@ -71,7 +71,7 @@
                                     IsTabStop="False" />
         </Grid>
 
-        <features:RepositoryView Grid.Row="1" DataContext="{Binding SelectedRepository.Value, Mode=OneWay}" />
+        <features:RepositoryView x:Name="RepositoryView" Grid.Row="1" DataContext="{Binding SelectedRepository.Value, Mode=OneWay}" />
 
         <controls1:FpsDisplay Grid.Row="1"
                               Width="150"

@@ -9,6 +9,7 @@ namespace Anne.Windows
     public class MainWindowSettings : IWindowSettings
     {
         public WINDOWPLACEMENT? Placement { get; set; }
+        public double[] Columns { get; set; }
 
         private static string ConfigFilePath
         {
@@ -29,6 +30,7 @@ namespace Anne.Windows
 
                 var config = JsonConvert.DeserializeObject<MainWindowSettings>(json);
                 Placement = config.Placement;
+                Columns = config.Columns;
             }
             catch
             {
