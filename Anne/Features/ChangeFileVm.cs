@@ -33,11 +33,10 @@ namespace Anne.Features
                         _diff = new SavingMemoryString();
                     else
                     {
-
-                        if (_isDiffMaking)
+                        if (IsDiffMaking)
                             return null;
 
-                        _isDiffMaking = true;
+                        IsDiffMaking = true;
                         Task.Run(() =>
                         {
                             if (_model.IsBinary == false)
@@ -46,7 +45,7 @@ namespace Anne.Features
                             _model.Patch = string.Empty; // 用済み
                             _model = null;
 
-                            _isDiffMaking = false;
+                            IsDiffMaking = false;
                             RaisePropertyChanged();
                         });
                     }
@@ -60,6 +59,11 @@ namespace Anne.Features
 
         private bool _isDiffMaking;
 
+        public bool IsDiffMaking
+        {
+            get { return _isDiffMaking; }
+            set { SetProperty(ref _isDiffMaking, value); }
+        }
 
         private ChangeFile _model;
 

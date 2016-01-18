@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Anne.Diff;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
@@ -24,10 +24,44 @@ namespace Anne.Features
         public ReactiveProperty<bool> IsBinary { get; }
 
         private SavingMemoryString _diff;
+
         public SavingMemoryString Diff
         {
-            get { return _diff; }
+            get
+            {
+                if (_diff == null)
+                {
+                    if (IsBinary.Value)
+                        _diff = new SavingMemoryString();
+                    else
+                    {
+                        if (IsDiffMaking)
+                            return null;
+
+                        IsDiffMaking = true;
+                        Task.Run(() =>
+                        {
+                            if (_model.IsBinary == false)
+                                this.MakeDiff(_model.Patch);
+
+                            IsDiffMaking = false;
+                            RaisePropertyChanged();
+                        });
+                    }
+                }
+
+                return _diff;
+            }
+
             set { SetProperty(ref _diff, value); }
+        }
+
+        private bool _isDiffMaking;
+
+        public bool IsDiffMaking
+        {
+            get { return _isDiffMaking; }
+            set { SetProperty(ref _isDiffMaking, value); }
         }
 
         public ReactiveProperty<bool> IsInStaging { get; }
@@ -36,7 +70,9 @@ namespace Anne.Features
 
         public ReactiveCommand DiscardChangesCommand { get; }
 
-        public ReactiveProperty<bool> IsSelected { get; } 
+        public ReactiveProperty<bool> IsSelected { get; }
+
+        private readonly WipFile _model;
 
         public WipFileVm(Repository repos, WipFile model)
             : base(true)
@@ -44,24 +80,18 @@ namespace Anne.Features
             Debug.Assert(repos != null);
             Debug.Assert(model != null);
 
+            _model = model;
+
+            //
             Path = model.ObserveProperty(x => x.Path).ToReactiveProperty().AddTo(MultipleDisposable);
-            //Diff.AddTo(MultipleDisposable);
+            Status = model.ObserveProperty(x => x.Status).ToReactiveProperty().AddTo(MultipleDisposable);
+            //
             DiffLines.AddTo(MultipleDisposable);
 
-            LinesAdded = model.ObserveProperty(x => x.LinesAdded).ToReactiveProperty().AddTo(MultipleDisposable);
-            LinesDeleted = model.ObserveProperty(x => x.LinesDeleted).ToReactiveProperty().AddTo(MultipleDisposable);
-            Status = model.ObserveProperty(x => x.Status).ToReactiveProperty().AddTo(MultipleDisposable);
-            IsBinary = model.ObserveProperty(x => x.IsBinary).ToReactiveProperty().AddTo(MultipleDisposable);
-
-            IsBinary
-                .Where(i => i == false)
-                .Subscribe(_ => this.MakeDiff(model.Patch))
-                .AddTo(MultipleDisposable);
-
-            model.ObserveProperty(x => x.Patch)
-                .Where(_ => IsBinary.Value == false)
-                .Subscribe(this.MakeDiff)
-                .AddTo(MultipleDisposable);
+            LinesAdded = model.ObserveProperty(x => x.LinesAdded, false).ToReactiveProperty().AddTo(MultipleDisposable);
+            LinesDeleted =
+                model.ObserveProperty(x => x.LinesDeleted, false).ToReactiveProperty().AddTo(MultipleDisposable);
+            IsBinary = model.ObserveProperty(x => x.IsBinary, false).ToReactiveProperty().AddTo(MultipleDisposable);
 
             #region IsInStaging, IsInStagingFromModel
 

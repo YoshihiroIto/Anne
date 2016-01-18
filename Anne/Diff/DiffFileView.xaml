@@ -6,6 +6,7 @@
            xmlns:diff="clr-namespace:Anne.Diff"
            xmlns:interfaces="clr-namespace:Anne.Features.Interfaces"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:wpfSpark="clr-namespace:WPFSpark;assembly=WPFSpark"
            LastChildFill="True"
            d:DesignHeight="300"
            d:DesignWidth="300"
@@ -17,16 +18,33 @@
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate DataType="{x:Type interfaces:IFileDiffVm}">
-                                <diff:DiffTextEditor FontFamily="Consolas"
-                                                     FontSize="12"
-                                                     HorizontalScrollBarVisibility="Hidden"
-                                                     IsReadOnly="True"
-                                                     SyntaxHighlighting="{Binding Path.Value,
-                                                                                  Mode=OneWay}"
-                                                     Text="{Binding Diff.Value,
-                                                                    Mode=OneWay}"
-                                                     VerticalScrollBarVisibility="Auto"
-                                                     WordWrap="True" />
+                                <Grid>
+                                    <diff:DiffTextEditor FontFamily="Consolas"
+                                                         FontSize="12"
+                                                         HorizontalScrollBarVisibility="Hidden"
+                                                         IsReadOnly="True"
+                                                         SyntaxHighlighting="{Binding Path.Value,
+                                                                                      Mode=OneWay}"
+                                                         Text="{Binding Diff.Value,
+                                                                        Mode=OneWay}"
+                                                         VerticalScrollBarVisibility="Auto"
+                                                         WordWrap="True" />
+
+                                    <wpfSpark:FluidProgressBar ClipToBounds="True" Foreground="{StaticResource AccentBrushKey}">
+                                        <wpfSpark:FluidProgressBar.Style>
+                                            <Style TargetType="{x:Type wpfSpark:FluidProgressBar}">
+                                                <Style.Triggers>
+                                                    <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                                                    <DataTrigger Binding="{Binding IsDiffMaking, Mode=OneWay}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </Style>
+                                        </wpfSpark:FluidProgressBar.Style>
+                                    </wpfSpark:FluidProgressBar>
+                                </Grid>
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>
