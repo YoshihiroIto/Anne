@@ -125,6 +125,10 @@ namespace Anne.Features
             DiscardChangesCommand
                 .Subscribe(_ => repos.DiscardChanges(new[] {Path.Value}))
                 .AddTo(MultipleDisposable);
+
+            model.ObserveProperty(x => x.Patch, false)
+                .Subscribe(x => Diff = null)
+                .AddTo(MultipleDisposable);
         }
     }
 }
