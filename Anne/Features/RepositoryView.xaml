@@ -40,9 +40,13 @@
     <Grid x:Name="Columns">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="8"
+                              MinWidth="8"
+                              MaxWidth="8" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="8"
+                              MinWidth="8"
+                              MaxWidth="8" />
             <ColumnDefinition Width="600" />
         </Grid.ColumnDefinitions>
 
@@ -89,10 +93,10 @@
            VerticalAlignment="Bottom"
            Background="#E0E0E0"
            BorderBrush="#C0C0C0"
-           Foreground="DimGray"
            BorderThickness="0,1,1,0"
            Content="{Binding WorkingJob.Value,
                              Mode=OneWay}"
+           Foreground="DimGray"
            IsHitTestVisible="False"
            Padding="4,2,2,2"
            SnapsToDevicePixels="True"
