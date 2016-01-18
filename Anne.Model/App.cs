@@ -25,7 +25,7 @@ namespace Anne.Model
                 var loc = Assembly.GetEntryAssembly().Location;
                 var dir = Path.GetDirectoryName(loc) ?? string.Empty;
 
-                return Path.Combine(dir, "Anne.config.yml");
+                return Path.Combine(dir, "Anne.config.json");
             }
         }
 

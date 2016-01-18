@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using YamlDotNet.Serialization;
+using Newtonsoft.Json;
 
 namespace Anne.Model
 {
@@ -14,10 +14,8 @@ namespace Anne.Model
         {
             try
             {
-                using (var reader = new StreamReader(filePath))
-                {
-                    return new Deserializer().Deserialize<AppConfig>(reader) ?? new AppConfig();
-                }
+                var json = File.ReadAllText(filePath);
+                return JsonConvert.DeserializeObject<AppConfig>(json);
             }
             catch
             {
@@ -27,10 +25,7 @@ namespace Anne.Model
 
         public static void SaveToFile(string filePath, AppConfig config)
         {
-            using (var writer = new StreamWriter(filePath))
-            {
-                new Serializer().Serialize(writer, config);
-            }
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(config, Formatting.Indented));
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using Anne.Features;
 using Anne.Foundation.Mvvm;
 using Anne.Model;
-using MetroRadiance.Controls;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 

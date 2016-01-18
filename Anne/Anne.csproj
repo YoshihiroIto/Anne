@@ -133,10 +133,6 @@
       <HintPath>..\packages\WPFSpark.1.2.0.2\lib\net461\WPFSpark.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="YamlDotNet, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.3.7.0\lib\net35\YamlDotNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Diff\DiffFileView.xaml.cs">

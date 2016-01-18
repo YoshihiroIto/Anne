@@ -3,7 +3,6 @@ using System.Reflection;
 using MetroRadiance.Controls;
 using MetroRadiance.Core.Win32;
 using Newtonsoft.Json;
-using YamlDotNet.Serialization;
 
 namespace Anne.Windows
 {
