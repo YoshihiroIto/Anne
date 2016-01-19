@@ -92,10 +92,11 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             // コミット
-            var observeCommit = _model.ObserveProperty(x => x.Commits);
+            ReadOnlyReactiveCollection<ICommitVm> oldCommits = null;
 
-            Commits = FileStatus.WipFiles.CombineLatest(observeCommit, (x, y) => 0)
-                .Do(_ => Commits?.Value?.Dispose())
+            var observeCommits = _model.ObserveProperty(x => x.Commits);
+            Commits = FileStatus.WipFiles.CombineLatest(observeCommits, (x, y) => 0)
+                .Do(_ => oldCommits = Commits?.Value)
                 .Select(_ =>
                 {
                     var allCommits = new ObservableCollection<ICommitVm>();
@@ -108,6 +109,7 @@ namespace Anne.Features
 
                     return allCommits.ToReadOnlyReactiveCollection();
                 })
+                .Do(_ => oldCommits?.Dispose())
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
