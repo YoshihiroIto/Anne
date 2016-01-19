@@ -27,29 +27,30 @@ namespace Anne.Features
         {
             get
             {
-                if (_diff == null)
+                if (_diff != null)
+                    return _diff;
+
+                lock (_diffMakingSync)
                 {
-                    if (IsBinary.Value)
+                    if (IsDiffMaking)
+                        return null;
+
+                    IsDiffMaking = true;
+                }
+
+                Task.Run(() =>
+                {
+                    if (_model.IsBinary)
                         _diff = new SavingMemoryString();
                     else
-                    {
-                        if (IsDiffMaking)
-                            return null;
+                        this.MakeDiff(_model.Patch);
 
-                        IsDiffMaking = true;
-                        Task.Run(() =>
-                        {
-                            if (_model.IsBinary == false)
-                                this.MakeDiff(_model.Patch);
+                    _model.Patch = string.Empty; // 用済み
+                    _model = null;
 
-                            _model.Patch = string.Empty; // 用済み
-                            _model = null;
-
-                            IsDiffMaking = false;
-                            RaisePropertyChanged();
-                        });
-                    }
-                }
+                    IsDiffMaking = false;
+                    RaisePropertyChanged();
+                });
 
                 return _diff;
             }
@@ -57,6 +58,8 @@ namespace Anne.Features
             set { SetProperty(ref _diff, value); }
         }
 
+
+        private readonly object _diffMakingSync = new object();
         private bool _isDiffMaking;
 
         public bool IsDiffMaking

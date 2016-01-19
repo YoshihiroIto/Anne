@@ -29,26 +29,27 @@ namespace Anne.Features
         {
             get
             {
-                if (_diff == null)
+                if (_diff != null)
+                    return _diff;
+
+                lock (_diffMakingSync)
                 {
-                    if (IsBinary.Value)
+                    if (IsDiffMaking)
+                        return null;
+
+                    IsDiffMaking = true;
+                }
+
+                Task.Run(() =>
+                {
+                    if (_model.IsBinary)
                         _diff = new SavingMemoryString();
                     else
-                    {
-                        if (IsDiffMaking)
-                            return null;
+                        this.MakeDiff(_model.Patch);
 
-                        IsDiffMaking = true;
-                        Task.Run(() =>
-                        {
-                            if (_model.IsBinary == false)
-                                this.MakeDiff(_model.Patch);
-
-                            IsDiffMaking = false;
-                            RaisePropertyChanged();
-                        });
-                    }
-                }
+                    IsDiffMaking = false;
+                    RaisePropertyChanged();
+                });
 
                 return _diff;
             }
@@ -56,6 +57,7 @@ namespace Anne.Features
             set { SetProperty(ref _diff, value); }
         }
 
+        private readonly object _diffMakingSync = new object();
         private bool _isDiffMaking;
 
         public bool IsDiffMaking
@@ -93,7 +95,7 @@ namespace Anne.Features
                 model.ObserveProperty(x => x.LinesDeleted, false).ToReactiveProperty().AddTo(MultipleDisposable);
             IsBinary = model.ObserveProperty(x => x.IsBinary, false).ToReactiveProperty().AddTo(MultipleDisposable);
 
-            #region IsInStaging, IsInStagingFromModel
+#region IsInStaging, IsInStagingFromModel
 
             IsInStaging = new ReactiveProperty<bool>(model.IsInStaging)
                 .AddTo(MultipleDisposable);
@@ -114,7 +116,7 @@ namespace Anne.Features
                 .Subscribe(x => IsInStaging.Value = x)
                 .AddTo(MultipleDisposable);
 
-            #endregion
+#endregion
 
             IsSelected = new ReactiveProperty<bool>()
                 .AddTo(MultipleDisposable);
