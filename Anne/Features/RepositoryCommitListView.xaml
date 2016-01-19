@@ -115,6 +115,23 @@
         <!--  EndRegion  -->
     </ListView.Resources>
 
+    <ListView.Template>
+        <ControlTemplate TargetType="ItemsControl">
+            <Border BorderBrush="LightGray"
+                    BorderThickness="1"
+                    SnapsToDevicePixels="True">
+                <DockPanel>
+                    <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                    <GridViewHeaderRowPresenter Columns="{Binding View.Columns, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type features:RepositoryCommitListView}}}" DockPanel.Dock="Top" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+        </ControlTemplate>
+
+    </ListView.Template>
+
     <ListView.View>
         <GridView>
             <GridViewColumn Width="200" Header="Label">
@@ -129,7 +146,7 @@
             </GridViewColumn>
             <GridViewColumn Width="Auto"
                             Header="Comment"
-                            listViewLayout:RangeColumn.IsFillColumn="true">
+                            listViewLayout:RangeColumn.IsFillColumn="True">
                 <GridViewColumn.CellTemplateSelector>
                     <selectors:CommitDataSelector Done="{StaticResource DoneCommitListCommentItemTemplate}" Wip="{StaticResource WipCommitListCommentItemTemplate}" />
                 </GridViewColumn.CellTemplateSelector>

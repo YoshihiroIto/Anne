@@ -2,9 +2,58 @@
     <SolidColorBrush x:Key="CurrentBackgroundBrush" Color="#30FF8B8B" />
     <SolidColorBrush x:Key="CurrentBorderBrush" Color="#FFFF8B8B" />
 
+    <Style TargetType="{x:Type ScrollBar}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="0.9" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="False">
+                <Setter Property="Opacity" Value="0.4" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type ScrollViewer}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ScrollContentPresenter Grid.RowSpan="2"
+                                                Grid.ColumnSpan="2"
+                                                CanContentScroll="{TemplateBinding CanContentScroll}" />
+                        <ScrollBar Name="PART_VerticalScrollBar"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                   Value="{TemplateBinding VerticalOffset}" />
+                        <ScrollBar Name="PART_HorizontalScrollBar"
+                                   Grid.Row="1"
+                                   Grid.Column="0"
+                                   Maximum="{TemplateBinding ScrollableWidth}"
+                                   Orientation="Horizontal"
+                                   ViewportSize="{TemplateBinding ViewportWidth}"
+                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                   Value="{TemplateBinding HorizontalOffset}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="FlatMultiColumnListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Style.Setters>
-            <Setter Property="Margin" Value="0,0,0,-1"/>
+            <Setter Property="Margin" Value="0,0,0,-1" />
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -47,8 +96,8 @@
     </Style>
     <Style x:Key="FlatListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Style.Setters>
-            <Setter Property="Margin" Value="0,0,0,-1"/>
-            
+            <Setter Property="Margin" Value="0,0,0,-1" />
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
@@ -108,4 +157,6 @@
             <Setter Property="Focusable" Value="False" />
         </Style.Setters>
     </Style>
+
+
 </ResourceDictionary>
