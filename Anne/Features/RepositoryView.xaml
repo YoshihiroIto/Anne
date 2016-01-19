@@ -99,7 +99,6 @@
            Content="{Binding WorkingJob.Value,
                              Mode=OneWay}"
            Foreground="DimGray"
-           IsHitTestVisible="False"
            Padding="4,2,2,2"
            SnapsToDevicePixels="True"
            Visibility="{Binding WorkingJob.Value,
