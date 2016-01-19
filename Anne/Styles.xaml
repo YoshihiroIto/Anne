@@ -172,7 +172,7 @@
     <Style TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
         <Setter Property="Foreground" Value="#ABABAB" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{x:Null}" />
         <Setter Property="Width" Value="10" />
         <Setter Property="Template">
             <Setter.Value>
@@ -192,18 +192,6 @@
                                        Background="{TemplateBinding Foreground}"
                                        Style="{DynamicResource ScrollBarTrackThumb}" />
                             </Track.Thumb>
-                            <Track.IncreaseRepeatButton>
-                                <RepeatButton x:Name="PageUp"
-                                              Command="ScrollBar.PageDownCommand"
-                                              Focusable="False"
-                                              Opacity="0" />
-                            </Track.IncreaseRepeatButton>
-                            <Track.DecreaseRepeatButton>
-                                <RepeatButton x:Name="PageDown"
-                                              Command="ScrollBar.PageUpCommand"
-                                              Focusable="False"
-                                              Opacity="0" />
-                            </Track.DecreaseRepeatButton>
                         </Track>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -224,8 +212,6 @@
                             <Setter Property="Width" Value="Auto" />
                             <Setter Property="Height" Value="10" />
                             <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
-                            <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand" />
-                            <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
