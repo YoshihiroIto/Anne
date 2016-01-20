@@ -67,10 +67,10 @@
                 <ControlTemplate TargetType="GridViewColumnHeader">
                     <Grid>
                         <Border Background="{StaticResource SemiactiveBackgroundBrushKey}"
-                                BorderThickness="0,0,0,1"
-                                SnapsToDevicePixels="True"
                                 BorderBrush="{StaticResource SemiactiveBorderBrushKey}"
-                                Padding="2,2,2,3">
+                                BorderThickness="0,0,0,1"
+                                Padding="2,2,2,3"
+                                SnapsToDevicePixels="True">
                             <ContentPresenter Name="HeaderContent"
                                               Margin="0,0,0,1"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -97,9 +97,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
-                        <Border Background="{TemplateBinding Background}"
+                        <Border Width="{Binding ActualWidth,
+                                                Mode=OneWay,
+                                                RelativeSource={RelativeSource FindAncestor,
+                                                                               AncestorType={x:Type ListView}}}"
+                                Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderThickness="1,1,3,1"
                                 SnapsToDevicePixels="True">
                             <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
