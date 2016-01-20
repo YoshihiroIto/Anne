@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Anne.Diff;
 using Anne.Features.Interfaces;
@@ -50,6 +51,7 @@ namespace Anne.Features
 
                     IsDiffMaking = false;
                     RaisePropertyChanged();
+                    _disposeResetEvent?.Set();
                 });
 
                 return _diff;
@@ -69,12 +71,22 @@ namespace Anne.Features
         }
 
         private ChangeFile _model;
+        private ManualResetEventSlim _disposeResetEvent;
 
         public ChangeFileVm(ChangeFile model)
         {
             Debug.Assert(model != null);
 
             _model = model;
+
+            MultipleDisposable.AddFirst(() =>
+            {
+                lock (_diffMakingSync)
+                {
+                    if (IsDiffMaking)
+                        _disposeResetEvent = new ManualResetEventSlim();
+                }
+            });
 
             //
             Path = model.ObserveProperty(x => x.Path).ToReactiveProperty().AddTo(MultipleDisposable);

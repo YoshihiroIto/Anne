@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
@@ -44,6 +45,7 @@ namespace Anne.Model.Git
                 {
                     FileDiffs.ForEach(x => ChangeFiles.Add(x));
                     IsChangeFilesBuilding = false;
+                    _disposeResetEvent?.Set();
                 });
 
                 return _changeFiles;
@@ -58,12 +60,13 @@ namespace Anne.Model.Git
             set { SetProperty(ref _isChangeFilesBuilding, value); }
         }
 
+        private LibGit2Sharp.Commit Internal => _repos.FindCommitBySha(Sha);
+
         private bool _isFileDiffsMakeDone;
         private readonly object _isFileDiffsMakeDoneSync = new object();
 
         private readonly Repository _repos;
-
-        private LibGit2Sharp.Commit Internal => _repos.FindCommitBySha(Sha);
+        private ManualResetEventSlim _disposeResetEvent;
 
         public Commit(Repository repos, string commitSha)
         {
@@ -72,6 +75,15 @@ namespace Anne.Model.Git
 
             _repos = repos;
             Sha = commitSha;
+
+            MultipleDisposable.AddFirst(() =>
+            {
+                lock (_isFileDiffsMakeDoneSync)
+                {
+                    if (_isFileDiffsMakeDone)
+                        _disposeResetEvent = new ManualResetEventSlim();
+                }
+            });
 
             MultipleDisposable.Add(() => _changeFiles?.ForEach(f => f.Dispose()));
         }

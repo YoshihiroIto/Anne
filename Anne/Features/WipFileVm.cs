@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Anne.Diff;
 using Anne.Features.Interfaces;
@@ -49,6 +50,7 @@ namespace Anne.Features
 
                     IsDiffMaking = false;
                     RaisePropertyChanged();
+                    _disposeResetEvent?.Set();
                 });
 
                 return _diff;
@@ -75,6 +77,7 @@ namespace Anne.Features
         public ReactiveProperty<bool> IsSelected { get; }
 
         private readonly WipFile _model;
+        private ManualResetEventSlim _disposeResetEvent;
 
         public WipFileVm(Repository repos, WipFile model)
             : base(true)
@@ -83,6 +86,15 @@ namespace Anne.Features
             Debug.Assert(model != null);
 
             _model = model;
+
+            MultipleDisposable.AddFirst(() =>
+            {
+                lock (_diffMakingSync)
+                {
+                    if (IsDiffMaking)
+                        _disposeResetEvent = new ManualResetEventSlim();
+                }
+            });
 
             //
             Path = model.ObserveProperty(x => x.Path).ToReactiveProperty().AddTo(MultipleDisposable);

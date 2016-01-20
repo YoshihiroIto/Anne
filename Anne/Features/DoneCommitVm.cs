@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Anne.Features.Interfaces;
@@ -52,9 +53,11 @@ namespace Anne.Features
                     () =>
                     {
                         var image = GravatarLoader.Get(_model.AutherEmail);
-                        _isDownloading = false;
 
                         Livet.DispatcherHelper.UIDispatcher.Invoke(() => AutherImage = image);
+
+                        _isDownloading = false;
+                        _disposeResetEvent?.Set();
                     });
 
                 return null;
@@ -149,11 +152,22 @@ namespace Anne.Features
 
         public ObservableCollection<CommitLabelVm> CommitLabels { get; }
 
+        private ManualResetEventSlim _disposeResetEvent;
+
         public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model)
         {
             Debug.Assert(model != null);
             _repos = repos;
             _model = model;
+
+            MultipleDisposable.AddFirst(() =>
+            {
+                lock (_isDownloadingSync)
+                {
+                    if (_isDownloading)
+                        _disposeResetEvent = new ManualResetEventSlim();
+                }
+            });
 
             IsChangeFilesBuilding =
                 model.ObserveProperty(x => x.IsChangeFilesBuilding)
