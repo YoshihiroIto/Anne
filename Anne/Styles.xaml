@@ -92,6 +92,7 @@
     <Style x:Key="FlatMultiColumnListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Style.Setters>
             <Setter Property="Margin" Value="0,0,0,-1" />
+            <Setter Property="Foreground" Value="Black" />
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -136,6 +137,7 @@
     <Style x:Key="FlatListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Style.Setters>
             <Setter Property="Margin" Value="0,0,0,-1" />
+            <Setter Property="Foreground" Value="Black" />
 
             <Setter Property="Template">
                 <Setter.Value>
