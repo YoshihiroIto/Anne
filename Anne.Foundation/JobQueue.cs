@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Threading;
 using System.Threading.Tasks;
 using Reactive.Bindings;
 using StatefulModel;
@@ -25,8 +26,7 @@ namespace Anne.Foundation
         }
 
         private readonly Queue<Job> _jobs = new Queue<Job>();
-        private bool _isActive;
-        private bool _isDisposed;
+        private volatile bool _isActive;
 
         private readonly object _syncObj = new object();
 
@@ -50,9 +50,10 @@ namespace Anne.Foundation
 
             lock(_syncObj)
             {
-                if (_jobs.Any() == false)
+                if (_jobs.Any() == false || _disposeResetEvent != null)
                 {
                     _isActive = false;
+                    _disposeResetEvent?.Set();
                     return;
                 }
 
@@ -84,18 +85,21 @@ namespace Anne.Foundation
                         }
                     }
                 }
-            }).ContinueWith(_ =>
-            {
-                if (_isDisposed)
-                    return;
-
-                RunJob();
-            });
+            }).ContinueWith(_ => RunJob());
         }
+
+        private ManualResetEventSlim _disposeResetEvent;
 
         public void Dispose()
         {
-            _isDisposed = true;
+            lock (_syncObj)
+            {
+                if (_isActive)
+                    _disposeResetEvent = new ManualResetEventSlim();
+            }
+
+            _disposeResetEvent?.Wait();
+            _disposeResetEvent?.Dispose();
 
             WorkingJob.Dispose();
             JobSummries.Dispose();
