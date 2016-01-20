@@ -148,20 +148,22 @@
         </Style.Setters>
     </Style>
 
+    <!-- http://blog.jsinh.in/how&#45;to&#45;create&#45;apple&#45;macos&#45;like&#45;scrollbar&#45;in&#45;wpf/ -->
     <Style x:Key="ScrollBarTrackThumb" TargetType="{x:Type Thumb}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border x:Name="Thumb"
+                    <Border x:Name="ScrollBarThumb"
                             Width="Auto"
                             Height="Auto"
+                            SnapsToDevicePixels="True"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Background="{TemplateBinding Background}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="Tag" Value="Horizontal">
-                            <Setter TargetName="Thumb" Property="Width" Value="Auto" />
-                            <Setter TargetName="Thumb" Property="Height" Value="10" />
+                            <Setter TargetName="ScrollBarThumb" Property="Width" Value="Auto" />
+                            <Setter TargetName="ScrollBarThumb" Property="Height" Value="10" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
