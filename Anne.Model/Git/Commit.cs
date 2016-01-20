@@ -31,17 +31,20 @@ namespace Anne.Model.Git
 
             get
             {
-                if (_isFileDiffsMakeDone == false)
+                lock (_isFileDiffsMakeDoneSync)
                 {
-                    _isFileDiffsMakeDone = true;
+                    if (_isFileDiffsMakeDone)
+                        return _changeFiles;
 
-                    IsChangeFilesBuilding = true;
-                    Task.Run(() =>
-                    {
-                        FileDiffs.ForEach(x => ChangeFiles.Add(x));
-                        IsChangeFilesBuilding = false;
-                    });
+                    _isFileDiffsMakeDone = true;
                 }
+
+                IsChangeFilesBuilding = true;
+                Task.Run(() =>
+                {
+                    FileDiffs.ForEach(x => ChangeFiles.Add(x));
+                    IsChangeFilesBuilding = false;
+                });
 
                 return _changeFiles;
             }
@@ -55,7 +58,9 @@ namespace Anne.Model.Git
             set { SetProperty(ref _isChangeFilesBuilding, value); }
         }
 
-        private volatile bool _isFileDiffsMakeDone;
+        private bool _isFileDiffsMakeDone;
+        private readonly object _isFileDiffsMakeDoneSync = new object();
+
         private readonly Repository _repos;
 
         private LibGit2Sharp.Commit Internal => _repos.FindCommitBySha(Sha);
