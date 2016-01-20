@@ -40,10 +40,13 @@ namespace Anne.Features
                 if (_autherImage != null)
                     return _autherImage;
 
-                if (_isDownloading)
-                    return null;
+                lock (_isDownloadingSync)
+                {
+                    if (_isDownloading)
+                        return null;
 
-                _isDownloading = true;
+                    _isDownloading = true;
+                }
 
                 Task.Run(
                     () =>
@@ -60,6 +63,7 @@ namespace Anne.Features
         }
 
         private volatile bool _isDownloading;
+        private readonly object _isDownloadingSync = new object();
 
         #endregion
 
