@@ -40,6 +40,55 @@
         </Setter>
     </Style>
 
+    <Style x:Key="GridViewColumnHeaderGripper" TargetType="Thumb">
+        <Setter Property="Width" Value="18" />
+        <Setter Property="Background" Value="{StaticResource SemiactiveBorderBrushKey}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                        <Rectangle Width="1"
+                                   HorizontalAlignment="Center"
+                                   Fill="{TemplateBinding Background}"
+                                   SnapsToDevicePixels="True" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="GridViewColumnHeader">
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource SemiactiveBackgroundBrushKey}" />
+        <Setter Property="Foreground" Value="{StaticResource SemiActiveForegroundBrushKey}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GridViewColumnHeader">
+                    <Grid>
+                        <Border Background="{StaticResource SemiactiveBackgroundBrushKey}"
+                                BorderThickness="0,0,0,1"
+                                SnapsToDevicePixels="True"
+                                BorderBrush="{StaticResource SemiactiveBorderBrushKey}"
+                                Padding="2,2,2,3">
+                            <ContentPresenter Name="HeaderContent"
+                                              Margin="0,0,0,1"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              TextElement.Foreground="{StaticResource SemiActiveForegroundBrushKey}" />
+                        </Border>
+                        <Thumb x:Name="PART_HeaderGripper"
+                               Margin="0,0,-9,0"
+                               HorizontalAlignment="Right"
+                               Style="{StaticResource GridViewColumnHeaderGripper}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="FlatMultiColumnListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Style.Setters>
             <Setter Property="Margin" Value="0,0,0,-1" />
@@ -148,7 +197,7 @@
         </Style.Setters>
     </Style>
 
-    <!-- http://blog.jsinh.in/how&#45;to&#45;create&#45;apple&#45;macos&#45;like&#45;scrollbar&#45;in&#45;wpf/ -->
+    <!--  http://blog.jsinh.in/how&#45;to&#45;create&#45;apple&#45;macos&#45;like&#45;scrollbar&#45;in&#45;wpf/  -->
     <Style x:Key="ScrollBarTrackThumb" TargetType="{x:Type Thumb}">
         <Setter Property="Template">
             <Setter.Value>
@@ -156,10 +205,10 @@
                     <Border x:Name="ScrollBarThumb"
                             Width="Auto"
                             Height="Auto"
-                            SnapsToDevicePixels="True"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            Background="{TemplateBinding Background}" />
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="Tag" Value="Horizontal">
                             <Setter TargetName="ScrollBarThumb" Property="Width" Value="Auto" />
