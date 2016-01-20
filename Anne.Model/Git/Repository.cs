@@ -34,7 +34,7 @@ namespace Anne.Model.Git
         }
 
         // ジョブキュー
-        public ReactiveCollection<string> JobSummries => _jobQueue.JobSummries;
+        public ReactiveCollection<string> JobSummaries => _jobQueue.JobSummaries;
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
         public event EventHandler<ExceptionEventArgs> JobExecutingException;
 
@@ -339,16 +339,16 @@ namespace Anne.Model.Git
                 });
         }
 
-        public void AddJob(string summry, Action action)
+        public void AddJob(string summary, Action action)
         {
-            _jobQueue.AddJob(summry, action);
+            _jobQueue.AddJob(summary, action);
         }
 
-        public void ExecuteJobSync(string summry, Action action)
+        public void ExecuteJobSync(string summary, Action action)
         {
             using (var sema = new SemaphoreSlim(0, 1))
             {
-                _jobQueue.AddJob(summry, () =>
+                _jobQueue.AddJob(summary, () =>
                 {
                     action();
 

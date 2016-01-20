@@ -78,6 +78,7 @@ namespace Anne.Foundation.Controls
 
         // http://www.k-brand.gr.jp/log/002168 を参考にしました
 
+        // ReSharper disable once StringLiteralTypo
         [DllImport("shlwapi.dll", CharSet = CharSet.Auto)]
         private static extern bool PathCompactPathEx([Out] StringBuilder pszOut, string szPath, int cchMax, int dwFlags);
 

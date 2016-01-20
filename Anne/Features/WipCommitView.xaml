@@ -39,18 +39,18 @@
             </Grid.ColumnDefinitions>
 
             <controls:PromptTextBox BorderThickness="1,1,1,0"
-                                    Prompt="Summry"
+                                    Prompt="Summary"
                                     SnapsToDevicePixels="True"
                                     TabIndex="0"
-                                    Text="{Binding Summry,
+                                    Text="{Binding Summary,
                                                    UpdateSourceTrigger=PropertyChanged}" />
 
             <Label Grid.Column="1"
                    BorderBrush="{StaticResource BorderBrushKey}"
                    BorderThickness="0,1,1,0"
-                   Content="{Binding SummryRemaining.Value,
+                   Content="{Binding SummaryRemaining.Value,
                                      Mode=OneWay}"
-                   Foreground="{Binding SummryRemainingBrush.Value,
+                   Foreground="{Binding SummaryRemainingBrush.Value,
                                         Mode=OneWay}"
                    SnapsToDevicePixels="True" />
         </Grid>

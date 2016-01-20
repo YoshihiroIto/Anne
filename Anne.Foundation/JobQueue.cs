@@ -14,14 +14,14 @@ namespace Anne.Foundation
     {
         public event EventHandler<ExceptionEventArgs> JobExecutingException;
 
-        //public ReadOnlyReactiveCollection<string> JobSummries { get; }
-        public ReactiveCollection<string> JobSummries { get; } = new ReactiveCollection<string>();
+        //public ReadOnlyReactiveCollection<string> JobSummaries { get; }
+        public ReactiveCollection<string> JobSummaries { get; } = new ReactiveCollection<string>();
         public ReactiveProperty<string> WorkingJob { get; } =
             new ReactiveProperty<string>(Scheduler.Immediate);
 
         private class Job
         {
-            public string Summry { get; set; }
+            public string Summary { get; set; }
             public Action Action { get; set; }
         }
 
@@ -34,7 +34,7 @@ namespace Anne.Foundation
         {
             lock (_syncObj)
             {
-                _jobs.Enqueue(new Job {Summry = summary, Action = action});
+                _jobs.Enqueue(new Job {Summary = summary, Action = action});
 
                 if (_isActive)
                     return;
@@ -64,9 +64,9 @@ namespace Anne.Foundation
             {
                 using (new AnonymousDisposable(() => WorkingJob.Value = string.Empty))
                 {
-                    WorkingJob.Value = job.Summry;
+                    WorkingJob.Value = job.Summary;
 
-                    Debug.WriteLine("JobQueue >>>>>>>>>>>>>>>>>>>>>>>>>> " + job.Summry);
+                    Debug.WriteLine("JobQueue >>>>>>>>>>>>>>>>>>>>>>>>>> " + job.Summary);
 
                     try
                     {
@@ -74,7 +74,7 @@ namespace Anne.Foundation
                     }
                     catch (Exception e)
                     {
-                        var args = new ExceptionEventArgs {Exception = e, Summry = job.Summry};
+                        var args = new ExceptionEventArgs {Exception = e, Summary = job.Summary};
 
                         JobExecutingException?.Invoke(this, args);
 
@@ -102,7 +102,7 @@ namespace Anne.Foundation
             _disposeResetEvent?.Dispose();
 
             WorkingJob.Dispose();
-            JobSummries.Dispose();
+            JobSummaries.Dispose();
         }
     }
 }

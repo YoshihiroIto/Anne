@@ -36,17 +36,17 @@ namespace Anne.Features.Interfaces
                     var fileDiffs = ParseDiff.Diff.Parse(patch).FirstOrDefault();
                     if (fileDiffs != null)
                     {
-                        foreach (var chunck in fileDiffs.Chunks)
+                        foreach (var chunk in fileDiffs.Chunks)
                         {
-                            sb.AppendLine(chunck.Content.TrimEnd('\r', '\n'));
-                            diffLinesTemp.Add(new DiffLine { LineType = DiffLine.LineTypes.ChunckTag });
+                            sb.AppendLine(chunk.Content.TrimEnd('\r', '\n'));
+                            diffLinesTemp.Add(new DiffLine { LineType = DiffLine.LineTypes.ChunkTag });
 
-                            var oldIndex = chunck.OldStart - 1;
-                            var newIndex = chunck.NewStart - 1;
+                            var oldIndex = chunk.OldStart - 1;
+                            var newIndex = chunk.NewStart - 1;
 
                             var addDeletePairs = new Dictionary<int, DiffLine[]>();
 
-                            foreach (var l in chunck.Changes)
+                            foreach (var l in chunk.Changes)
                             {
                                 switch (l.Type)
                                 {

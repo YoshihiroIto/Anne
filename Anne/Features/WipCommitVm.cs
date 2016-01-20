@@ -16,10 +16,10 @@ namespace Anne.Features
     public class WipCommitVm : ViewModelBase, ICommitVm
     {
         // ICommitVm
-        public string Summry
+        public string Summary
         {
-            get { return _summry; }
-            set { SetProperty(ref _summry, value); }
+            get { return _summary; }
+            set { SetProperty(ref _summary, value); }
         }
 
         public string Description
@@ -42,13 +42,13 @@ namespace Anne.Features
             set { SetProperty(ref _diffFileViewSource, value); }
         }
 
-        public ReadOnlyReactiveProperty<int> SummryRemaining { get; }
-        public ReadOnlyReactiveProperty<SolidColorBrush> SummryRemainingBrush { get; }
+        public ReadOnlyReactiveProperty<int> SummaryRemaining { get; }
+        public ReadOnlyReactiveProperty<SolidColorBrush> SummaryRemainingBrush { get; }
 
         public ReactiveProperty<bool?> IsAllSelected { get; }
 
         private readonly RepositoryVm _repos;
-        private string _summry = string.Empty;
+        private string _summary = string.Empty;
         private string _description = string.Empty;
 
         public WipCommitVm(RepositoryVm repos)
@@ -72,13 +72,13 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
 
-            SummryRemaining =
-                this.ObserveProperty(x => x.Summry)
+            SummaryRemaining =
+                this.ObserveProperty(x => x.Summary)
                     .Select(x => 80 - x.Length)
                     .ToReadOnlyReactiveProperty()
                     .AddTo(MultipleDisposable);
 
-            SummryRemainingBrush = SummryRemaining
+            SummaryRemainingBrush = SummaryRemaining
                 .Select(x =>
                 {
                     if (x < 0)
@@ -91,12 +91,12 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             CommitCommand =
-                this.ObserveProperty(x => x.Summry)
+                this.ObserveProperty(x => x.Summary)
                     .Select(x => string.IsNullOrWhiteSpace(x) == false)
                     .ToReactiveCommand()
                     .AddTo(MultipleDisposable);
 
-            CommitCommand.Subscribe(_ => repos.Commit((Summry + "\n\n" + Description).Trim()))
+            CommitCommand.Subscribe(_ => repos.Commit((Summary + "\n\n" + Description).Trim()))
                 .AddTo(MultipleDisposable);
 
             DiscardChangesCommand = SelectedWipFiles.CollectionChangedAsObservable()

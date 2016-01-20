@@ -16,7 +16,7 @@ namespace Anne.Features
     public class DoneCommitVm : ViewModelBase, ICommitVm
     {
         // ICommitVm
-        public string Summry => MessageShort;
+        public string Summary => MessageShort;
 
         public string Message => _model.Message;
         public string TrimmedMessage => _model.Message.Trim();

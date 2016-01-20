@@ -109,7 +109,7 @@ namespace Anne.Diff
         {
             switch(diffLine.LineType)
             {
-                case DiffLine.LineTypes.ChunckTag:
+                case DiffLine.LineTypes.ChunkTag:
                     DrawIndexText(dc, rect, "･･･", OldIndexOffset, TextAlignment.Center);
                     DrawIndexText(dc, rect, "･･･", NewIndexOffset, TextAlignment.Center);
                     break;

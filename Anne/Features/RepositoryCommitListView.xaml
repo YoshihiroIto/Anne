@@ -42,21 +42,21 @@
         </ContextMenu>
 
         <converters:TypeOfConverter x:Key="TypeOf" />
-        <converters:StringToVisibilityConverter x:Key="WipVisiblity" NoWhiteSpace="Collapsed" />
+        <converters:StringToVisibilityConverter x:Key="WipVisibility" NoWhiteSpace="Collapsed" />
 
         <!--  Region WIP  -->
         <DataTemplate x:Key="WipCommitListLabelItemTemplate" DataType="{x:Type features:WipCommitVm}" />
         <DataTemplate x:Key="WipCommitListGraphItemTemplate" DataType="{x:Type features:WipCommitVm}" />
         <DataTemplate x:Key="WipCommitListCommentItemTemplate" DataType="{x:Type features:WipCommitVm}">
             <Grid Margin="-5,0">
-                <TextBlock VerticalAlignment="Center" Text="{Binding Summry, Mode=OneWay}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Summary, Mode=OneWay}" />
                 <TextBlock VerticalAlignment="Center"
                            FontWeight="Bold"
                            Foreground="DarkGray"
                            Text="Work In Progress"
-                           Visibility="{Binding Summry,
+                           Visibility="{Binding Summary,
                                                 Mode=OneWay,
-                                                Converter={StaticResource WipVisiblity}}" />
+                                                Converter={StaticResource WipVisibility}}" />
             </Grid>
         </DataTemplate>
         <!--  EndRegion  -->
@@ -104,7 +104,7 @@
         <DataTemplate x:Key="DoneCommitListCommentItemTemplate" DataType="{x:Type features:DoneCommitVm}">
             <TextBlock Margin="-5,0"
                        VerticalAlignment="Center"
-                       Text="{Binding Summry,
+                       Text="{Binding Summary,
                                       Mode=OneTime}"
                        TextTrimming="CharacterEllipsis">
                 <TextBlock.ToolTip>

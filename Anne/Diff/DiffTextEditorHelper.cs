@@ -37,10 +37,10 @@ namespace Anne.Diff
 
                 switch (diffLine.LineType)
                 {
-                    case DiffLine.LineTypes.ChunckTag:
+                    case DiffLine.LineTypes.ChunkTag:
                         brush = isLight
-                            ? Constants.LightChunckTagBackground
-                            : Constants.ChunckTagBackground;
+                            ? Constants.LightChunkTagBackground
+                            : Constants.ChunkTagBackground;
                         break;
 
                     case DiffLine.LineTypes.Add:

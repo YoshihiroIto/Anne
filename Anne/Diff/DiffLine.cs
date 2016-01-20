@@ -10,7 +10,7 @@ namespace Anne.Diff
             Add = LineChangeType.Add,
             Delete = LineChangeType.Delete,
             //
-            ChunckTag = -1
+            ChunkTag = -1
         }
 
         public class ContentDiff

@@ -6,7 +6,7 @@ namespace Anne.Foundation
     {
         public static readonly Pen FramePen = new Pen(Brushes.LightGray, 0.5);
 
-        public static readonly SolidColorBrush ChunckTagBackground =
+        public static readonly SolidColorBrush ChunkTagBackground =
             new SolidColorBrush(Color.FromRgb(0xF0, 0xF0, 0xFF));
 
         public static readonly SolidColorBrush AddBackground =
@@ -15,7 +15,7 @@ namespace Anne.Foundation
         public static readonly SolidColorBrush RemoveBackground =
             new SolidColorBrush(Color.FromRgb(0xFF, 0xDD, 0xDD));
 
-        public static readonly SolidColorBrush LightChunckTagBackground =
+        public static readonly SolidColorBrush LightChunkTagBackground =
             new SolidColorBrush(Color.FromRgb(0xF8, 0xF8, 0xFF));
 
         public static readonly SolidColorBrush LightAddBackground =
@@ -34,11 +34,11 @@ namespace Anne.Foundation
         {
             FramePen.Freeze();
 
-            ChunckTagBackground.Freeze();
+            ChunkTagBackground.Freeze();
             AddBackground.Freeze();
             RemoveBackground.Freeze();
 
-            LightChunckTagBackground.Freeze();
+            LightChunkTagBackground.Freeze();
             LightAddBackground.Freeze();
             LightRemoveBackground.Freeze();
 

@@ -20,7 +20,7 @@ namespace Anne.Features
 {
     public class RepositoryVm : ViewModelBase
     {
-        public ReadOnlyReactiveCollection<string> JobSummries { get; private set; }
+        public ReadOnlyReactiveCollection<string> JobSummaries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
         public ReactiveProperty<ReadOnlyReactiveCollection<ICommitVm>> Commits { get; }
@@ -61,7 +61,7 @@ namespace Anne.Features
             _model = model;
             _parent = parent;
 
-            JobSummries = _model.JobSummries
+            JobSummaries = _model.JobSummaries
                 .ToReadOnlyReactiveCollection()
                 .AddTo(MultipleDisposable);
 
@@ -132,7 +132,7 @@ namespace Anne.Features
             Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
                 .Select(x => x.EventArgs)
                 .ObserveOnUIDispatcher()
-                .Subscribe(e => ShowDialog(e.Exception, e.Summry))
+                .Subscribe(e => ShowDialog(e.Exception, e.Summary))
                 .AddTo(MultipleDisposable);
 
             InitializeCommands();
@@ -151,11 +151,11 @@ namespace Anne.Features
             return _model.GetCommitLabels(commitSha);
         }
 
-        private void ShowDialog(Exception e, string summry)
+        private void ShowDialog(Exception e, string summary)
         {
             Debug.Assert(e != null);
 
-            var message = string.IsNullOrEmpty(summry) ? e.Message : $"{summry}\n--\n{e.Message}";
+            var message = string.IsNullOrEmpty(summary) ? e.Message : $"{summary}\n--\n{e.Message}";
 
             Messenger.Raise(new InformationMessage(message, "Information", "Info"));
         }
