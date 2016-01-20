@@ -90,7 +90,7 @@
     <ListView Grid.Row="2"
               HorizontalContentAlignment="Stretch"
               AlternationCount="2"
-              BorderBrush="LightGray"
+              BorderBrush="{StaticResource BorderBrushKey}"
               Grid.IsSharedSizeScope="True"
               ItemsSource="{Binding WipFiles.Value,
                                     Mode=OneWay}"
@@ -103,7 +103,7 @@
               behaviours:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedWipFiles}">
         <ListView.Template>
             <ControlTemplate TargetType="ItemsControl">
-                <Border BorderBrush="LightGray"
+                <Border BorderBrush="{StaticResource BorderBrushKey}" 
                         BorderThickness="1"
                         SnapsToDevicePixels="True">
                     <ScrollViewer Background="White" HorizontalScrollBarVisibility="Disabled">
@@ -192,7 +192,7 @@
 
     <Border Grid.Row="4"
             Background="White"
-            BorderBrush="LightGray"
+            BorderBrush="{StaticResource BorderBrushKey}" 
             BorderThickness="1,0,1,1"
             SnapsToDevicePixels="True">
         <diff:SingleOrMultiDiffFileView DataContext="{Binding DiffFileViewSource, Mode=OneWay}" />

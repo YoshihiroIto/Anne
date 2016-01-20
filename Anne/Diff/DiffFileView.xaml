@@ -75,7 +75,7 @@
 
     <Line DockPanel.Dock="Bottom"
           SnapsToDevicePixels="True"
-          Stroke="LightGray"
+          Stroke="{StaticResource BorderBrushKey}"
           X1="0"
           X2="{Binding ElementName=DiffTextEditor,
                        Path=ActualWidth,

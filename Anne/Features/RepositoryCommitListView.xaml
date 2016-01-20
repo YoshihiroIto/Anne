@@ -117,7 +117,7 @@
 
     <ListView.Template>
         <ControlTemplate TargetType="ItemsControl">
-            <Border BorderBrush="LightGray"
+            <Border BorderBrush="{StaticResource BorderBrushKey}"
                     BorderThickness="1"
                     SnapsToDevicePixels="True">
                 <DockPanel>
