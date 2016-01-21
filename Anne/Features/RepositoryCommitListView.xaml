@@ -49,8 +49,12 @@
         <DataTemplate x:Key="WipCommitListGraphItemTemplate" DataType="{x:Type features:WipCommitVm}" />
         <DataTemplate x:Key="WipCommitListCommentItemTemplate" DataType="{x:Type features:WipCommitVm}">
             <Grid Margin="-5,0">
-                <TextBlock VerticalAlignment="Center" Text="{Binding Summary, Mode=OneWay}" />
-                <TextBlock VerticalAlignment="Center"
+                <TextBlock Height="16"
+                           VerticalAlignment="Center"
+                           Text="{Binding Summary,
+                                          Mode=OneWay}" />
+                <TextBlock Height="16"
+                           VerticalAlignment="Center"
                            FontWeight="Bold"
                            Foreground="DarkGray"
                            Text="Work In Progress"
@@ -63,7 +67,8 @@
 
         <!--  Region Done  -->
         <DataTemplate x:Key="DoneCommitListLabelItemTemplate" DataType="{x:Type features:DoneCommitVm}">
-            <ItemsControl Margin="-5,0"
+            <ItemsControl Height="16"
+                          Margin="-5,0"
                           VerticalAlignment="Center"
                           Focusable="False"
                           IsTabStop="False"
@@ -86,9 +91,11 @@
                                 <controls:CommitLabelMark Width="12"
                                                           Height="12"
                                                           Margin="1"
+                                                          VerticalAlignment="Center"
                                                           Type="{Binding Type,
                                                                          Mode=OneWay}" />
                                 <TextBlock Margin="0,0,3,0"
+                                           VerticalAlignment="Center"
                                            FontSize="9"
                                            Text="{Binding Name,
                                                           Mode=OneWay}" />
