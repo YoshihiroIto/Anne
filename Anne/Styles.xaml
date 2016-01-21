@@ -69,7 +69,7 @@
                         <Border Background="{StaticResource SemiactiveBackgroundBrushKey}"
                                 BorderBrush="{StaticResource SemiactiveBorderBrushKey}"
                                 BorderThickness="0,0,0,1"
-                                Padding="2,2,2,3"
+                                Padding="2,1.5,2,1.5"
                                 SnapsToDevicePixels="True">
                             <ContentPresenter Name="HeaderContent"
                                               Margin="0,0,0,1"
