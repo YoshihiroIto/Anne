@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
-using System.IO;
-using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Text;
+using LZ4;
 
 namespace Anne.Foundation
 {
@@ -28,37 +27,21 @@ namespace Anne.Foundation
         }
 
         private byte[] _data;
+        private int _orgSize;
 
-        private static string Decompress(byte[] destination)
+        private string Decompress(byte[] data)
         {
-            using (var ms = new MemoryStream(destination))
-            using (var decomp = new DeflateStream(ms, CompressionMode.Decompress))
-            {
-                var sb = new StringBuilder();
-                var buf = new byte[4096];
-                int length;
+            var buf = LZ4Codec.Decode(data, 0, data.Length, _orgSize);
 
-                while ((length = decomp.Read(buf, 0, buf.Length)) > 0)
-                {
-                    sb.Append(Encoding.Unicode.GetString(buf, 0, length));
-                }
-
-                return sb.ToString();
-            }
+            return Encoding.Unicode.GetString(buf, 0, buf.Length);
         }
 
-        private static byte[] Compress(string text)
+        private byte[] Compress(string text)
         {
-            using (var ms = new MemoryStream())
-            using (var comp = new DeflateStream(ms, CompressionMode.Compress))
-            {
-                var source = Encoding.Unicode.GetBytes(text);
+            var source = Encoding.Unicode.GetBytes(text);
+            _orgSize = source.Length;
 
-                comp.Write(source, 0, source.Length);
-                comp.Close();
-
-                return ms.ToArray();
-            }
+            return LZ4Codec.Encode(source, 0, source.Length);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
