@@ -4,6 +4,7 @@
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:diff="clr-namespace:Anne.Diff"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               BorderBrush="{StaticResource BorderBrushKey}"
               ItemsSource="{Binding Mode=OneWay}"
               VirtualizingPanel.IsVirtualizing="True"
@@ -14,7 +15,11 @@
               mc:Ignorable="d">
     <ItemsControl.ItemTemplate>
         <DataTemplate>
-            <diff:DiffFileView />
+            <diff:DiffFileView>
+                <i:Interaction.Behaviors>
+                    <diff:DiffFileViewListWheelScrollKillBehavior />
+                </i:Interaction.Behaviors>
+            </diff:DiffFileView>
         </DataTemplate>
     </ItemsControl.ItemTemplate>
 
