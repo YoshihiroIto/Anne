@@ -56,14 +56,14 @@ namespace Anne.Model.Git
             Path = path;
             Internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
 
-            // ファイルステータス
-            FileStatus = new FileStatus(this)
-                .AddTo(MultipleDisposable);
-
             // ジョブキュー
             _jobQueue.AddTo(MultipleDisposable);
             WorkingJob = _jobQueue.WorkingJob
                 .ToReadOnlyReactiveProperty(eventScheduler: Scheduler.Immediate)
+                .AddTo(MultipleDisposable);
+
+            // ファイルステータス
+            FileStatus = new FileStatus(this)
                 .AddTo(MultipleDisposable);
 
             Observable.FromEventPattern<ExceptionEventArgs>(_jobQueue, nameof(JobQueue.JobExecutingException))
