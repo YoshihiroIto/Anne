@@ -48,6 +48,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Externals\ListViewLayout\Itenso.Windows.Controls.ListViewLayout.dll</HintPath>
     </Reference>
+    <Reference Include="Jil, Version=2.12.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jil.2.12.1\lib\net45\Jil.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MetroRadiance, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\MetroRadiance.dll</HintPath>
       <Private>True</Private>
@@ -64,10 +68,6 @@
       <HintPath>..\packages\MetroRadiance.Chrome.1.1.0.2\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ParseDiff, Version=1.0.15322.1101, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ParseDiff.1.0.15322.1101\lib\net40\ParseDiff.dll</HintPath>
       <Private>True</Private>
@@ -82,6 +82,10 @@
     </Reference>
     <Reference Include="ReactiveProperty.NET46, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ReactiveProperty.2.4.1\lib\net46\ReactiveProperty.NET46.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sigil, Version=4.5.0.0, Culture=neutral, PublicKeyToken=2d06c3494341c8ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sigil.4.5.0\lib\net45\Sigil.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StatefulModel, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -138,6 +142,7 @@
     <Compile Include="Diff\DiffFileView.xaml.cs">
       <DependentUpon>DiffFileView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Diff\DiffFileViewListWheelScrollKillBehavior.cs" />
     <Compile Include="Diff\DiffLinesCountView.xaml.cs">
       <DependentUpon>DiffLinesCountView.xaml</DependentUpon>
     </Compile>

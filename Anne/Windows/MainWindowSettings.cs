@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Reflection;
+using Jil;
 using MetroRadiance.Controls;
 using MetroRadiance.Core.Win32;
-using Newtonsoft.Json;
 
 namespace Anne.Windows
 {
@@ -28,7 +28,7 @@ namespace Anne.Windows
             {
                 var json = File.ReadAllText(ConfigFilePath);
 
-                var config = JsonConvert.DeserializeObject<MainWindowSettings>(json);
+                var config = JSON.Deserialize<MainWindowSettings>(json);
                 Placement = config.Placement;
                 Columns = config.Columns;
             }
@@ -40,7 +40,7 @@ namespace Anne.Windows
 
         public void Save()
         {
-            File.WriteAllText(ConfigFilePath, JsonConvert.SerializeObject(this, Formatting.Indented));
+            File.WriteAllText(ConfigFilePath, JSON.Serialize(this, Options.PrettyPrint));
         }
     }
 }

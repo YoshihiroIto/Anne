@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
+using Jil;
 
 namespace Anne.Model
 {
@@ -15,7 +15,7 @@ namespace Anne.Model
             try
             {
                 var json = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<AppConfig>(json);
+                return JSON.Deserialize<AppConfig>(json);
             }
             catch
             {
@@ -25,7 +25,7 @@ namespace Anne.Model
 
         public static void SaveToFile(string filePath, AppConfig config)
         {
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(config, Formatting.Indented));
+            File.WriteAllText(filePath, JSON.Serialize(config, Options.PrettyPrint));
         }
     }
 }
