@@ -10,11 +10,6 @@
       d:DesignHeight="600"
       d:DesignWidth="300"
       mc:Ignorable="d">
-    <!-- <Grid.Resources> -->
-    <!--  <converters:BoolToVisibilityConverter x:Key="VisibilityConverter"  -->
-    <!--  False="Visible"  -->
-    <!--  True="Collapsed" />  -->
-    <!-- </Grid.Resources> -->
 
     <Grid.RowDefinitions>
         <RowDefinition Height="2*" />
@@ -133,7 +128,6 @@
     <ListView Grid.Row="2"
               AlternationCount="2"
               BorderBrush="{StaticResource BorderBrushKey}"
-              Grid.IsSharedSizeScope="True"
               ItemsSource="{Binding ChangeFiles,
                                     Mode=OneWay}"
               ScrollViewer.CanContentScroll="True"
@@ -163,7 +157,6 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" SharedSizeGroup="DiffLinesCount" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
@@ -174,13 +167,7 @@
                                              Status="{Binding Status.Value,
                                                               Mode=OneTime}" />
 
-                    <!--  <diff:DiffLinesCountView Grid.Column="1"  -->
-                    <!--  Margin="4,0,0,0"  -->
-                    <!--  Visibility="{Binding IsBinary.Value,  -->
-                    <!--  Mode=OneTime,  -->
-                    <!--  Converter={StaticResource VisibilityConverter}}" />  -->
-
-                    <Grid Grid.Column="2" Margin="4,0,0,0">
+                    <Grid Grid.Column="1" Margin="4,0,0,0">
                         <controls:PathTextBlock PathText="{Binding Path.Value, Mode=OneTime}" />
                     </Grid>
                     <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
