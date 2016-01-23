@@ -24,5 +24,14 @@ namespace Anne.Features
 
             vm?.TwoPaneLayout.UpdateLayout(DiffGrid.ActualWidth, DiffGrid.ActualHeight);
         }
+
+        private void DiffGrid_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            // todo.レイアウト更新が走ってくれないためこのイベントでも処理する。要確認
+
+            var vm = DataContext as WipCommitVm;
+
+            vm?.TwoPaneLayout.UpdateLayout(DiffGrid.ActualWidth, DiffGrid.ActualHeight);
+        }
     }
 }

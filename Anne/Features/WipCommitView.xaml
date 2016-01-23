@@ -90,7 +90,7 @@
           externals:SizeObserver.ObservedHeight="{Binding TwoPaneLayout.BasePaneHeight.Value,
                                                           Mode=OneWayToSource}"
           externals:SizeObserver.ObservedWidth="{Binding TwoPaneLayout.BasePaneWidth.Value,
-                                                         Mode=OneWayToSource}">
+                                                         Mode=OneWayToSource}" SizeChanged="DiffGrid_SizeChanged">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
