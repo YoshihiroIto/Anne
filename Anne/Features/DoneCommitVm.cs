@@ -152,6 +152,18 @@ namespace Anne.Features
 
         public ObservableCollection<CommitLabelVm> CommitLabels { get; }
 
+        private TwoPaneLayoutVm _twoPaneLayout;
+
+        public TwoPaneLayoutVm TwoPaneLayout
+        {
+            get
+            {
+                if (_twoPaneLayout != null)
+                    return _twoPaneLayout;
+                return _twoPaneLayout = new TwoPaneLayoutVm().AddTo(MultipleDisposable);
+            }
+        }
+
         private ManualResetEventSlim _disposeResetEvent;
 
         public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model)

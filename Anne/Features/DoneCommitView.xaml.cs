@@ -9,5 +9,12 @@
         {
             InitializeComponent();
         }
+
+        private void Grid_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            var vm = e.NewValue as DoneCommitVm;
+
+            vm?.TwoPaneLayout.UpdateLayout(DiffGrid.ActualWidth, DiffGrid.ActualHeight);
+        }
     }
 }

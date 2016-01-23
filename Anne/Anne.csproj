@@ -156,6 +156,7 @@
     <Compile Include="Features\RepositoryCommitListView.xaml.cs">
       <DependentUpon>RepositoryCommitListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Features\TwoPaneLayoutVm.cs" />
     <Compile Include="Features\WipFileVm.cs" />
     <Compile Include="Diff\DiffLine.cs" />
     <Compile Include="Features\DoneCommitVm.cs" />
