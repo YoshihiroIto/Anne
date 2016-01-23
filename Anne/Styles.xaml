@@ -1,6 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="CurrentBackgroundBrush" Color="#30FF8B8B" />
-    <SolidColorBrush x:Key="CurrentBorderBrush" Color="#FFFF8B8B" />
+    <SolidColorBrush x:Key="CurrentBackgroundBrush" Color="#5FFF2050" />
+    <SolidColorBrush x:Key="CurrentBorderBrush" Color="#FFFF2050" />
+    <SolidColorBrush x:Key="SelectionBrush" Color="#FFFF2050" />
+
+    <Pen x:Key="CurrentBackgroundPen" Brush="{StaticResource CurrentBackgroundBrush}" />
+    <Pen x:Key="CurrentBorderPen" Brush="{StaticResource CurrentBorderBrush}" />
+
 
     <Style TargetType="{x:Type ScrollViewer}">
         <Setter Property="OverridesDefaultStyle" Value="True" />

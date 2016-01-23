@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Anne.Foundation.Controls
 {
@@ -22,6 +23,14 @@ namespace Anne.Foundation.Controls
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public TextEditor()
+        {
+            TextArea.SelectionBrush = Application.Current.FindResource("CurrentBackgroundBrush") as Brush;
+            TextArea.SelectionBorder = Application.Current.FindResource("CurrentBorderPen") as Pen;
+            TextArea.SelectionCornerRadius = 0;
+            TextArea.SelectionForeground = Brushes.Black;
+        }
 
         protected override void OnTextChanged(EventArgs e)
         {

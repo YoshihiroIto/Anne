@@ -56,7 +56,7 @@
                 <TextBlock Height="16"
                            VerticalAlignment="Center"
                            FontWeight="Bold"
-                           Foreground="DarkGray"
+                           Foreground="DimGray"
                            Text="Work In Progress"
                            Visibility="{Binding Summary,
                                                 Mode=OneWay,

@@ -26,6 +26,7 @@
                     <Setter Property="Margin" Value="8,0,0,0" />
                 </Style>
                 <Style x:Key="CommitMetaValueStyle" TargetType="{x:Type TextBox}">
+                    <Setter Property="SelectionBrush" Value="{StaticResource SelectionBrush}" />
                     <Setter Property="Margin" Value="8,0,0,0" />
                     <Setter Property="IsReadOnly" Value="True" />
                     <Setter Property="BorderBrush" Value="{x:Null}" />
@@ -113,6 +114,7 @@
                                     HorizontalScrollBarVisibility="Hidden"
                                     IsReadOnly="True"
                                     IsTabStop="False"
+                                    SelectionBrush="{StaticResource SelectionBrush}"
                                     Source="{Binding TrimmedMessage,
                                                      Mode=OneTime}"
                                     VerticalScrollBarVisibility="Auto" />
