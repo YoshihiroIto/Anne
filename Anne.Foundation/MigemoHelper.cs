@@ -46,14 +46,23 @@ namespace Anne.Foundation
             _internal?.Dispose();
         }
 
+        private readonly Regex _emptyRegex = new Regex(string.Empty);
+
         public Regex MakeRegex(string query)
         {
             query = query.Trim();
 
             if (string.IsNullOrEmpty(query))
-                return new Regex(string.Empty);
+                return _emptyRegex;
 
-            return Internal.GetRegex(query);
+            try
+            {
+                return Internal.GetRegex(query);
+            }
+            catch
+            {
+                return _emptyRegex;
+            }
         }
 
         private void InitializeDll()
