@@ -72,7 +72,7 @@
                                     Width="200"
                                     Margin="0,2,2,0"
                                     VerticalAlignment="Top"
-                                    Prompt="Search"
+                                    Prompt="Search(Alt+L)"
                                     Text="{Binding SearchWord.Value,
                                                    UpdateSourceTrigger=PropertyChanged}"
                                     WindowChrome.IsHitTestVisibleInChrome="True" />
