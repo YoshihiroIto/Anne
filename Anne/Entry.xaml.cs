@@ -25,6 +25,7 @@ namespace Anne
                 e.Run();
 
                 Model.App.Destory();
+                MigemoHelper.Instance.Destory();
             }
             DisposableChecker.End();
         }
@@ -36,6 +37,7 @@ namespace Anne
             Livet.DispatcherHelper.UIDispatcher = Dispatcher;
             Reactive.Bindings.UIDispatcherScheduler.Initialize();
 
+            MigemoHelper.Instance.Initialize();
             Model.App.Initialize();
         }
     }

@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Linq;
 using Anne.Features;
+using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Anne.Model;
 using Reactive.Bindings;
@@ -35,6 +38,14 @@ namespace Anne.Windows
 
             SearchWord = new ReactiveProperty<string>(string.Empty)
                 .AddTo(MultipleDisposable);
+
+            SearchWord
+                .Throttle(TimeSpan.FromMilliseconds(200))
+                .Subscribe(x =>
+                {
+                    var regex = MigemoHelper.Instance.MakeRegex(x);
+                    Debug.WriteLine(regex);
+                }).AddTo(MultipleDisposable);
 
             SelectedRepository.Value = Repositories.FirstOrDefault();
 

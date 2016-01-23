@@ -118,6 +118,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Externals\DiffMatchPatch.cs" />
     <Compile Include="Controls\PathTextBlock.cs" />
+    <Compile Include="Externals\Migemo.cs" />
     <Compile Include="Externals\SelectedItemsBinding\IListItemConverter.cs" />
     <Compile Include="Externals\SelectedItemsBinding\MultiSelectorBehaviours.cs" />
     <Compile Include="Externals\SelectedItemsBinding\TwoListSynchronizer.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="GravatarLoader.cs" />
     <Compile Include="JobQueue.cs" />
     <Compile Include="ListExtensions.cs" />
+    <Compile Include="MigemoHelper.cs" />
     <Compile Include="MultipleDisposableExtensions.cs" />
     <Compile Include="Mvvm\ModelBase.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
@@ -136,6 +138,21 @@
     <Compile Include="TwoPaneLayoutVm.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cmigemo\dict\han2zen.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="cmigemo\dict\hira2kata.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="cmigemo\dict\migemo-dict">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="cmigemo\dict\roma2hira.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="cmigemo\dict\zen2han.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +182,14 @@
       <Project>{a6fefddc-d4d9-4bb9-adee-8afc6f008e53}</Project>
       <Name>Livet2</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cmigemo\win32\migemo.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="cmigemo\win64\migemo.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
