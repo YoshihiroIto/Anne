@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
@@ -24,7 +25,7 @@ namespace Anne.Features
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
         public ReactiveProperty<ReadOnlyReactiveCollection<ICommitVm>> Commits { get; }
-        
+
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
 
@@ -33,6 +34,8 @@ namespace Anne.Features
 
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
+
+        public ReactiveProperty<Regex> FilterRegex { get; }
 
         public ReactiveProperty<RepositoryOutlinerVm> Outliner { get; }
 
@@ -91,11 +94,14 @@ namespace Anne.Features
             FileStatus = new FileStatusVm(model)
                 .AddTo(MultipleDisposable);
 
+            FilterRegex = new ReactiveProperty<Regex>(new Regex(string.Empty))
+                .AddTo(MultipleDisposable);
+
             // コミット
             ReadOnlyReactiveCollection<ICommitVm> oldCommits = null;
 
             var observeCommits = _model.ObserveProperty(x => x.Commits);
-            Commits = FileStatus.WipFiles.CombineLatest(observeCommits, (x, y) => 0)
+            Commits = FileStatus.WipFiles.CombineLatest(observeCommits, FilterRegex, (x, y, z) => 0)
                 .Do(_ => oldCommits = Commits?.Value)
                 .Select(_ =>
                 {
@@ -104,7 +110,10 @@ namespace Anne.Features
                         if (FileStatus.WipFiles.Value.Any())
                             allCommits.Add(new WipCommitVm(this));
 
-                        _model.Commits.Select(y => (ICommitVm)new DoneCommitVm(this, y)).ForEach(y => allCommits.Add(y));
+                        _model.Commits
+                            .Where(y => FilterRegex.Value.IsMatch(y.Message))
+                            .Select(y => (ICommitVm) new DoneCommitVm(this, y))
+                            .ForEach(y => allCommits.Add(y));
                     }
 
                     return allCommits.ToReadOnlyReactiveCollection();
@@ -113,7 +122,7 @@ namespace Anne.Features
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            MultipleDisposable.Add(() =>  Commits?.Value?.Dispose());
+            MultipleDisposable.Add(() => Commits?.Value?.Dispose());
 
             // 選択アイテム
             SelectedLocalBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
@@ -144,7 +153,9 @@ namespace Anne.Features
         public void Revert(string commitSha) => _model.Revert(commitSha);
         public void SwitchBranch(string branchName) => _model.SwitchBranch(branchName);
         public void CheckoutBranch(string branchName) => _model.CheckoutBranch(branchName);
-        public void RemoveBranches(IEnumerable<string> branchCanonicalNames) => _model.RemoveBranches(branchCanonicalNames);
+
+        public void RemoveBranches(IEnumerable<string> branchCanonicalNames)
+            => _model.RemoveBranches(branchCanonicalNames);
 
         public IEnumerable<CommitLabel> GetCommitLabels(string commitSha)
         {

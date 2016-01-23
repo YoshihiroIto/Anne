@@ -76,7 +76,7 @@ namespace Anne.Windows
             switch (key)
             {
                 case Key.L:
-                    SearchBox.Focus();
+                    FilterBox.Focus();
                     break;
             }
         }

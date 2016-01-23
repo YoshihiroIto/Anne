@@ -57,7 +57,8 @@ namespace Anne.Foundation
 
             try
             {
-                return Internal.GetRegex(query);
+                var pattern = Internal.Query(query);
+                return new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);  
             }
             catch
             {

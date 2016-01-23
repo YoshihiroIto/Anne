@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using Anne.Features;
@@ -20,7 +19,7 @@ namespace Anne.Windows
 
         public ReadOnlyReactiveProperty<string> Title { get; }
 
-        public ReactiveProperty<string> SearchWord { get; }
+        public ReactiveProperty<string> FilterWord { get; }
 
         public MainWindowVm()
         {
@@ -36,15 +35,15 @@ namespace Anne.Windows
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            SearchWord = new ReactiveProperty<string>(string.Empty)
+            FilterWord = new ReactiveProperty<string>(string.Empty)
                 .AddTo(MultipleDisposable);
 
-            SearchWord
-                .Throttle(TimeSpan.FromMilliseconds(200))
+            FilterWord
+                .Throttle(TimeSpan.FromMilliseconds(300))
                 .Subscribe(x =>
                 {
                     var regex = MigemoHelper.Instance.MakeRegex(x);
-                    Debug.WriteLine(regex);
+                    Repositories.ForEach(r => r.FilterRegex.Value = regex);
                 }).AddTo(MultipleDisposable);
 
             SelectedRepository.Value = Repositories.FirstOrDefault();
