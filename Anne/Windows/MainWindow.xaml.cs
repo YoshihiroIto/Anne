@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 using MetroRadiance.Core.Win32;
 
@@ -61,6 +62,23 @@ namespace Anne.Windows
             setting.Placement = placement;
             setting.Columns = RepositoryView.Columns.ColumnDefinitions.Select(x => x.ActualWidth).ToArray();
             setting.Save();
+        }
+
+        private void MetroWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.IsDown == false)
+                return;
+
+            if ((Keyboard.Modifiers & ModifierKeys.Alt) == 0)
+                return;
+
+            var key = e.Key == Key.System ? e.SystemKey : e.Key;
+            switch (key)
+            {
+                case Key.L:
+                    SearchBox.Focus();
+                    break;
+            }
         }
     }
 }

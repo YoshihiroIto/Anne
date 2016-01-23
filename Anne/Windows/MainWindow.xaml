@@ -14,6 +14,7 @@
                                       Mode=OneWay}"
                       Width="1700"
                       Height="900"
+                      PreviewKeyDown="MetroWindow_PreviewKeyDown"
                       ResizeMode="CanResize"
                       ToolTipService.InitialShowDelay="50"
                       WindowStartupLocation="CenterScreen"
@@ -66,12 +67,14 @@
                    IsHitTestVisible="False"
                    Padding="0" />
 
-            <controls:PromptTextBox Grid.Column="2"
+            <controls:PromptTextBox x:Name="SearchBox"
+                                    Grid.Column="2"
                                     Width="200"
                                     Margin="0,2,2,0"
                                     VerticalAlignment="Top"
                                     Prompt="Search"
-                                    Text="{Binding SearchWord.Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding SearchWord.Value,
+                                                   UpdateSourceTrigger=PropertyChanged}"
                                     WindowChrome.IsHitTestVisibleInChrome="True" />
 
             <controls:SystemButtons Grid.Column="3"
