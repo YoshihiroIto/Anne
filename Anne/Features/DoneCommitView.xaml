@@ -8,9 +8,10 @@
       xmlns:externals="clr-namespace:Anne.Foundation.Externals;assembly=Anne.Foundation"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:wpfSpark="clr-namespace:WPFSpark;assembly=WPFSpark"
+      DataContextChanged="Grid_DataContextChanged"
       d:DesignHeight="600"
       d:DesignWidth="300"
-      mc:Ignorable="d" DataContextChanged="Grid_DataContextChanged">
+      mc:Ignorable="d">
     <Grid.RowDefinitions>
         <RowDefinition Height="1*" />
         <RowDefinition Height="Auto" />
@@ -122,8 +123,8 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Center" />
 
-    <Grid Grid.Row="2" 
-    x:Name="DiffGrid"
+    <Grid x:Name="DiffGrid"
+          Grid.Row="2"
           externals:SizeObserver.Observe="True"
           externals:SizeObserver.ObservedHeight="{Binding TwoPaneLayout.BasePaneHeight.Value,
                                                           Mode=OneWayToSource}"
@@ -161,7 +162,6 @@
                     <Setter Property="Grid.ColumnSpan" Value="{Binding TwoPaneLayout.FirstColumnSpan.Value, Mode=OneWay}" />
                 </Style>
             </ListView.Style>
-
             <ListView.Template>
                 <ControlTemplate TargetType="ItemsControl">
                     <Border BorderBrush="{StaticResource BorderBrushKey}"

@@ -9,8 +9,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+      xmlns:externals="clr-namespace:Anne.Foundation.Externals;assembly=Anne.Foundation"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      DataContextChanged="Grid_DataContextChanged"
       d:DesignHeight="600"
       d:DesignWidth="300"
       mc:Ignorable="d">
@@ -21,9 +23,7 @@
     </Grid.Resources>
 
     <Grid.RowDefinitions>
-        <RowDefinition Height="2*" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="3*" />
+        <RowDefinition Height="1*" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="3*" />
     </Grid.RowDefinitions>
@@ -84,105 +84,153 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Center" />
 
-    <ListView Grid.Row="2"
-              HorizontalContentAlignment="Stretch"
-              AlternationCount="2"
-              BorderBrush="{StaticResource BorderBrushKey}"
-              ItemsSource="{Binding WipFiles.Value,
-                                    Mode=OneWay}"
-              ScrollViewer.CanContentScroll="True"
-              SelectionMode="Extended"
-              TabIndex="4"
-              VirtualizingPanel.IsVirtualizing="True"
-              VirtualizingPanel.ScrollUnit="Pixel"
-              VirtualizingPanel.VirtualizationMode="Recycling"
-              behaviours:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedWipFiles}">
-        <ListView.Template>
-            <ControlTemplate TargetType="ItemsControl">
-                <Border BorderBrush="{StaticResource BorderBrushKey}" 
-                        BorderThickness="1"
-                        SnapsToDevicePixels="True">
-                    <ScrollViewer Background="White" HorizontalScrollBarVisibility="Disabled">
-                        <ItemsPresenter />
-                    </ScrollViewer>
-                </Border>
-            </ControlTemplate>
-        </ListView.Template>
-        <ListView.ItemsPanel>
-            <ItemsPanelTemplate>
-                <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
-            </ItemsPanelTemplate>
-        </ListView.ItemsPanel>
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <Grid Height="20" Background="Transparent">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+    <Grid x:Name="DiffGrid"
+          Grid.Row="2"
+          externals:SizeObserver.Observe="True"
+          externals:SizeObserver.ObservedHeight="{Binding TwoPaneLayout.BasePaneHeight.Value,
+                                                          Mode=OneWayToSource}"
+          externals:SizeObserver.ObservedWidth="{Binding TwoPaneLayout.BasePaneWidth.Value,
+                                                         Mode=OneWayToSource}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-                    <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                    <CheckBox Grid.Column="0" IsChecked="{Binding IsInStaging.Value}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-                    <controls1:FileStatusMark Grid.Column="1"
-                                              Width="14"
-                                              Height="14"
-                                              Margin="4,0,0,0"
-                                              VerticalAlignment="Center"
-                                              Status="{Binding Status.Value,
-                                                               Mode=OneWay}" />
+        <ListView HorizontalContentAlignment="Stretch"
+                  AlternationCount="2"
+                  BorderBrush="{StaticResource BorderBrushKey}"
+                  ItemsSource="{Binding WipFiles.Value,
+                                        Mode=OneWay}"
+                  ScrollViewer.CanContentScroll="True"
+                  SelectionMode="Extended"
+                  TabIndex="4"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.ScrollUnit="Pixel"
+                  VirtualizingPanel.VirtualizationMode="Recycling"
+                  behaviours:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedWipFiles}">
+            <ListView.Style>
+                <Style TargetType="{x:Type ListView}">
+                    <Setter Property="Grid.Row" Value="{Binding TwoPaneLayout.FirstRow.Value, Mode=OneWay}" />
+                    <Setter Property="Grid.Column" Value="{Binding TwoPaneLayout.FirstColumn.Value, Mode=OneWay}" />
+                    <Setter Property="Grid.RowSpan" Value="{Binding TwoPaneLayout.FirstRowSpan.Value, Mode=OneWay}" />
+                    <Setter Property="Grid.ColumnSpan" Value="{Binding TwoPaneLayout.FirstColumnSpan.Value, Mode=OneWay}" />
+                </Style>
+            </ListView.Style>
+            <ListView.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <Border BorderBrush="{StaticResource BorderBrushKey}"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="True">
+                        <ScrollViewer Background="White" HorizontalScrollBarVisibility="Disabled">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </ListView.Template>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel CanVerticallyScroll="True" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="20" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Column="2" Margin="4,0,0,0">
-                        <controls1:PathTextBlock VerticalAlignment="Center" PathText="{Binding Path.Value, Mode=OneWay}" />
+                        <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
+                        <CheckBox Grid.Column="0" IsChecked="{Binding IsInStaging.Value}" />
+
+                        <controls1:FileStatusMark Grid.Column="1"
+                                                  Width="14"
+                                                  Height="14"
+                                                  Margin="4,0,0,0"
+                                                  VerticalAlignment="Center"
+                                                  Status="{Binding Status.Value,
+                                                                   Mode=OneWay}" />
+
+                        <Grid Grid.Column="2" Margin="4,0,0,0">
+                            <controls1:PathTextBlock VerticalAlignment="Center" PathText="{Binding Path.Value, Mode=OneWay}" />
+                        </Grid>
+
+                        <Button Grid.Column="3"
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                Command="{Binding DiscardChangesCommand,
+                                                  Mode=OneTime}"
+                                Content="Discard"
+                                Visibility="{Binding DataContext.IsSelected.Value,
+                                                     Converter={StaticResource DiscardButtonVisibility},
+                                                     RelativeSource={RelativeSource FindAncestor,
+                                                                                    AncestorType={x:Type Grid}}}" />
+                        <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
                     </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
 
-                    <Button Grid.Column="3"
-                            Margin="4,0,0,0"
-                            VerticalAlignment="Center"
-                            Command="{Binding DiscardChangesCommand,
-                                              Mode=OneTime}"
-                            Content="Discard"
-                            Visibility="{Binding DataContext.IsSelected.Value,
-                                                 Converter={StaticResource DiscardButtonVisibility},
-                                                 RelativeSource={RelativeSource FindAncestor,
-                                                                                AncestorType={x:Type Grid}}}" />
-                    <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
-                </Grid>
-            </DataTemplate>
-        </ListView.ItemTemplate>
+            <i:Interaction.Triggers>
+                <ei:KeyTrigger Key="Space">
+                    <behaviors:LivetCallMethodAction MethodName="ToggleStaging" MethodTarget="{Binding}" />
+                </ei:KeyTrigger>
+            </i:Interaction.Triggers>
 
-        <i:Interaction.Triggers>
-            <ei:KeyTrigger Key="Space">
-                <behaviors:LivetCallMethodAction MethodName="ToggleStaging" MethodTarget="{Binding}" />
-            </ei:KeyTrigger>
-        </i:Interaction.Triggers>
+            <ListView.ItemContainerStyle>
+                <Style BasedOn="{StaticResource FlatListViewItemStyle}" TargetType="ListViewItem">
+                    <EventSetter Event="KeyDown" Handler="ListViewItem_KeyDown" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected.Value}" />
+                </Style>
+            </ListView.ItemContainerStyle>
 
-        <ListView.ItemContainerStyle>
-            <Style BasedOn="{StaticResource FlatListViewItemStyle}" TargetType="ListViewItem">
-                <EventSetter Event="KeyDown" Handler="ListViewItem_KeyDown" />
-                <Setter Property="IsSelected" Value="{Binding IsSelected.Value}" />
-            </Style>
-        </ListView.ItemContainerStyle>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding DiscardChangesCommand, Mode=OneWay}" Header="Discard changes" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
 
-        <ListView.ContextMenu>
-            <ContextMenu>
-                <MenuItem Command="{Binding DiscardChangesCommand, Mode=OneWay}" Header="Discard changes" />
-            </ContextMenu>
-        </ListView.ContextMenu>
-    </ListView>
+        <!--  ReSharper disable Xaml.MissingGridIndex  -->
+        <Border Background="White"
+                BorderBrush="{StaticResource BorderBrushKey}"
+                BorderThickness="1,0,1,1"
+                SnapsToDevicePixels="True">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Grid.Row" Value="{Binding TwoPaneLayout.SecondRow.Value, Mode=OneWay}" />
+                    <Setter Property="Grid.Column" Value="{Binding TwoPaneLayout.SecondColumn.Value, Mode=OneWay}" />
+                    <Setter Property="Grid.RowSpan" Value="{Binding TwoPaneLayout.SecondRowSpan.Value, Mode=OneWay}" />
+                    <Setter Property="Grid.ColumnSpan" Value="{Binding TwoPaneLayout.SecondColumnSpan.Value, Mode=OneWay}" />
+                </Style>
+            </Border.Style>
 
-    <GridSplitter Grid.Row="3"
-                  Height="6"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Center" />
+            <diff:SingleOrMultiDiffFileView DataContext="{Binding DiffFileViewSource, Mode=OneWay}" />
+        </Border>
+        <!--  ReSharper restore Xaml.MissingGridIndex  -->
 
-    <Border Grid.Row="4"
-            Background="White"
-            BorderBrush="{StaticResource BorderBrushKey}" 
-            BorderThickness="1,0,1,1"
-            SnapsToDevicePixels="True">
-        <diff:SingleOrMultiDiffFileView DataContext="{Binding DiffFileViewSource, Mode=OneWay}" />
-    </Border>
+        <GridSplitter Grid.Row="0"
+                      Grid.Column="1"
+                      Width="6"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch"
+                      Visibility="{Binding TwoPaneLayout.IsVerticalSplitterVisibility.Value,
+                                           Mode=OneWay}" />
+
+        <GridSplitter Grid.Row="1"
+                      Grid.Column="0"
+                      Height="6"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Center"
+                      Visibility="{Binding TwoPaneLayout.IsHorizontalSplitterVisibility.Value,
+                                           Mode=OneWay}" />
+    </Grid>
 </Grid>

@@ -17,5 +17,12 @@ namespace Anne.Features
             if (e.Key == Key.Space)
                 (DataContext as WipCommitVm)?.ToggleStaging();
         }
+
+        private void Grid_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            var vm = e.NewValue as WipCommitVm;
+
+            vm?.TwoPaneLayout.UpdateLayout(DiffGrid.ActualWidth, DiffGrid.ActualHeight);
+        }
     }
 }
