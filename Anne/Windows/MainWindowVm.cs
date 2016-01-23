@@ -17,6 +17,8 @@ namespace Anne.Windows
 
         public ReadOnlyReactiveProperty<string> Title { get; }
 
+        public ReactiveProperty<string> SearchWord { get; }
+
         public MainWindowVm()
         {
             SelectedRepository
@@ -29,6 +31,9 @@ namespace Anne.Windows
             Title = SelectedRepository
                 .Select(x => x == null ? "Anne" : "Anne -- " + x.Path)
                 .ToReadOnlyReactiveProperty()
+                .AddTo(MultipleDisposable);
+
+            SearchWord = new ReactiveProperty<string>(string.Empty)
                 .AddTo(MultipleDisposable);
 
             SelectedRepository.Value = Repositories.FirstOrDefault();
