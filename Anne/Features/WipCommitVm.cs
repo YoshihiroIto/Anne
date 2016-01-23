@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using Anne.Features.Interfaces;
+using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;

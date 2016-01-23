@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-namespace Anne.Features
+namespace Anne.Foundation
 {
     public class TwoPaneLayoutVm : ViewModelBase
     {
@@ -40,11 +39,6 @@ namespace Anne.Features
 
             BasePaneWidth.AddTo(MultipleDisposable);
             BasePaneHeight.AddTo(MultipleDisposable);
-
-            BasePaneHeight.Subscribe(x =>
-            {
-                Debug.WriteLine(x);
-            });
 
             BasePaneWidth
                 .CombineLatest(BasePaneHeight, (width, height) => new {width, height})

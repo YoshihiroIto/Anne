@@ -133,6 +133,7 @@
     <Compile Include="Externals\WrappingStream.cs" />
     <Compile Include="RepositoryOutlinerItemType.cs" />
     <Compile Include="SavingMemoryString.cs" />
+    <Compile Include="TwoPaneLayoutVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
