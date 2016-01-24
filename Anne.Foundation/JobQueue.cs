@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Threading;
@@ -65,8 +64,6 @@ namespace Anne.Foundation
                 using (new AnonymousDisposable(() => WorkingJob.Value = string.Empty))
                 {
                     WorkingJob.Value = job.Summary;
-
-                    Debug.WriteLine("JobQueue >>>>>>>>>>>>>>>>>>>>>>>>>> " + job.Summary);
 
                     try
                     {
