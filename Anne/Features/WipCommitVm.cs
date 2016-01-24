@@ -48,16 +48,18 @@ namespace Anne.Features
 
         public ReactiveProperty<bool?> IsAllSelected { get; }
 
-        public TwoPaneLayoutVm TwoPaneLayout => _repos.TwoPaneLayout;
+        public TwoPaneLayoutVm TwoPaneLayout { get; }
 
         private readonly RepositoryVm _repos;
         private string _summary = string.Empty;
         private string _description = string.Empty;
 
-        public WipCommitVm(RepositoryVm repos)
+        public WipCommitVm(RepositoryVm repos, TwoPaneLayoutVm twoPaneLayout)
         {
             Debug.Assert(repos != null);
             _repos = repos;
+
+            TwoPaneLayout = twoPaneLayout ?? new TwoPaneLayoutVm().AddTo(MultipleDisposable);
 
             SelectedWipFiles = new ObservableCollection<WipFileVm>();
             SelectedWipFiles.CollectionChangedAsObservable()

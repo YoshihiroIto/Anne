@@ -120,11 +120,11 @@ namespace Anne.Features
                     var allCommits = new ObservableCollection<ICommitVm>();
                     {
                         if (FileStatus.WipFiles.Value.Any())
-                            allCommits.Add(new WipCommitVm(this));
+                            allCommits.Add(new WipCommitVm(this, TwoPaneLayout));
 
                         _model.Commits
                             .Where(y => WordFilter.Value.IsMatch(y.Message))
-                            .Select(y => (ICommitVm) new DoneCommitVm(this, y))
+                            .Select(y => (ICommitVm) new DoneCommitVm(this, y, TwoPaneLayout))
                             .ForEach(y => allCommits.Add(y));
                     }
 
