@@ -40,13 +40,15 @@ namespace Anne.Windows
 
             Filter
                 .Throttle(TimeSpan.FromMilliseconds(300))
-                .Subscribe(x =>
-                {
-                    var wordFilter = new WordFilter(x);
-                    Repositories.ForEach(r => r.WordFilter.Value = wordFilter);
-                }).AddTo(MultipleDisposable);
+                .Subscribe(x => SelectedRepository.Value.WordFilter.Value = new WordFilter(x))
+                .AddTo(MultipleDisposable);
+
+            SelectedRepository
+                .Subscribe(_ => Filter.Value = string.Empty)
+                .AddTo(MultipleDisposable);
 
             SelectedRepository.Value = Repositories.FirstOrDefault();
+
 
 // 現在のフォーカスを持っているコントロールを表示する
 #if false
