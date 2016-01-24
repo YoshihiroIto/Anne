@@ -76,12 +76,15 @@ namespace Anne.Features
         {
             get
             {
-                if (_changeFiles != null)
-                    return _changeFiles;
+                lock (_changeFilesSync)
+                {
+                    if (_changeFiles != null)
+                        return _changeFiles;
 
-                _changeFiles = _model.ChangeFiles
-                    .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
-                    .AddTo(MultipleDisposable);
+                    _changeFiles = _model.ChangeFiles
+                        .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
+                        .AddTo(MultipleDisposable);
+                }
 
                 MultipleDisposable.Add(() => _changeFiles.ForEach(x => x.Dispose()));
 
@@ -94,6 +97,9 @@ namespace Anne.Features
                 return _changeFiles;
             }
         }
+
+        private readonly object _changeFilesSync = new object();
+
 
         public ObservableCollection<ChangeFileVm> SelectedChangeFiles { get; }
 
