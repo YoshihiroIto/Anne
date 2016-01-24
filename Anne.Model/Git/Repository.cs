@@ -77,8 +77,7 @@ namespace Anne.Model.Git
 
             var filter = new CommitFilter
             {
-                SortBy = CommitSortStrategies.Time,
-                IncludeReachableFrom = Internal.Refs
+                SortBy = CommitSortStrategies.Time
             };
 
             {

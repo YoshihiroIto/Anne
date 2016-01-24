@@ -88,7 +88,7 @@ namespace Anne.Model.Git
             if (Internal == null)
                 return;
 
-            Name = Internal.FriendlyName;
+            Name = Internal.Name;
             IsRemote = Internal.IsRemote;
             IsCurrent = Internal.IsCurrentRepositoryHead;
         }
