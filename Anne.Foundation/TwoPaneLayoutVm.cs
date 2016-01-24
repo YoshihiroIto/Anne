@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Windows;
+﻿using System.Windows;
 using Anne.Foundation.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -22,9 +20,6 @@ namespace Anne.Foundation
         public ReactiveProperty<int> SecondRowSpan { get; } = new ReactiveProperty<int>();
         public ReactiveProperty<int> SecondColumnSpan { get; } = new ReactiveProperty<int>();
 
-        public ReactiveProperty<double> BasePaneWidth { get; } = new ReactiveProperty<double>();
-        public ReactiveProperty<double> BasePaneHeight { get; } = new ReactiveProperty<double>();
-
         public TwoPaneLayoutVm()
         {
             FirstRow.AddTo(MultipleDisposable);
@@ -36,14 +31,6 @@ namespace Anne.Foundation
             SecondRowSpan.AddTo(MultipleDisposable);
             SecondColumn.AddTo(MultipleDisposable);
             SecondColumnSpan.AddTo(MultipleDisposable);
-
-            BasePaneWidth.AddTo(MultipleDisposable);
-            BasePaneHeight.AddTo(MultipleDisposable);
-
-            BasePaneWidth
-                .CombineLatest(BasePaneHeight, (width, height) => new {width, height})
-                .Subscribe(x => UpdateLayout(x.width, x.height))
-                .AddTo(MultipleDisposable);
         }
 
         public void UpdateLayout(double width, double height)

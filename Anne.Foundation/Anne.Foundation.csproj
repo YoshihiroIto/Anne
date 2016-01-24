@@ -122,7 +122,6 @@
     <Compile Include="Externals\SelectedItemsBinding\IListItemConverter.cs" />
     <Compile Include="Externals\SelectedItemsBinding\MultiSelectorBehaviours.cs" />
     <Compile Include="Externals\SelectedItemsBinding\TwoListSynchronizer.cs" />
-    <Compile Include="Externals\SizeObserver.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="GravatarLoader.cs" />
     <Compile Include="JobQueue.cs" />

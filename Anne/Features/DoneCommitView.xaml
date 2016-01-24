@@ -5,7 +5,6 @@
       xmlns:controls="clr-namespace:Anne.Foundation.Controls;assembly=Anne.Foundation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
-      xmlns:externals="clr-namespace:Anne.Foundation.Externals;assembly=Anne.Foundation"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:wpfSpark="clr-namespace:WPFSpark;assembly=WPFSpark"
       DataContextChanged="Grid_DataContextChanged"
@@ -127,13 +126,7 @@
 
     <Grid x:Name="DiffGrid"
           Grid.Row="2"
-          SizeChanged="DiffGrid_SizeChanged"
-          externals:SizeObserver.Observe="True"
-          externals:SizeObserver.ObservedHeight="{Binding TwoPaneLayout.BasePaneHeight.Value,
-                                                          Mode=OneWayToSource}"
-          externals:SizeObserver.ObservedWidth="{Binding TwoPaneLayout.BasePaneWidth.Value,
-                                                         Mode=OneWayToSource}">
-
+          SizeChanged="DiffGrid_SizeChanged">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />

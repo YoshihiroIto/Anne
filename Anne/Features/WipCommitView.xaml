@@ -9,7 +9,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-      xmlns:externals="clr-namespace:Anne.Foundation.Externals;assembly=Anne.Foundation"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       DataContextChanged="Grid_DataContextChanged"
@@ -86,11 +85,7 @@
 
     <Grid x:Name="DiffGrid"
           Grid.Row="2"
-          externals:SizeObserver.Observe="True"
-          externals:SizeObserver.ObservedHeight="{Binding TwoPaneLayout.BasePaneHeight.Value,
-                                                          Mode=OneWayToSource}"
-          externals:SizeObserver.ObservedWidth="{Binding TwoPaneLayout.BasePaneWidth.Value,
-                                                         Mode=OneWayToSource}" SizeChanged="DiffGrid_SizeChanged">
+          SizeChanged="DiffGrid_SizeChanged">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -218,8 +213,8 @@
         <!--  ReSharper restore Xaml.MissingGridIndex  -->
 
         <GridSplitter Grid.Row="0"
-                      Grid.Column="1"
                       Grid.RowSpan="3"
+                      Grid.Column="1"
                       Width="6"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Stretch"
