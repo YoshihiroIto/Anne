@@ -39,7 +39,11 @@
                                     SnapsToDevicePixels="True"
                                     TabIndex="0"
                                     Text="{Binding Summary,
-                                                   UpdateSourceTrigger=PropertyChanged}" />
+                                                   UpdateSourceTrigger=PropertyChanged}">
+                <controls:PromptTextBox.InputBindings>
+                    <KeyBinding Command="{Binding CommitCommand, Mode=OneTime}" Key="Enter" />
+                </controls:PromptTextBox.InputBindings>
+            </controls:PromptTextBox>
 
             <Label Grid.Column="1"
                    BorderBrush="{StaticResource BorderBrushKey}"
