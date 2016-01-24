@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
@@ -117,7 +118,7 @@ namespace Anne.Features
 
                     return allCommits;
                 })
-                .Do(_ => oldCommits?.OfType<IDisposable>().ForEach(x => x.Dispose()))
+                .Do(_ => Task.Run(() => oldCommits?.OfType<IDisposable>().ForEach(x => x.Dispose())))
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
