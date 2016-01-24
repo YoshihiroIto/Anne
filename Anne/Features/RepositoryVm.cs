@@ -23,7 +23,7 @@ namespace Anne.Features
         public ReadOnlyReactiveCollection<string> JobSummaries { get; private set; }
         public ReadOnlyReactiveProperty<string> WorkingJob { get; private set; }
 
-        public ReactiveProperty<ReadOnlyReactiveCollection<ICommitVm>> Commits { get; }
+        public ReactiveProperty<ObservableCollection<ICommitVm>> Commits { get; }
 
         public ReadOnlyObservableCollection<BranchVm> LocalBranches { get; private set; }
         public ReadOnlyObservableCollection<BranchVm> RemoteBranches { get; private set; }
@@ -97,7 +97,7 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             // コミット
-            ReadOnlyReactiveCollection<ICommitVm> oldCommits = null;
+            ObservableCollection<ICommitVm> oldCommits = null;
 
             var observeCommits = _model.ObserveProperty(x => x.Commits);
             Commits = FileStatus.WipFiles.CombineLatest(observeCommits, WordFilter, (x, y, z) => 0)
@@ -115,13 +115,13 @@ namespace Anne.Features
                             .ForEach(y => allCommits.Add(y));
                     }
 
-                    return allCommits.ToReadOnlyReactiveCollection();
+                    return allCommits;
                 })
-                .Do(_ => oldCommits?.Dispose())
+                .Do(_ => oldCommits?.OfType<IDisposable>().ForEach(x => x.Dispose()))
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            MultipleDisposable.Add(() => Commits?.Value?.Dispose());
+            MultipleDisposable.Add(() => Commits?.Value?.OfType<IDisposable>().ForEach(x => x.Dispose()));
 
             // 選択アイテム
             SelectedLocalBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
