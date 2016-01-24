@@ -219,6 +219,7 @@
 
         <GridSplitter Grid.Row="0"
                       Grid.Column="1"
+                      Grid.RowSpan="3"
                       Width="6"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Stretch"
@@ -227,6 +228,7 @@
 
         <GridSplitter Grid.Row="1"
                       Grid.Column="0"
+                      Grid.ColumnSpan="3"
                       Height="6"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Center"

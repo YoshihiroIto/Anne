@@ -127,6 +127,7 @@
 
     <Grid x:Name="DiffGrid"
           Grid.Row="2"
+          SizeChanged="DiffGrid_SizeChanged"
           externals:SizeObserver.Observe="True"
           externals:SizeObserver.ObservedHeight="{Binding TwoPaneLayout.BasePaneHeight.Value,
                                                           Mode=OneWayToSource}"
@@ -252,6 +253,7 @@
         </wpfSpark:FluidProgressBar>
 
         <GridSplitter Grid.Row="0"
+                      Grid.RowSpan="3"
                       Grid.Column="1"
                       Width="6"
                       HorizontalAlignment="Center"
@@ -261,6 +263,7 @@
 
         <GridSplitter Grid.Row="1"
                       Grid.Column="0"
+                      Grid.ColumnSpan="3"
                       Height="6"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Center"
