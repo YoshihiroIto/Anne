@@ -201,7 +201,7 @@
         <!--  ReSharper disable Xaml.MissingGridIndex  -->
         <Border Background="White"
                 BorderBrush="{StaticResource BorderBrushKey}"
-                BorderThickness="1,0,1,1"
+                BorderThickness="1"
                 SnapsToDevicePixels="True">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
