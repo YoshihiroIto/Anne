@@ -48,17 +48,7 @@ namespace Anne.Features
 
         public ReactiveProperty<bool?> IsAllSelected { get; }
 
-        private TwoPaneLayoutVm _twoPaneLayout;
-
-        public TwoPaneLayoutVm TwoPaneLayout
-        {
-            get
-            {
-                if (_twoPaneLayout != null)
-                    return _twoPaneLayout;
-                return _twoPaneLayout = new TwoPaneLayoutVm().AddTo(MultipleDisposable);
-            }
-        }
+        public TwoPaneLayoutVm TwoPaneLayout => _repos.TwoPaneLayout;
 
         private readonly RepositoryVm _repos;
         private string _summary = string.Empty;
