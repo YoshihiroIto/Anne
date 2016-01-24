@@ -136,6 +136,7 @@
     <Compile Include="RepositoryOutlinerItemType.cs" />
     <Compile Include="SavingMemoryString.cs" />
     <Compile Include="TwoPaneLayoutVm.cs" />
+    <Compile Include="WordFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cmigemo\dict\han2zen.dat">

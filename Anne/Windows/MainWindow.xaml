@@ -73,7 +73,7 @@
                                     Margin="0,2,2,0"
                                     VerticalAlignment="Top"
                                     Prompt="Filter(Alt+L)"
-                                    Text="{Binding FilterWord.Value,
+                                    Text="{Binding Filter.Value,
                                                    UpdateSourceTrigger=PropertyChanged}"
                                     WindowChrome.IsHitTestVisibleInChrome="True" />
 

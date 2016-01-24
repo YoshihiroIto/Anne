@@ -19,7 +19,7 @@ namespace Anne.Windows
 
         public ReadOnlyReactiveProperty<string> Title { get; }
 
-        public ReactiveProperty<string> FilterWord { get; }
+        public ReactiveProperty<string> Filter { get; }
 
         public MainWindowVm()
         {
@@ -35,15 +35,15 @@ namespace Anne.Windows
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            FilterWord = new ReactiveProperty<string>(string.Empty)
+            Filter = new ReactiveProperty<string>(string.Empty)
                 .AddTo(MultipleDisposable);
 
-            FilterWord
+            Filter
                 .Throttle(TimeSpan.FromMilliseconds(300))
                 .Subscribe(x =>
                 {
-                    var regex = MigemoHelper.Instance.MakeRegex(x);
-                    Repositories.ForEach(r => r.FilterRegex.Value = regex);
+                    var wordFilter = new WordFilter(x);
+                    Repositories.ForEach(r => r.WordFilter.Value = wordFilter);
                 }).AddTo(MultipleDisposable);
 
             SelectedRepository.Value = Repositories.FirstOrDefault();

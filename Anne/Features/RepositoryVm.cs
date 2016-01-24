@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text.RegularExpressions;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
@@ -35,7 +34,7 @@ namespace Anne.Features
         public ReactiveProperty<BranchVm> SelectedLocalBranch { get; }
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
-        public ReactiveProperty<Regex> FilterRegex { get; }
+        public ReactiveProperty<WordFilter> WordFilter { get; }
 
         public ReactiveProperty<RepositoryOutlinerVm> Outliner { get; }
 
@@ -94,14 +93,14 @@ namespace Anne.Features
             FileStatus = new FileStatusVm(model)
                 .AddTo(MultipleDisposable);
 
-            FilterRegex = new ReactiveProperty<Regex>(new Regex(string.Empty))
+            WordFilter = new ReactiveProperty<WordFilter>(new WordFilter())
                 .AddTo(MultipleDisposable);
 
             // コミット
             ReadOnlyReactiveCollection<ICommitVm> oldCommits = null;
 
             var observeCommits = _model.ObserveProperty(x => x.Commits);
-            Commits = FileStatus.WipFiles.CombineLatest(observeCommits, FilterRegex, (x, y, z) => 0)
+            Commits = FileStatus.WipFiles.CombineLatest(observeCommits, WordFilter, (x, y, z) => 0)
                 .Do(_ => oldCommits = Commits?.Value)
                 .Select(_ =>
                 {
@@ -111,7 +110,7 @@ namespace Anne.Features
                             allCommits.Add(new WipCommitVm(this));
 
                         _model.Commits
-                            .Where(y => FilterRegex.Value.IsMatch(y.Message))
+                            .Where(y => WordFilter.Value.IsMatch(y.Message))
                             .Select(y => (ICommitVm) new DoneCommitVm(this, y))
                             .ForEach(y => allCommits.Add(y));
                     }
