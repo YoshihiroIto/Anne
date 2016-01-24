@@ -25,5 +25,25 @@ namespace Anne.Foundation
         {
             return _regexes.All(r => r.IsMatch(s));
         }
+
+        public override bool Equals(object obj)
+        {
+            var w = obj as WordFilter;
+
+            return w != null && _regexes.Select(x => x.ToString()).SequenceEqual(w._regexes.Select(x => x.ToString()));
+        }
+
+        public bool Equals(WordFilter w)
+        {
+            return w != null && _regexes.Select(x => x.ToString()).SequenceEqual(w._regexes.Select(x => x.ToString()));
+        }
+
+        public override int GetHashCode()
+        {
+            if (_regexes.Length == 0)
+                return _regexes.GetHashCode();
+
+            return _regexes.Aggregate(0, (current, r) => current ^ r.ToString().GetHashCode());
+        }
     }
 }
