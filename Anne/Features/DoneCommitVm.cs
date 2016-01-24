@@ -79,19 +79,11 @@ namespace Anne.Features
                 if (_changeFiles != null)
                     return _changeFiles;
 
-                try
-                {
-                    _changeFiles = _model.ChangeFiles
-                        .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
-                        .AddTo(MultipleDisposable);
+                _changeFiles = _model.ChangeFiles
+                    .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
+                    .AddTo(MultipleDisposable);
 
-                    MultipleDisposable.Add(() => _changeFiles.ForEach(x => x.Dispose()));
-                }
-                catch(Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                    return null;
-                }
+                MultipleDisposable.Add(() => _changeFiles.ForEach(x => x.Dispose()));
 
                 ChangeFiles.ObserveAddChanged().Subscribe(x =>
                 {
@@ -106,6 +98,7 @@ namespace Anne.Features
         public ObservableCollection<ChangeFileVm> SelectedChangeFiles { get; }
 
         private object _diffFileViewSource;
+
         public object DiffFileViewSource
         {
             get { return _diffFileViewSource; }
@@ -118,6 +111,7 @@ namespace Anne.Features
         private readonly Model.Git.Commit _model;
 
         private ReactiveCommand<ResetMode> _resetCommand;
+
         public ReactiveCommand<ResetMode> ResetCommand
         {
             get
