@@ -24,6 +24,10 @@
             <behaviors:DataContextDisposeAction />
         </i:EventTrigger>
 
+        <i:EventTrigger EventName="ContentRendered">
+            <behaviors:LivetCallMethodAction MethodName="OnContentRendered" MethodTarget="{Binding}" />
+        </i:EventTrigger>
+
         <messaging:InteractionMessageTrigger MessageKey="Info" Messenger="{Binding Messenger, Mode=OneTime}">
             <messaging:InformationDialogInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False" />
         </messaging:InteractionMessageTrigger>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Threading;
@@ -29,17 +30,32 @@ namespace Anne.Foundation
 
         private readonly object _syncObj = new object();
 
+        private bool _isRunning;
+
+        public void Start()
+        {
+            Debug.Assert(_isRunning == false);
+
+            _isRunning = true;
+
+            _isActive = true;
+            RunJob();
+        }
+
         public void AddJob(string summary, Action action)
         {
             lock (_syncObj)
             {
                 _jobs.Enqueue(new Job {Summary = summary, Action = action});
 
-                if (_isActive)
-                    return;
+                if (_isRunning)
+                {
+                    if (_isActive)
+                        return;
 
-                _isActive = true;
-                RunJob();
+                    _isActive = true;
+                    RunJob();
+                }
             }
         }
 

@@ -338,6 +338,11 @@ namespace Anne.Model.Git
                 });
         }
 
+        public void StartJob()
+        {
+            _jobQueue.Start();
+        }
+
         public void AddJob(string summary, Action action)
         {
             _jobQueue.AddJob(summary, action);

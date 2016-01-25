@@ -62,5 +62,15 @@ namespace Anne.Windows
             });
 #endif
         }
+
+        private bool _isInitialized;
+        public void OnContentRendered()
+        {
+            if (_isInitialized)
+                return;
+
+            _isInitialized = true;
+            App.Instance.Repositories.ForEach(x => x.StartJob());
+        }
     }
 }
