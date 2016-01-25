@@ -154,7 +154,7 @@ namespace Anne.Diff
                     new Typeface("Consolas"),
                     14,
                     brush),
-                new Point(rect.Left + 4, rect.Top));
+                new Point(rect.Left + 4, rect.Top - 1));
         }
 
         private static void DrawIndexText(DrawingContext dc, Rect rect, string text, double x, TextAlignment align)
