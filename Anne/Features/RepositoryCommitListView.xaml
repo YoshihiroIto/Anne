@@ -145,8 +145,7 @@
             <TextBlock Margin="-5,0"
                        VerticalAlignment="Center"
                        Text="{Binding Summary,
-                                      Mode=OneTime}"
-                       TextTrimming="CharacterEllipsis">
+                                      Mode=OneTime}">
                 <TextBlock.ToolTip>
                     <TextBlock Text="{Binding TrimmedMessage, Mode=OneTime}" />
                 </TextBlock.ToolTip>
