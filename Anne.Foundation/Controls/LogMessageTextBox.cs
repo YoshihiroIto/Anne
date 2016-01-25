@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,7 +35,14 @@ namespace Anne.Foundation.Controls
         {
             if (string.IsNullOrEmpty(Source))
             {
-                Document = new FlowDocument();
+                try
+                {
+                    Document = new FlowDocument();
+                }
+                catch
+                {
+                    // ignored
+                }
                 return;
             }
 

@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
@@ -110,11 +110,9 @@ namespace Anne.Features
                 .AddTo(MultipleDisposable);
 
             // コミット
-            ObservableCollection<ICommitVm> oldCommits = null;
-
             var observeCommits = _model.ObserveProperty(x => x.Commits);
             Commits = FileStatus.WipFiles.CombineLatest(observeCommits, WordFilter, (x, y, z) => 0)
-                .Do(_ => oldCommits = Commits?.Value)
+                .Do(_ => _oldCommits.Enqueue(Commits?.Value))
                 .Select(_ =>
                 {
                     var allCommits = new ObservableCollection<ICommitVm>();
@@ -130,7 +128,14 @@ namespace Anne.Features
 
                     return allCommits;
                 })
-                .Do(_ => Task.Run(() => oldCommits?.OfType<IDisposable>().ForEach(x => x.Dispose())))
+                .Do(_ =>
+                {
+                    ObservableCollection<ICommitVm> oldCommits;
+                    var i = _oldCommits.TryDequeue(out oldCommits);
+                    Debug.Assert(i);
+
+                    oldCommits?.OfType<IDisposable>().ForEach(x => x.Dispose());
+                })
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
@@ -158,6 +163,9 @@ namespace Anne.Features
 
             InitializeCommands();
         }
+
+        private readonly ConcurrentQueue<ObservableCollection<ICommitVm>> _oldCommits
+            = new ConcurrentQueue<ObservableCollection<ICommitVm>>();
 
         public void Commit(string message) => _model.Commit(message);
         public void DiscardChanges(IEnumerable<string> paths) => _model.DiscardChanges(paths);
