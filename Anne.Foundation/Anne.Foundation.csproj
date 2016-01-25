@@ -130,6 +130,7 @@
     <Compile Include="Externals\SelectedItemsBinding\MultiSelectorBehaviours.cs" />
     <Compile Include="Externals\SelectedItemsBinding\TwoListSynchronizer.cs" />
     <Compile Include="FileWatcher.cs" />
+    <Compile Include="FrameworkElementExtensions.cs" />
     <Compile Include="GravatarLoader.cs" />
     <Compile Include="JobQueue.cs" />
     <Compile Include="ListExtensions.cs" />

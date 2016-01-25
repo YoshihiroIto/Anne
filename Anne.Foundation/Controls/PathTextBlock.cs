@@ -1,12 +1,16 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Reactive.Linq;
+using Reactive.Bindings.Extensions;
 
 namespace Anne.Foundation.Controls
 {
@@ -29,7 +33,9 @@ namespace Anne.Foundation.Controls
 
                     self.ToolTip = e.NewValue;
 
-                    self.UpdateText(self.ActualWidth);
+                    var parent = self.Parent as FrameworkElement;
+                    if (parent != null)
+                        self.UpdateText(() => parent.ActualWidth);
                 }));
 
         #endregion
@@ -93,31 +99,34 @@ namespace Anne.Foundation.Controls
         {
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
-            SizeChanged += (s, e) => UpdateText(ActualWidth);
         }
+
+        private IDisposable _parentSizeChangedObservable;
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
             var parent = Parent as FrameworkElement;
             if (parent != null)
-                parent.SizeChanged += ParentOnSizeChanged;
+            {
+                _parentSizeChangedObservable = parent.SizeChangedAsObservable()
+                    .Where(x => x.WidthChanged)
+                    .Throttle(TimeSpan.FromMilliseconds(1))
+                    .ObserveOnUIDispatcher()
+                    .Subscribe(x => UpdateText(() => x.NewSize.Width));
+
+                UpdateText(() => parent.ActualWidth);
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            var parent = Parent as FrameworkElement;
-            if (parent != null)
-                parent.SizeChanged -= ParentOnSizeChanged;
+            _parentSizeChangedObservable?.Dispose();
         }
 
-        private void ParentOnSizeChanged(object sender, SizeChangedEventArgs args)
+        private void UpdateText(Func<double> targetWidthGetter)
         {
-            if (args.WidthChanged)
-                UpdateText(args.NewSize.Width);
-        }
+            var targetWidth = targetWidthGetter();
 
-        private void UpdateText(double targetWidth)
-        {
             targetWidth -= Padding.Left + Padding.Right;
 
             if (targetWidth <= 0.0)
@@ -129,54 +138,65 @@ namespace Anne.Foundation.Controls
                 return;
             }
 
-            var typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
+            var pathText = PathText;
 
             var text = PathText;
-            for (var length = text.Length; length != 0; --length)
+            var currentCulture = CultureInfo.CurrentCulture;
+            var typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
+            var fontSize = FontSize;
+            var foreground = Foreground;
+
+            Task.Run(() =>
             {
-                var ft = new FormattedText(
-                    text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, typeface, FontSize, Foreground);
+                for (var length = text.Length; length != 0; --length)
+                {
+                    var ft = new FormattedText(text, currentCulture, FlowDirection.LeftToRight, typeface, fontSize, foreground);
+                    if (ft.WidthIncludingTrailingWhitespace <= targetWidth)
+                        break;
 
-                if (ft.WidthIncludingTrailingWhitespace <= targetWidth)
-                    break;
+                    text = TruncatePath(pathText, length);
+                }
 
-                text = TruncatePath(PathText, length);
-            }
+                Livet.DispatcherHelper.UIDispatcher.Invoke(() =>
+                {
+                    var latestTargetWidth = targetWidthGetter() - (Padding.Left + Padding.Right);
 
-            if (string.IsNullOrEmpty(text))
+                    if (Math.Abs(targetWidth - latestTargetWidth) > 0.1)
+                        return;
+
+                    UpdateInlines(text);
+                });
+            });
+        }
+
+        // ディレクトリ部とファイル部を分離し色分けする
+        private void UpdateInlines(string text)
+        {
+            var dirname = Path.GetDirectoryName(text) ?? string.Empty;
+            var filename = Path.GetFileName(text);
+
+            if (dirname.Length > 0)
+                dirname += @"\";
+
+            if (Inlines.Count != 2)
             {
                 Inlines.Clear();
-                Text = "???";
+                Inlines.Add(new Run(dirname) {Foreground = DirnameForeground});
+                Inlines.Add(new Run(filename) {Foreground = FilenameForeground});
             }
-
-            // ディレクトリ部とファイル部を分離し色分けする
+            else
             {
-                var dirname = Path.GetDirectoryName(text) ?? string.Empty;
-                var filename = Path.GetFileName(text);
+                var first = Inlines.FirstInline as Run;
+                var last = Inlines.LastInline as Run;
 
-                if (dirname.Length > 0)
-                    dirname += @"\";
+                Debug.Assert(first != null);
+                Debug.Assert(last != null);
 
-                if (Inlines.Count != 2)
-                {
-                    Inlines.Clear();
-                    Inlines.Add(new Run(dirname) { Foreground = DirnameForeground });
-                    Inlines.Add(new Run(filename) { Foreground = FilenameForeground });
-                }
-                else
-                {
-                    var first = Inlines.FirstInline as Run;
-                    var last = Inlines.LastInline as Run;
+                if (first.Text != dirname)
+                    first.Text = dirname;
 
-                    Debug.Assert(first != null);
-                    Debug.Assert(last != null);
-
-                    if (first.Text != dirname)
-                        first.Text = dirname;
-
-                    if (last.Text != filename)
-                        last.Text = filename;
-                }
+                if (last.Text != filename)
+                    last.Text = filename;
             }
         }
     }
