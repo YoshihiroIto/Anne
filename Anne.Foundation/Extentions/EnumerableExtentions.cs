@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Anne.Foundation
+namespace Anne.Foundation.Extentions
 {
     public static class EnumerableExtentions
     {

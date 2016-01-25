@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
+using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 using Reactive.Bindings;

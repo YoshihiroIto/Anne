@@ -1,7 +1,7 @@
 ﻿using System;
 using StatefulModel;
 
-namespace Anne.Foundation
+namespace Anne.Foundation.Extentions
 {
     public static class MultipleDisposableExtensions
     {

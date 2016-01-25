@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using System.Windows;
 
-namespace Anne.Foundation
+namespace Anne.Foundation.Extentions
 {
     public static class FrameworkElementExtensions
     {

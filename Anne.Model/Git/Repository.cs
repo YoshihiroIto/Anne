@@ -8,6 +8,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 using Anne.Foundation;
+using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 using Reactive.Bindings;

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using Anne.Foundation;
+using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 using Reactive.Bindings;

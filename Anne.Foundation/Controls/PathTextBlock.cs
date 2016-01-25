@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Reactive.Linq;
+using Anne.Foundation.Extentions;
 using Reactive.Bindings.Extensions;
 
 namespace Anne.Foundation.Controls
