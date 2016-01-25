@@ -128,14 +128,6 @@ namespace Anne.Features
 
                     return allCommits;
                 })
-                .Do(_ =>
-                {
-                    ObservableCollection<ICommitVm> oldCommits;
-                    var i = _oldCommits.TryDequeue(out oldCommits);
-                    Debug.Assert(i);
-
-                    oldCommits?.OfType<IDisposable>().ForEach(x => x.Dispose());
-                })
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
@@ -154,6 +146,16 @@ namespace Anne.Features
                 .Sample(TimeSpan.FromMilliseconds(150))
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
+
+            // todo:暫定処置。ここで開放した物が参照されてしまうため、ディレイして開放処理を行っている。要調査
+            SelectedCommitDelay
+                .Delay(TimeSpan.FromMilliseconds(1000))
+                .Subscribe(_ =>
+            {
+                ObservableCollection<ICommitVm> oldCommits;
+                if (_oldCommits.TryDequeue(out oldCommits))
+                    oldCommits?.OfType<IDisposable>().ForEach(x => x.Dispose());
+            }).AddTo(MultipleDisposable);
 
             Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
                 .Select(x => x.EventArgs)
