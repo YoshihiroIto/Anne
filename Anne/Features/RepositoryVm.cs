@@ -124,6 +124,8 @@ namespace Anne.Features
                             allCommits.Add(new WipCommitVm(this, TwoPaneLayout));
 
                         x.commits
+                            .AsParallel()
+                            .AsOrdered()
                             .Where(y => x.wordFilter.IsMatch(y.Message))
                             .Select(y => (ICommitVm) new DoneCommitVm(this, y, TwoPaneLayout))
                             .ForEach(y => allCommits.Add(y));
