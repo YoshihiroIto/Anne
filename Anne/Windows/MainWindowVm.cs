@@ -40,6 +40,7 @@ namespace Anne.Windows
 
             Filter
                 .Throttle(TimeSpan.FromMilliseconds(300))
+                .Where(_ => SelectedRepository.Value != null)
                 .Subscribe(x => SelectedRepository.Value.WordFilter.Value = new WordFilter(x))
                 .AddTo(MultipleDisposable);
 
@@ -49,6 +50,11 @@ namespace Anne.Windows
 
             SelectedRepository.Value = Repositories.FirstOrDefault();
 
+            Repositories
+                .CollectionChangedAsObservable()
+                .Where(_ => SelectedRepository.Value == null)
+                .Subscribe(_ => SelectedRepository.Value = Repositories.FirstOrDefault())
+                .AddTo(MultipleDisposable);
 
 // 現在のフォーカスを持っているコントロールを表示する
 #if false
