@@ -36,6 +36,7 @@ namespace Anne.Features
         public ReactiveProperty<BranchVm> SelectedRemoteBranch { get; }
 
         public ReactiveProperty<WordFilter> WordFilter { get; }
+        public ReactiveProperty<bool> IsFiltering { get; } 
 
         public ReactiveProperty<RepositoryOutlinerVm> Outliner { get; }
 
@@ -106,8 +107,8 @@ namespace Anne.Features
             FileStatus = new FileStatusVm(model)
                 .AddTo(MultipleDisposable);
 
-            WordFilter = new ReactiveProperty<WordFilter>(new WordFilter())
-                .AddTo(MultipleDisposable);
+            WordFilter = new ReactiveProperty<WordFilter>(new WordFilter()).AddTo(MultipleDisposable);
+            IsFiltering = new ReactiveProperty<bool>().AddTo(MultipleDisposable);
 
             // コミット
             var observeCommits = _model.ObserveProperty(x => x.Commits);
@@ -115,6 +116,7 @@ namespace Anne.Features
                 observeCommits,
                 WordFilter,
                 (wipFiles, commits, wordFilter) => new {wipFiles, commits, wordFilter})
+                .Do(_ => IsFiltering.Value = true)
                 .Do(_ => _oldCommits.Enqueue(Commits?.Value))
                 .Select(x =>
                 {
@@ -133,6 +135,7 @@ namespace Anne.Features
 
                     return allCommits;
                 })
+                .Do(_ => IsFiltering.Value = false)
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
