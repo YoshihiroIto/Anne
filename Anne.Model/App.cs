@@ -43,10 +43,9 @@ namespace Anne.Model
 
         private App()
         {
-            _config = AppConfig.LoadFromFile(ConfigFilePath);
-
             MultipleDisposable.Add(() => Repositories.ForEach(x => x.Dispose()));
 
+            _config = AppConfig.LoadFromFile(ConfigFilePath);
             _config.Repositories.ForEach(r => Repositories.Add(new Repository(r)));
         }
     }
