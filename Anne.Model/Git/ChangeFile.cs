@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 
@@ -20,9 +21,13 @@ namespace Anne.Model.Git
                 if (_isGeneratedPatch == false)
                     MakePatch();
 
-                return _patch;
+                return _patch.Value;
             }
-            set { SetProperty(ref _patch, value); }
+            set
+            {
+                _patch.Value = value;
+                RaisePropertyChanged();
+            }
         }
 
         public int LinesAdded
@@ -92,7 +97,7 @@ namespace Anne.Model.Git
 
         // ReSharper disable InconsistentNaming
         protected string _path;
-        protected string _patch;
+        protected SavingMemoryString _patch = new SavingMemoryString();
         protected int _linesAdded;
         protected int _linesDeleted;
         protected ChangeKind _status;
@@ -110,7 +115,7 @@ namespace Anne.Model.Git
             _isBinary = diff.IsBinaryComparison;
             _linesAdded = diff.LinesAdded;
             _linesDeleted = diff.LinesDeleted;
-            _patch = diff.Patch;
+            _patch.Value = diff.Patch;
 
             _repos = null;
             _oldTree = null;

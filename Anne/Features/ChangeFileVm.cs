@@ -46,7 +46,6 @@ namespace Anne.Features
                     else
                         this.MakeDiff(_model.Patch);
 
-                    _model.Patch = string.Empty; // 用済み
                     _model = null;
 
                     IsDiffMaking = false;

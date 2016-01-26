@@ -111,17 +111,20 @@ namespace Anne.Features
 
             // コミット
             var observeCommits = _model.ObserveProperty(x => x.Commits);
-            Commits = FileStatus.WipFiles.CombineLatest(observeCommits, WordFilter, (x, y, z) => 0)
+            Commits = FileStatus.WipFiles.CombineLatest(
+                observeCommits,
+                WordFilter,
+                (wipFiles, commits, wordFilter) => new {wipFiles, commits, wordFilter})
                 .Do(_ => _oldCommits.Enqueue(Commits?.Value))
-                .Select(_ =>
+                .Select(x =>
                 {
                     var allCommits = new ObservableCollection<ICommitVm>();
                     {
-                        if (FileStatus.WipFiles.Value.Any())
+                        if (x.wipFiles.Any())
                             allCommits.Add(new WipCommitVm(this, TwoPaneLayout));
 
-                        _model.Commits
-                            .Where(y => WordFilter.Value.IsMatch(y.Message))
+                        x.commits
+                            .Where(y => x.wordFilter.IsMatch(y.Message))
                             .Select(y => (ICommitVm) new DoneCommitVm(this, y, TwoPaneLayout))
                             .ForEach(y => allCommits.Add(y));
                     }
@@ -138,7 +141,7 @@ namespace Anne.Features
             SelectedRemoteBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
 
             SelectedCommit = Commits
-                .Select(_ => Commits.Value?.FirstOrDefault())
+                .Select(c => c?.FirstOrDefault())
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
@@ -147,15 +150,16 @@ namespace Anne.Features
                 .ToReadOnlyReactiveProperty()
                 .AddTo(MultipleDisposable);
 
-            // todo:暫定処置。ここで開放した物が参照されてしまうため、ディレイして開放処理を行っている。要調査
-            SelectedCommitDelay
+            Commits
                 .Delay(TimeSpan.FromMilliseconds(1000))
                 .Subscribe(_ =>
-            {
-                ObservableCollection<ICommitVm> oldCommits;
-                if (_oldCommits.TryDequeue(out oldCommits))
+                {
+                    ObservableCollection<ICommitVm> oldCommits;
+                    var i = _oldCommits.TryDequeue(out oldCommits);
+                    Debug.Assert(i);
+
                     oldCommits?.OfType<IDisposable>().ForEach(x => x.Dispose());
-            }).AddTo(MultipleDisposable);
+                }).AddTo(MultipleDisposable);
 
             Observable.FromEventPattern<ExceptionEventArgs>(_model, nameof(_model.JobExecutingException))
                 .Select(x => x.EventArgs)
