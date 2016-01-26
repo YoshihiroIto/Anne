@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
@@ -55,10 +56,12 @@ namespace Anne.Features
                     {
                         var image = GravatarLoader.Get(_model.AutherEmail);
 
-                        Livet.DispatcherHelper.UIDispatcher.Invoke(() => AutherImage = image);
-
-                        _isDownloading = false;
-                        _disposeResetEvent?.Set();
+                        Application.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            AutherImage = image;
+                            _isDownloading = false;
+                            _disposeResetEvent?.Set();
+                        });
                     });
 
                 return null;

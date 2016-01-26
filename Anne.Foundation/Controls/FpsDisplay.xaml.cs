@@ -48,7 +48,7 @@ namespace Anne.Foundation.Controls
 
             try
             {
-                Livet.DispatcherHelper.UIDispatcher.Invoke(() => Fps = fps);
+                Dispatcher.InvokeAsync(() => Fps = fps);
             }
             catch
             {

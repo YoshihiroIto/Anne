@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using ReactiveBingViewer.IO;
 
@@ -33,9 +34,6 @@ namespace Anne.Foundation
 
         private static BitmapImage LoadImage(string email)
         {
-// ネットアクセスしたくない時はfalseにする
-#if true
-
             if (NetworkInterface.GetIsNetworkAvailable() == false)
                 return null;
 
@@ -49,7 +47,7 @@ namespace Anne.Foundation
                 {
                     var data = wc.DownloadData(url);
 
-                    Livet.DispatcherHelper.UIDispatcher.Invoke(() =>
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
                         using (var stream = new WrappingStream(new MemoryStream(data)))
                         {
@@ -74,9 +72,6 @@ namespace Anne.Foundation
             {
                 return null;
             }
-#else
-            return null;
-#endif
         }
 
         private static string GenerateUrlFromEmail(string email)

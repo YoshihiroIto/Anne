@@ -158,7 +158,7 @@ namespace Anne.Foundation.Controls
                     text = TruncatePath(pathText, length);
                 }
 
-                Livet.DispatcherHelper.UIDispatcher.Invoke(() =>
+                Dispatcher.InvokeAsync(() =>
                 {
                     var latestTargetWidth = targetWidthGetter() - (Padding.Left + Padding.Right);
 

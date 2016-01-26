@@ -62,7 +62,7 @@ namespace Anne.Windows
             {
                 while (true)
                 {
-                    Livet.DispatcherHelper.UIDispatcher.Invoke(() => Debug.WriteLine(Keyboard.FocusedElement));
+                    Application.Current.Dispatcher.Invoke(() => Debug.WriteLine(Keyboard.FocusedElement));
                     Thread.Sleep(1000);
                 }
             });
