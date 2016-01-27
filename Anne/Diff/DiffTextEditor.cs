@@ -11,8 +11,8 @@ namespace Anne.Diff
 
             IsTabStop = false;
             Focusable = false;
-            TextArea.IsTabStop = false;
-            TextArea.Focusable = false;
+            TextArea.IsTabStop = true;
+            TextArea.Focusable = true;
         }
     }
 }
