@@ -57,7 +57,7 @@
                     BorderBrush="{StaticResource BorderBrushKey}"
                     BorderThickness="1"
                     SnapsToDevicePixels="True">
-                <Image RenderOptions.BitmapScalingMode="Fant" Source="{Binding AutherImage, Mode=OneWay}" />
+                <Image Source="{Binding AutherImage, Mode=OneWay}" />
             </Border>
 
             <!--  Hash  -->
