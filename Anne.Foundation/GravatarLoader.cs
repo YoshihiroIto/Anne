@@ -78,13 +78,13 @@ namespace Anne.Foundation
         {
             using (var hasher = MD5.Create())
             {
-                var hash = hasher.ComputeHash(Encoding.Default.GetBytes(email));
+                var hash = hasher.ComputeHash(Encoding.Default.GetBytes(email.Trim().ToLower()));
                 var sb = new StringBuilder();
 
                 foreach (var h in hash)
                     sb.Append(h.ToString("x2"));
 
-                return $"http://www.gravatar.com/avatar/{sb}&size=256&d=mm";
+                return $"http://www.gravatar.com/avatar/{sb}?&size=256&default=retro";
             }
         }
     }
