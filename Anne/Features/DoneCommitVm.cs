@@ -80,32 +80,56 @@ namespace Anne.Features
         {
             get
             {
-                lock (_changeFilesSync)
-                {
-                    if (_changeFiles != null)
-                        return _changeFiles;
+                return LazyInitializer.EnsureInitialized(
+                    ref _changeFiles,
+                    () =>
+                    {
+                        var changeFiles = _model.ChangeFiles
+                            .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
+                            .AddTo(MultipleDisposable);
 
-                    _changeFiles = _model.ChangeFiles
-                        .ToReadOnlyReactiveCollection(x => new ChangeFileVm(x))
-                        .AddTo(MultipleDisposable);
-                }
+                        changeFiles.ObserveAddChanged().Subscribe(x =>
+                        {
+                            if (SelectedChangeFiles.Any() == false)
+                                SelectedChangeFiles.Add(x);
+                        }).AddTo(MultipleDisposable);
 
-                MultipleDisposable.Add(() => _changeFiles.ForEach(x => x.Dispose()));
+                        MultipleDisposable.Add(() => _changeFiles.ForEach(x => x.Dispose()));
 
-                ChangeFiles.ObserveAddChanged().Subscribe(x =>
-                {
-                    if (SelectedChangeFiles.Any() == false)
-                        SelectedChangeFiles.Add(x);
-                }).AddTo(MultipleDisposable);
-
-                return _changeFiles;
+                        return changeFiles;
+                    });
             }
         }
 
-        private readonly object _changeFilesSync = new object();
+        private ObservableCollection<ChangeFileVm> _selectedChangeFiles;
 
+        public ObservableCollection<ChangeFileVm> SelectedChangeFiles
+        {
+            get
+            {
+                return LazyInitializer.EnsureInitialized(
+                    ref _selectedChangeFiles,
+                    () =>
+                    {
+                        var selectedChangeFiles = new ObservableCollection<ChangeFileVm>();
+                        selectedChangeFiles.CollectionChangedAsObservable()
+                            .Subscribe(_ =>
+                            {
+                                var count = _selectedChangeFiles.Count;
 
-        public ObservableCollection<ChangeFileVm> SelectedChangeFiles { get; }
+                                if (count == 0)
+                                    DiffFileViewSource = ChangeFiles.FirstOrDefault();
+                                else if (count == 1)
+                                    DiffFileViewSource = _selectedChangeFiles.FirstOrDefault();
+                                else
+                                    DiffFileViewSource = _selectedChangeFiles;
+                            })
+                            .AddTo(MultipleDisposable);
+
+                        return selectedChangeFiles;
+                    });
+            }
+        }
 
         private object _diffFileViewSource;
 
@@ -115,10 +139,20 @@ namespace Anne.Features
             set { SetProperty(ref _diffFileViewSource, value); }
         }
 
-        public ReadOnlyReactiveProperty<bool> IsChangeFilesBuilding { get; }
+        private ReadOnlyReactiveProperty<bool> _isChangeFilesBuilding;
 
-        private readonly RepositoryVm _repos;
-        private readonly Model.Git.Commit _model;
+        public ReadOnlyReactiveProperty<bool> IsChangeFilesBuilding
+        {
+            get
+            {
+                return LazyInitializer.EnsureInitialized(
+                    ref _isChangeFilesBuilding,
+                    () =>
+                        _model.ObserveProperty(x => x.IsChangeFilesBuilding)
+                            .ToReadOnlyReactiveProperty()
+                            .AddTo(MultipleDisposable));
+            }
+        }
 
         private ReactiveCommand<ResetMode> _resetCommand;
 
@@ -126,14 +160,15 @@ namespace Anne.Features
         {
             get
             {
-                if (_resetCommand != null)
-                    return _resetCommand;
-
-                _resetCommand = new ReactiveCommand<ResetMode>().AddTo(MultipleDisposable);
-                _resetCommand.Subscribe(mode => _repos.Reset(mode, _model.Sha))
-                    .AddTo(MultipleDisposable);
-
-                return _resetCommand;
+                return LazyInitializer.EnsureInitialized(
+                    ref _resetCommand,
+                    () =>
+                    {
+                        var command = new ReactiveCommand<ResetMode>().AddTo(MultipleDisposable);
+                        command.Subscribe(mode => _repos.Reset(mode, _model.Sha))
+                            .AddTo(MultipleDisposable);
+                        return command;
+                    });
             }
         }
 
@@ -143,21 +178,43 @@ namespace Anne.Features
         {
             get
             {
-                if (_revertCommand != null)
-                    return _revertCommand;
-
-                _revertCommand = new ReactiveCommand().AddTo(MultipleDisposable);
-                _revertCommand.Subscribe(mode => _repos.Revert(_model.Sha))
-                    .AddTo(MultipleDisposable);
-
-                return _revertCommand;
+                return LazyInitializer.EnsureInitialized(
+                    ref _revertCommand,
+                    () =>
+                    {
+                        var command = new ReactiveCommand().AddTo(MultipleDisposable);
+                        command.Subscribe(mode => _repos.Revert(_model.Sha))
+                            .AddTo(MultipleDisposable);
+                        return command;
+                    });
             }
         }
 
-        public ObservableCollection<CommitLabelVm> CommitLabels { get; }
+        private ObservableCollection<CommitLabelVm> _commitLabels;
+
+        public ObservableCollection<CommitLabelVm> CommitLabels
+        {
+            get
+            {
+                return LazyInitializer.EnsureInitialized(
+                    ref _commitLabels,
+                    () =>
+                    {
+                        var labels = _repos
+                            .GetCommitLabels(_model.Sha)
+                            .Select(x => new CommitLabelVm(x))
+                            .ToObservableCollection();
+
+                        MultipleDisposable.Add(() => CommitLabels.ForEach(x => x.Dispose()));
+                        return labels;
+                    });
+            }
+        }
 
         public TwoPaneLayoutVm TwoPaneLayout { get; }
 
+        private readonly RepositoryVm _repos;
+        private readonly Model.Git.Commit _model;
         private ManualResetEventSlim _disposeResetEvent;
 
         public DoneCommitVm(RepositoryVm repos, Model.Git.Commit model, TwoPaneLayoutVm twoPaneLayout)
@@ -176,33 +233,6 @@ namespace Anne.Features
                         _disposeResetEvent = new ManualResetEventSlim();
                 }
             });
-
-            IsChangeFilesBuilding =
-                model.ObserveProperty(x => x.IsChangeFilesBuilding)
-                    .ToReadOnlyReactiveProperty()
-                    .AddTo(MultipleDisposable);
-
-            SelectedChangeFiles = new ObservableCollection<ChangeFileVm>();
-            SelectedChangeFiles.CollectionChangedAsObservable()
-                .Subscribe(_ =>
-                {
-                    var count = SelectedChangeFiles.Count;
-
-                    if (count == 0)
-                        DiffFileViewSource = ChangeFiles.FirstOrDefault();
-                    else if (count == 1)
-                        DiffFileViewSource = SelectedChangeFiles.FirstOrDefault();
-                    else
-                        DiffFileViewSource = SelectedChangeFiles;
-                })
-                .AddTo(MultipleDisposable);
-
-            CommitLabels = repos
-                .GetCommitLabels(model.Sha)
-                .Select(x => new CommitLabelVm(x))
-                .ToObservableCollection();
-
-            MultipleDisposable.Add(() => CommitLabels.ForEach(x => x.Dispose()));
         }
     }
 }
