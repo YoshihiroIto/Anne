@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Anne.Foundation;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
 
@@ -12,8 +13,21 @@ namespace Anne.Model.Git
 {
     public class Commit : ModelBase
     {
-        public string Message => Internal.Message;
-        public string MessageShort => Internal.MessageShort;
+        public string Message
+        {
+            get
+            {
+                return LazyInitializer.EnsureInitialized(ref _messageCache, () => new SavingMemoryString(Internal.Message)).Value;
+            }
+        }
+
+        public string MessageShort
+        {
+            get
+            {
+                return LazyInitializer.EnsureInitialized(ref _messageShortCache, () => new SavingMemoryString(Internal.MessageShort)).Value;
+            }
+        }
 
         public string Sha { get; }
         public string ShaShort => Sha.Substring(0, 7);
@@ -23,6 +37,9 @@ namespace Anne.Model.Git
         public string AutherName => Internal.Author.Name;
         public string AutherEmail => Internal.Author.Email;
         public DateTimeOffset When => Internal.Author.When;
+
+        private SavingMemoryString _messageCache;
+        private SavingMemoryString _messageShortCache;
 
         private ObservableCollection<ChangeFile> _changeFiles = new ObservableCollection<ChangeFile>();
 
