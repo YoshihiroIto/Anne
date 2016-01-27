@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using LZ4;
@@ -9,10 +10,31 @@ namespace Anne.Foundation
     {
         public string Value
         {
-            get { return _data == null ? string.Empty : Decompress(_data); }
+            get
+            {
+                if (_plane != null)
+                    return _plane;
+
+                return _data == null ? null : Decompress(_data);
+            }
+
             set
             {
-                _data = Compress(value);
+                if (value == null)
+                {
+                    _data = null;
+                    _plane = null;
+                }
+                else
+                {
+                    _data = Compress(value);
+                    if (_data.Length >= value.Length*2)
+                    {
+                        _data = null;
+                        _plane = value;
+                    }
+                }
+
                 OnPropertyChanged();
             }
         }
@@ -29,8 +51,12 @@ namespace Anne.Foundation
         private byte[] _data;
         private int _orgSize;
 
+        private string _plane;
+
         private string Decompress(byte[] data)
         {
+            Debug.Assert(data != null);
+
             var buf = LZ4Codec.Decode(data, 0, data.Length, _orgSize);
 
             return Encoding.Unicode.GetString(buf, 0, buf.Length);
@@ -38,6 +64,8 @@ namespace Anne.Foundation
 
         private byte[] Compress(string text)
         {
+            Debug.Assert(text != null);
+
             var source = Encoding.Unicode.GetBytes(text);
             _orgSize = source.Length;
 
