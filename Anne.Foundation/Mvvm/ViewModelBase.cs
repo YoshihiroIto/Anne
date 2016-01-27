@@ -1,43 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Livet;
+﻿using System.Threading;
+using Livet.Messaging;
 
 namespace Anne.Foundation.Mvvm
 {
-    public class ViewModelBase : ViewModel
+    public class ViewModelBase : ModelBase
     {
-        private readonly bool _disableDisposableChecker;
+        private InteractionMessenger _messenger;
+
+        public InteractionMessenger Messenger
+        {
+            get { return LazyInitializer.EnsureInitialized(ref _messenger, () => new InteractionMessenger()); }
+        }
 
         public ViewModelBase(bool disableDisposableChecker = false)
+            : base(disableDisposableChecker)
         {
-            _disableDisposableChecker = disableDisposableChecker;
-
-            if (_disableDisposableChecker == false)
-                DisposableChecker.Add(this);
-        }
-
-        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(storage, value))
-                return false;
- 
-            storage = value;
-
-            // ReSharper disable once ExplicitCallerInfoArgument
-            RaisePropertyChanged(propertyName);
-
-            return true;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_disableDisposableChecker == false)
-                    DisposableChecker.Remove(this);
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

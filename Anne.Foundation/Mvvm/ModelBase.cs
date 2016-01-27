@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Livet;
 using StatefulModel;
 
@@ -8,7 +9,12 @@ namespace Anne.Foundation.Mvvm
 {
     public class ModelBase : NotificationObject, IDisposable
     {
-        public MultipleDisposable MultipleDisposable { get; set; } = new MultipleDisposable();
+        private MultipleDisposable _multipleDisposable;
+        public MultipleDisposable MultipleDisposable
+        {
+            get { return LazyInitializer.EnsureInitialized(ref _multipleDisposable, () => new MultipleDisposable()); }
+        }
+
         private readonly bool _disableDisposableChecker;
 
         public ModelBase(bool disableDisposableChecker = false)
@@ -41,10 +47,7 @@ namespace Anne.Foundation.Mvvm
 
             if (disposing)
             {
-                MultipleDisposable?.Dispose();
-
-                if (_disableDisposableChecker == false)
-                    DisposableChecker.Remove(this);
+                _multipleDisposable?.Dispose();
             }
 
             _disposed = true;
@@ -54,6 +57,9 @@ namespace Anne.Foundation.Mvvm
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+
+            if (_disableDisposableChecker == false)
+                DisposableChecker.Remove(this);
         }
     }
 }
