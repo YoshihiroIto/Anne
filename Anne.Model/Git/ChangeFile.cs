@@ -30,6 +30,7 @@ namespace Anne.Model.Git
             }
         }
 
+#if false
         public int LinesAdded
         {
             get
@@ -53,6 +54,7 @@ namespace Anne.Model.Git
             }
             set { SetProperty(ref _linesDeleted, value); }
         }
+#endif
 
         public ChangeKind Status
         {
@@ -76,8 +78,8 @@ namespace Anne.Model.Git
         {
             Path = source.Path;
             Patch = source.Patch;
-            LinesAdded = source.LinesAdded;
-            LinesDeleted = source.LinesDeleted;
+            //LinesAdded = source.LinesAdded;
+            //LinesDeleted = source.LinesDeleted;
             Status = source.Status;
             IsBinary = source.IsBinary;
         }
@@ -98,8 +100,8 @@ namespace Anne.Model.Git
         // ReSharper disable InconsistentNaming
         protected string _path;
         protected SavingMemoryString _patch = new SavingMemoryString();
-        protected int _linesAdded;
-        protected int _linesDeleted;
+        //protected int _linesAdded;
+        //protected int _linesDeleted;
         protected ChangeKind _status;
         protected bool _isBinary;
         // ReSharper restore InconsistentNaming
@@ -113,8 +115,8 @@ namespace Anne.Model.Git
             Debug.Assert(diff != null);
 
             _isBinary = diff.IsBinaryComparison;
-            _linesAdded = diff.LinesAdded;
-            _linesDeleted = diff.LinesDeleted;
+            //_linesAdded = diff.LinesAdded;
+            //_linesDeleted = diff.LinesDeleted;
             _patch.Value = diff.Patch;
 
             _repos = null;
@@ -125,8 +127,8 @@ namespace Anne.Model.Git
 
             // ReSharper disable ExplicitCallerInfoArgument
             RaisePropertyChanged(nameof(IsBinary));
-            RaisePropertyChanged(nameof(LinesAdded));
-            RaisePropertyChanged(nameof(LinesDeleted));
+            //RaisePropertyChanged(nameof(LinesAdded));
+            //RaisePropertyChanged(nameof(LinesDeleted));
             RaisePropertyChanged(nameof(Patch));
             // ReSharper restore ExplicitCallerInfoArgument
         }

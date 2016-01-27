@@ -70,8 +70,8 @@ namespace Anne.Model.Git
                                         new WipFile(_repos, IsInStaging(x.State), x.FilePath)
                                         {
                                             Patch = compare.Patch,
-                                            LinesAdded = compare.LinesAdded,
-                                            LinesDeleted = compare.LinesDeleted,
+                                            //LinesAdded = compare.LinesAdded,
+                                            //LinesDeleted = compare.LinesDeleted,
                                             Status = compare.Status,
                                             IsBinary = compare.IsBinaryComparison
                                         };
