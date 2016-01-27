@@ -15,8 +15,8 @@ namespace Anne.Features.Interfaces
         ReactiveProperty<string> Path { get; }
         ReactiveProperty<DiffLine[]> DiffLines { get; }
 
-        ReactiveProperty<int> LinesAdded { get; }
-        ReactiveProperty<int> LinesDeleted { get; }
+        //ReactiveProperty<int> LinesAdded { get; }
+        //ReactiveProperty<int> LinesDeleted { get; }
         ReactiveProperty<LibGit2Sharp.ChangeKind> Status { get; }
         ReactiveProperty<bool> IsBinary { get; }
 

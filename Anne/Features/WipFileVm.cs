@@ -19,8 +19,8 @@ namespace Anne.Features
         // IFileDiffVm
         public ReactiveProperty<string> Path { get; }
         public ReactiveProperty<DiffLine[]> DiffLines { get; } = new ReactiveProperty<DiffLine[]>();
-        public ReactiveProperty<int> LinesAdded { get; }
-        public ReactiveProperty<int> LinesDeleted { get; }
+        //public ReactiveProperty<int> LinesAdded { get; }
+        //public ReactiveProperty<int> LinesDeleted { get; }
         public ReactiveProperty<ChangeKind> Status { get; }
         public ReactiveProperty<bool> IsBinary { get; }
 
@@ -102,9 +102,8 @@ namespace Anne.Features
             //
             DiffLines.AddTo(MultipleDisposable);
 
-            LinesAdded = model.ObserveProperty(x => x.LinesAdded, false).ToReactiveProperty().AddTo(MultipleDisposable);
-            LinesDeleted =
-                model.ObserveProperty(x => x.LinesDeleted, false).ToReactiveProperty().AddTo(MultipleDisposable);
+            //LinesAdded = model.ObserveProperty(x => x.LinesAdded, false).ToReactiveProperty().AddTo(MultipleDisposable);
+            //LinesDeleted = model.ObserveProperty(x => x.LinesDeleted, false).ToReactiveProperty().AddTo(MultipleDisposable);
             IsBinary = model.ObserveProperty(x => x.IsBinary, false).ToReactiveProperty().AddTo(MultipleDisposable);
 
 #region IsInStaging, IsInStagingFromModel
