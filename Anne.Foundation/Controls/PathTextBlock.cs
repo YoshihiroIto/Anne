@@ -4,13 +4,13 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Reactive.Linq;
 using Anne.Foundation.Extentions;
+using Jewelry.Collections;
 using Reactive.Bindings.Extensions;
 
 namespace Anne.Foundation.Controls
@@ -36,7 +36,7 @@ namespace Anne.Foundation.Controls
 
                     var parent = self.Parent as FrameworkElement;
                     if (parent != null)
-                        self.UpdateText(() => parent.ActualWidth);
+                        self.UpdateText(parent.ActualWidth);
                 }));
 
         #endregion
@@ -113,9 +113,9 @@ namespace Anne.Foundation.Controls
                     .Where(x => x.WidthChanged)
                     .Throttle(TimeSpan.FromMilliseconds(1))
                     .ObserveOnUIDispatcher()
-                    .Subscribe(x => UpdateText(() => x.NewSize.Width));
+                    .Subscribe(x => UpdateText(x.NewSize.Width));
 
-                UpdateText(() => parent.ActualWidth);
+                UpdateText(parent.ActualWidth);
             }
         }
 
@@ -124,10 +124,8 @@ namespace Anne.Foundation.Controls
             _parentSizeChangedObservable?.Dispose();
         }
 
-        private void UpdateText(Func<double> targetWidthGetter)
+        private void UpdateText(double targetWidth)
         {
-            var targetWidth = targetWidthGetter();
-
             targetWidth -= Padding.Left + Padding.Right;
 
             if (targetWidth <= 0.0)
@@ -147,28 +145,27 @@ namespace Anne.Foundation.Controls
             var fontSize = FontSize;
             var foreground = Foreground;
 
-            Task.Run(() =>
+            for (var length = text.Length; length != 0; --length)
             {
-                for (var length = text.Length; length != 0; --length)
-                {
-                    var ft = new FormattedText(text, currentCulture, FlowDirection.LeftToRight, typeface, fontSize, foreground);
-                    if (ft.WidthIncludingTrailingWhitespace <= targetWidth)
-                        break;
+                var textWidth = TextWidthCache.GetOrAdd(
+                    text,
+                    t =>
+                    {
+                        var ft = new FormattedText(t, currentCulture, FlowDirection.LeftToRight, typeface, fontSize,
+                            foreground);
+                        return ft.WidthIncludingTrailingWhitespace;
+                    });
 
-                    text = TruncatePath(pathText, length);
-                }
+                if (textWidth <= targetWidth)
+                    break;
 
-                Dispatcher.InvokeAsync(() =>
-                {
-                    var latestTargetWidth = targetWidthGetter() - (Padding.Left + Padding.Right);
+                text = TruncatePath(pathText, length);
+            }
 
-                    if (Math.Abs(targetWidth - latestTargetWidth) > 0.1)
-                        return;
-
-                    UpdateInlines(text);
-                });
-            });
+            UpdateInlines(text);
         }
+
+        private static readonly LruCache<string, double> TextWidthCache = new LruCache<string, double>(10000, false);
 
         // ディレクトリ部とファイル部を分離し色分けする
         private void UpdateInlines(string text)
