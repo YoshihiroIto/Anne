@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Threading;
 using Anne.Foundation;
 using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
@@ -346,22 +345,6 @@ namespace Anne.Model.Git
         public void AddJob(string summary, Action action)
         {
             _jobQueue.AddJob(summary, action);
-        }
-
-        public void ExecuteJobSync(string summary, Action action)
-        {
-            using (var sema = new SemaphoreSlim(0, 1))
-            {
-                _jobQueue.AddJob(summary, () =>
-                {
-                    action();
-
-                    // ReSharper disable once AccessToDisposedClosure
-                    sema.Release();
-                });
-
-                sema.Wait();
-            }
         }
     }
 }
