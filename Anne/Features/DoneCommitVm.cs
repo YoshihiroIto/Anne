@@ -56,12 +56,12 @@ namespace Anne.Features
                     {
                         var image = GravatarLoader.Get(_model.AutherEmail);
 
-                        Application.Current.Dispatcher.InvokeAsync(() =>
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             AutherImage = image;
                             _isDownloading = false;
                             _disposeResetEvent?.Set();
-                        });
+                        }));
                     });
 
                 return null;

@@ -46,14 +46,7 @@ namespace Anne.Foundation.Controls
             var fps = $"FPS:{_count}";
             _count = 0;
 
-            try
-            {
-                Dispatcher.InvokeAsync(() => Fps = fps);
-            }
-            catch
-            {
-                // ignored
-            }
+            Dispatcher.BeginInvoke(new Action(() => Fps = fps));
         }
 
         private void CompositionTargetOnRendering(object sender, EventArgs eventArgs)
