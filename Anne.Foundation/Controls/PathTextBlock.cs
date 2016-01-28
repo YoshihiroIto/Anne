@@ -87,11 +87,11 @@ namespace Anne.Foundation.Controls
         [DllImport("shlwapi.dll", CharSet = CharSet.Auto)]
         private static extern bool PathCompactPathEx([Out] StringBuilder pszOut, string szPath, int cchMax, int dwFlags);
 
-        private static string TruncatePath(string path, int length)
+        private static string TruncatePath(string path, int length, StringBuilder buffer)
         {
-            var sb = new StringBuilder(length + 1);
-            PathCompactPathEx(sb, path, length, 0);
-            return sb.ToString();
+            buffer.Clear();
+            PathCompactPathEx(buffer, path, length, 0);
+            return buffer.ToString();
         }
 
         public PathTextBlock()
@@ -144,6 +144,8 @@ namespace Anne.Foundation.Controls
             var text = PathText;
             var textLength = text.Length;
 
+            var buffer = new StringBuilder(textLength * 2 + 1);
+
             // 最低限入る長さまで求める
             while (textLength > 0)
             {
@@ -160,7 +162,7 @@ namespace Anne.Foundation.Controls
                     break;
 
                 textLength >>= 1;
-                text = TruncatePath(pathText, textLength);
+                text = TruncatePath(pathText, textLength, buffer);
             }
 
             // ぎりぎりまで詰める
@@ -169,7 +171,7 @@ namespace Anne.Foundation.Controls
                 for (var step = textLength; step > 0; step >>= 1)
                 {
                     var nextTextLength = textLength + step;
-                    var nextText = TruncatePath(pathText, nextTextLength);
+                    var nextText = TruncatePath(pathText, nextTextLength, buffer);
 
                     var nextTextWidth = TextWidthCache.GetOrAdd(
                         nextText,
@@ -184,7 +186,7 @@ namespace Anne.Foundation.Controls
                         textLength += step;
                 }
 
-                text = TruncatePath(pathText, textLength);
+                text = TruncatePath(pathText, textLength, buffer);
             }
 
             UpdateInlines(text);
