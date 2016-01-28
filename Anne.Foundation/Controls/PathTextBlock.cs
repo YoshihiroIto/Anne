@@ -124,57 +124,35 @@ namespace Anne.Foundation.Controls
 
         private void UpdateText(double targetWidth)
         {
-            targetWidth -= Padding.Left + Padding.Right;
-
-            if (targetWidth <= 0.0)
-                return;
-
-            if (string.IsNullOrEmpty(PathText))
+            using (new NoGcBlock())
             {
-                Text = string.Empty;
-                return;
-            }
+                targetWidth -= Padding.Left + Padding.Right;
 
-            var currentCulture = CultureInfo.CurrentCulture;
-            var typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
-            var fontSize = FontSize;
-            var foreground = Foreground;
+                if (targetWidth <= 0.0)
+                    return;
 
-            var pathText = PathText;
-            var text = PathText;
-            var textLength = text.Length;
-
-            var buffer = new StringBuilder(textLength * 2 + 1);
-
-            // 最低限入る長さまで求める
-            while (textLength > 0)
-            {
-                var textWidth = TextWidthCache.GetOrAdd(
-                    text,
-                    t =>
-                    {
-                        var ft = new FormattedText(
-                            t, currentCulture, FlowDirection.LeftToRight, typeface, fontSize, foreground);
-                        return ft.WidthIncludingTrailingWhitespace;
-                    });
-
-                if (textWidth <= targetWidth)
-                    break;
-
-                textLength >>= 1;
-                text = TruncatePath(pathText, textLength, buffer);
-            }
-
-            // ぎりぎりまで詰める
-            if (textLength != pathText.Length)
-            {
-                for (var step = textLength; step > 0; step >>= 1)
+                if (string.IsNullOrEmpty(PathText))
                 {
-                    var nextTextLength = textLength + step;
-                    var nextText = TruncatePath(pathText, nextTextLength, buffer);
+                    Text = string.Empty;
+                    return;
+                }
 
-                    var nextTextWidth = TextWidthCache.GetOrAdd(
-                        nextText,
+                var currentCulture = CultureInfo.CurrentCulture;
+                var typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
+                var fontSize = FontSize;
+                var foreground = Foreground;
+
+                var pathText = PathText;
+                var text = PathText;
+                var textLength = text.Length;
+
+                var buffer = new StringBuilder(textLength*2 + 1);
+
+                // 最低限入る長さまで求める
+                while (textLength > 0)
+                {
+                    var textWidth = TextWidthCache.GetOrAdd(
+                        text,
                         t =>
                         {
                             var ft = new FormattedText(
@@ -182,14 +160,39 @@ namespace Anne.Foundation.Controls
                             return ft.WidthIncludingTrailingWhitespace;
                         });
 
-                    if (nextTextWidth <= targetWidth)
-                        textLength += step;
+                    if (textWidth <= targetWidth)
+                        break;
+
+                    textLength >>= 1;
+                    text = TruncatePath(pathText, textLength, buffer);
                 }
 
-                text = TruncatePath(pathText, textLength, buffer);
-            }
+                // ぎりぎりまで詰める
+                if (textLength != pathText.Length)
+                {
+                    for (var step = textLength; step > 0; step >>= 1)
+                    {
+                        var nextTextLength = textLength + step;
+                        var nextText = TruncatePath(pathText, nextTextLength, buffer);
 
-            UpdateInlines(text);
+                        var nextTextWidth = TextWidthCache.GetOrAdd(
+                            nextText,
+                            t =>
+                            {
+                                var ft = new FormattedText(
+                                    t, currentCulture, FlowDirection.LeftToRight, typeface, fontSize, foreground);
+                                return ft.WidthIncludingTrailingWhitespace;
+                            });
+
+                        if (nextTextWidth <= targetWidth)
+                            textLength += step;
+                    }
+
+                    text = TruncatePath(pathText, textLength, buffer);
+                }
+
+                UpdateInlines(text);
+            }
         }
 
         private static readonly LruCache<string, double> TextWidthCache = new LruCache<string, double>(10000, false);
