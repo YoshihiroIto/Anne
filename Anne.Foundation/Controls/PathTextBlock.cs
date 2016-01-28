@@ -83,8 +83,6 @@ namespace Anne.Foundation.Controls
 
         #endregion
 
-        // http://www.k-brand.gr.jp/log/002168 を参考にしました
-
         // ReSharper disable once StringLiteralTypo
         [DllImport("shlwapi.dll", CharSet = CharSet.Auto)]
         private static extern bool PathCompactPathEx([Out] StringBuilder pszOut, string szPath, int cchMax, int dwFlags);
@@ -92,7 +90,7 @@ namespace Anne.Foundation.Controls
         private static string TruncatePath(string path, int length)
         {
             var sb = new StringBuilder(length + 1);
-            PathCompactPathEx(sb, path, length + 1, 0);
+            PathCompactPathEx(sb, path, length, 0);
             return sb.ToString();
         }
 
@@ -137,29 +135,56 @@ namespace Anne.Foundation.Controls
                 return;
             }
 
-            var pathText = PathText;
-
-            var text = PathText;
             var currentCulture = CultureInfo.CurrentCulture;
             var typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
             var fontSize = FontSize;
             var foreground = Foreground;
 
-            for (var length = text.Length; length != 0; --length)
+            var pathText = PathText;
+            var text = PathText;
+            var textLength = text.Length;
+
+            // 最低限入る長さまで求める
+            while (textLength > 0)
             {
                 var textWidth = TextWidthCache.GetOrAdd(
                     text,
                     t =>
                     {
-                        var ft = new FormattedText(t, currentCulture, FlowDirection.LeftToRight, typeface, fontSize,
-                            foreground);
+                        var ft = new FormattedText(
+                            t, currentCulture, FlowDirection.LeftToRight, typeface, fontSize, foreground);
                         return ft.WidthIncludingTrailingWhitespace;
                     });
 
                 if (textWidth <= targetWidth)
                     break;
 
-                text = TruncatePath(pathText, length);
+                textLength >>= 1;
+                text = TruncatePath(pathText, textLength);
+            }
+
+            // ぎりぎりまで詰める
+            if (textLength != pathText.Length)
+            {
+                for (var step = textLength; step > 0; step >>= 1)
+                {
+                    var nextTextLength = textLength + step;
+                    var nextText = TruncatePath(pathText, nextTextLength);
+
+                    var nextTextWidth = TextWidthCache.GetOrAdd(
+                        nextText,
+                        t =>
+                        {
+                            var ft = new FormattedText(
+                                t, currentCulture, FlowDirection.LeftToRight, typeface, fontSize, foreground);
+                            return ft.WidthIncludingTrailingWhitespace;
+                        });
+
+                    if (nextTextWidth <= targetWidth)
+                        textLength += step;
+                }
+
+                text = TruncatePath(pathText, textLength);
             }
 
             UpdateInlines(text);
@@ -170,8 +195,10 @@ namespace Anne.Foundation.Controls
         // ディレクトリ部とファイル部を分離し色分けする
         private void UpdateInlines(string text)
         {
-            var dirname = Path.GetDirectoryName(text) ?? string.Empty;
-            var filename = Path.GetFileName(text);
+            var isEmpty = string.IsNullOrEmpty(text);
+
+            var dirname = isEmpty ? string.Empty : Path.GetDirectoryName(text) ?? string.Empty;
+            var filename = isEmpty ? string.Empty : Path.GetFileName(text);
 
             if (dirname.Length > 0)
                 dirname += @"\";
