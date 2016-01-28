@@ -24,6 +24,7 @@ namespace Anne.Model.Git
 
         // コミット
         private ObservableCollection<Commit> _commits;
+
         public ObservableCollection<Commit> Commits
         {
             get { return _commits; }
@@ -57,6 +58,8 @@ namespace Anne.Model.Git
             Path = path;
             Internal = new LibGit2Sharp.Repository(path).AddTo(MultipleDisposable);
 
+            MultipleDisposable.Add(() => Commits.ForEach(x => x.Dispose()));
+
             // ジョブキュー
             _jobQueue.AddTo(MultipleDisposable);
             WorkingJob = _jobQueue.WorkingJob
@@ -76,23 +79,7 @@ namespace Anne.Model.Git
                 .ToReadOnlyReactiveCollection(x => new Branch(x.CanonicalName, Internal), Scheduler.Immediate)
                 .AddTo(MultipleDisposable);
 
-            var filter = new CommitFilter
-            {
-                SortBy = CommitSortStrategies.Time
-            };
-
-            {
-                UpdateBranches();
-                UpdateCommitLabelDict(Branches.ToArray());
-
-                Commits =
-                    Internal.Commits.QueryBy(filter)
-                        .Take(App.MaxCommitCount)
-                        .Select(x => new Commit(this, x.Sha))
-                        .ToObservableCollection();
-
-                MultipleDisposable.Add(() => Commits.ForEach(x => x.Dispose()));
-            }
+            UpdateAll();
 
             {
                 var watcher = new FileWatcher(System.IO.Path.Combine(Path, @".git\refs"), true)
@@ -101,16 +88,7 @@ namespace Anne.Model.Git
                 new EventListener<FileSystemEventHandler>(
                     h => watcher.FileUpdated += h,
                     h => watcher.FileUpdated -= h,
-                    (s, e) =>
-                    {
-                        UpdateBranches();
-                        UpdateCommitLabelDict(Branches.ToArray());
-
-                        Commits = Internal.Commits.QueryBy(filter)
-                            .Take(App.MaxCommitCount)
-                            .Select(x => new Commit(this, x.Sha))
-                            .ToObservableCollection();
-                    })
+                    (s, e) => _jobQueue.AddJob("UpdateAll", UpdateAll))
                     .AddTo(MultipleDisposable);
 
                 watcher.Start();
@@ -144,6 +122,13 @@ namespace Anne.Model.Git
             return commit;
         }
 
+        private void UpdateAll()
+        {
+            UpdateBranches();
+            UpdateCommitLabelDict(Branches.ToArray());
+            UpdateCommits();
+        }
+
         private void UpdateBranches()
         {
             _branchesPool
@@ -162,6 +147,20 @@ namespace Anne.Model.Git
 
                     _branchesPool.Insert(insertIndex, x);
                 });
+        }
+
+        private void UpdateCommits()
+        {
+            Commits =
+                Internal.Commits.QueryBy(
+                    new CommitFilter
+                    {
+                        SortBy = CommitSortStrategies.Time,
+                        IncludeReachableFrom = Internal.Refs
+                    })
+                    .Take(App.MaxCommitCount)
+                    .Select(x => new Commit(this, x.Sha))
+                    .ToObservableCollection();
         }
 
         private void UpdateBranchProps(Branch[] branches)
