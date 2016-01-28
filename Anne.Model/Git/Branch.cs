@@ -66,18 +66,17 @@ namespace Anne.Model.Git
 
         public string TipSha => Internal.Tip.Sha;
         public string TrackingBranchSha => Internal.TrackedBranch.Tip.Sha;
-        public string CanonicalName => Internal.CanonicalName;
+        public string CanonicalName { get; }
 
         private readonly LibGit2Sharp.Repository _repos;
-        private readonly string _sourceCanonicalName;
-        private LibGit2Sharp.Branch Internal => _repos.Branches[_sourceCanonicalName];
+        private LibGit2Sharp.Branch Internal => _repos.Branches[CanonicalName];
         
         public Branch(string sourceCanonicalName, LibGit2Sharp.Repository repos)
         {
             Debug.Assert(string.IsNullOrEmpty(sourceCanonicalName) == false);
             Debug.Assert(repos != null);
 
-            _sourceCanonicalName = sourceCanonicalName;
+            CanonicalName = sourceCanonicalName;
             _repos = repos;
 
             UpdateProps();
