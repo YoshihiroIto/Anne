@@ -8,9 +8,9 @@ using System.Windows;
 [assembly: AssemblyTitle("Anne")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Yoshihiro Ito")]
 [assembly: AssemblyProduct("Anne")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright © 2016 Yoshihiro Ito All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
