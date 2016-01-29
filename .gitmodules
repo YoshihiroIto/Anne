@@ -4,6 +4,3 @@
 [submodule "Externals/Livet2"]
 	path = Externals/Livet2
 	url = https://github.com/YoshihiroIto/Livet2
-[submodule "Externals/libgit2sharp"]
-	path = Externals/libgit2sharp
-	url = https://github.com/YoshihiroIto/libgit2sharp
