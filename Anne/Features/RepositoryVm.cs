@@ -111,15 +111,18 @@ namespace Anne.Features
             IsFiltering = new ReactiveProperty<bool>().AddTo(MultipleDisposable);
 
             // コミット
-            var observeCommits = _model.ObserveProperty(x => x.Commits);
-            Commits = FileStatus.WipFiles.CombineLatest(
-                observeCommits,
-                WordFilter,
+            ICommitVm selectedCommitVm = null;
+
+            Commits = FileStatus.WipFiles.CombineLatest(_model.ObserveProperty(x => x.Commits), WordFilter,
                 (wipFiles, commits, wordFilter) => new {wipFiles, commits, wordFilter})
                 .Do(_ => IsFiltering.Value = true)
                 .Do(_ => _oldCommits.Enqueue(Commits?.Value))
                 .Select(x =>
                 {
+                    selectedCommitVm = null;
+
+                    var selectedCommitHash = (SelectedCommit?.Value as DoneCommitVm)?.Hash;
+
                     var allCommits = new ObservableCollection<ICommitVm>();
                     {
                         if (x.wipFiles.Any())
@@ -129,7 +132,15 @@ namespace Anne.Features
                             .AsParallel()
                             .AsOrdered()
                             .Where(y => x.wordFilter.IsMatch(y.Message))
-                            .Select(y => (ICommitVm) new DoneCommitVm(this, y, TwoPaneLayout))
+                            .Select(y =>
+                            {
+                                var commit = new DoneCommitVm(this, y, TwoPaneLayout);
+
+                                if (commit.Hash == selectedCommitHash)
+                                    selectedCommitVm = commit;
+
+                                return (ICommitVm) commit;
+                            })
                             .ForEach(y => allCommits.Add(y));
                     }
 
@@ -146,7 +157,7 @@ namespace Anne.Features
             SelectedRemoteBranch = new ReactiveProperty<BranchVm>().AddTo(MultipleDisposable);
 
             SelectedCommit = Commits
-                .Select(c => c?.FirstOrDefault())
+                .Select(c => selectedCommitVm ?? c?.FirstOrDefault())
                 .ToReactiveProperty()
                 .AddTo(MultipleDisposable);
 
