@@ -126,6 +126,7 @@ namespace Anne.Model.Git
             UpdateBranches();
             UpdateCommitLabelDict(Branches.ToArray());
             UpdateCommits();
+            UpdateGraph();
         }
 
         private void UpdateBranches()
@@ -148,8 +149,13 @@ namespace Anne.Model.Git
                 });
         }
 
+        private readonly Dictionary<string, Commit> _shaToCommit = new Dictionary<string, Commit>();
+
         private void UpdateCommits()
         {
+            var index = 0;
+            _shaToCommit.Clear();
+
             Commits =
                 Internal.Commits.QueryBy(
                     new CommitFilter
@@ -158,8 +164,42 @@ namespace Anne.Model.Git
                         IncludeReachableFrom = Internal.Refs
                     })
                     .Take(App.MaxCommitCount)
-                    .Select(x => new Commit(this, x.Sha))
+                    .Select(x =>
+                    {
+                        var commit = new Commit(this, x.Sha, index++);
+                        _shaToCommit.Add(commit.Sha, commit);
+                        return commit;
+                    })
                     .ToObservableCollection();
+        }
+
+        private void UpdateGraph()
+        {
+            var first = Commits.FirstOrDefault();
+            if (first != null)
+                first.CommitGraphNode.Current = 0;
+
+            Commits.ForEach(commit =>
+            {
+#if true
+                if (commit.Sha == "6b8fe7fb69c7106ed1622eecbf217ee7a1c07162")
+                {
+                    int a = 0;
+                }
+#endif
+
+                commit.ParentShas.ForEach(parentSha =>
+                {
+                    Debug.Assert(_shaToCommit.ContainsKey(parentSha));
+                    var parentIndex = _shaToCommit[parentSha].Index;
+
+                    Commits[parentIndex].CommitGraphNode.PutCurrent();
+
+                    // 自分の直後から親の直前まで
+                    for (var i = commit.Index + 1; i < parentIndex; ++ i)
+                        Commits[i].CommitGraphNode.Forward();
+                });
+            });
         }
 
         private void UpdateBranchProps(Branch[] branches)

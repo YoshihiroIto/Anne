@@ -24,8 +24,8 @@ namespace Anne.Features
         public string Message => _model.Message;
         public string TrimmedMessage => _model.Message.Trim();
         public string MessageShort => _model.MessageShort;
-        public string Parents => string.Join(", ", _model.ParentShaShorts);
-        public string Hash => $"{_model.Sha} [{_model.ShaShort}]";
+        public string Parents => string.Join(", ", _model.ParentShas.Select(x => x.Substring(0, 7)));
+        public string Hash => $"{_model.Sha} [{_model.Sha.Substring(0, 7)}]";
         public string Auther => $"{_model.AutherName} <{_model.AutherEmail}>";
         public string Date => _model.When.ToString("F");
 

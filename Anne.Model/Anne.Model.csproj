@@ -100,6 +100,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="AppConfig.cs" />
+    <Compile Include="Git\CommitGraphNode.cs" />
     <Compile Include="Git\CommitLabel.cs" />
     <Compile Include="Git\WipFile.cs" />
     <Compile Include="Git\FileStatus.cs" />

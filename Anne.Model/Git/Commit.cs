@@ -11,13 +11,18 @@ using LibGit2Sharp;
 
 namespace Anne.Model.Git
 {
+    [DebuggerDisplay("Current={CommitGraphNode._current}, Depth={CommitGraphNode._depth}, Message={MessageShort}")]
     public class Commit : ModelBase
     {
+        public readonly int Index;
+
         public string Message
         {
             get
             {
-                return LazyInitializer.EnsureInitialized(ref _messageCache, () => new SavingMemoryString(Internal.Message)).Value;
+                return LazyInitializer.EnsureInitialized(
+                    ref _messageCache,
+                    () => new SavingMemoryString(Internal.Message)).Value;
             }
         }
 
@@ -25,14 +30,14 @@ namespace Anne.Model.Git
         {
             get
             {
-                return LazyInitializer.EnsureInitialized(ref _messageShortCache, () => new SavingMemoryString(Internal.MessageShort)).Value;
+                return LazyInitializer.EnsureInitialized(
+                    ref _messageShortCache,
+                    () => new SavingMemoryString(Internal.MessageShort)).Value;
             }
         }
 
         public string Sha { get; }
-        public string ShaShort => Sha.Substring(0, 7);
-        public IEnumerable<string> ParentShas => Internal.Parents.Select(x => x.Sha);
-        public IEnumerable<string> ParentShaShorts => Internal.Parents.Select(x => x.Sha.Substring(0, 7));
+        public IEnumerable<string> ParentShas => Internal.Parents.Select(x => x.Sha); 
 
         public string AutherName => Internal.Author.Name;
         public string AutherEmail => Internal.Author.Email;
@@ -77,6 +82,8 @@ namespace Anne.Model.Git
             set { SetProperty(ref _isChangeFilesBuilding, value); }
         }
 
+        public CommitGraphNode CommitGraphNode { get; } = new CommitGraphNode();
+
         private LibGit2Sharp.Commit Internal => _repos.FindCommitBySha(Sha);
 
         private bool _isFileDiffsMakeDone;
@@ -85,13 +92,14 @@ namespace Anne.Model.Git
         private readonly Repository _repos;
         private ManualResetEventSlim _disposeResetEvent;
 
-        public Commit(Repository repos, string commitSha)
+        public Commit(Repository repos, string commitSha, int index)
         {
             Debug.Assert(repos != null);
             Debug.Assert(commitSha != null);
 
             _repos = repos;
             Sha = commitSha;
+            Index = index;
 
             MultipleDisposable.AddFirst(() =>
             {
