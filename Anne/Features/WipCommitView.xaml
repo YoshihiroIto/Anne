@@ -8,9 +8,9 @@
       xmlns:converters="clr-namespace:Anne.Foundation.Converters;assembly=Anne.Foundation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
-      xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:input="clr-namespace:Microsoft.Expression.Interactivity.Input;assembly=Microsoft.Expression.Interactions"
       DataContextChanged="Grid_DataContextChanged"
       d:DesignHeight="600"
       d:DesignWidth="300"
@@ -179,9 +179,9 @@
             </ListView.ItemTemplate>
 
             <i:Interaction.Triggers>
-                <ei:KeyTrigger Key="Space">
+                <input:KeyTrigger Key="Space">
                     <behaviors:LivetCallMethodAction MethodName="ToggleStaging" MethodTarget="{Binding}" />
-                </ei:KeyTrigger>
+                </input:KeyTrigger>
             </i:Interaction.Triggers>
 
             <ListView.ItemContainerStyle>

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using MetroRadiance.Core.Win32;
+using MetroRadiance.Interop.Win32;
 
 namespace Anne.Windows
 {
@@ -32,10 +32,10 @@ namespace Anne.Windows
                 var placement = WindowSettings.Placement.Value;
                 placement.length = Marshal.SizeOf(typeof (WINDOWPLACEMENT));
                 placement.flags = 0;
-                placement.showCmd = placement.showCmd == SW.SHOWMINIMIZED ? SW.SHOWNORMAL : placement.showCmd;
+                placement.showCmd = placement.showCmd == ShowWindowFlags.SW_SHOWMINIMIZED ? ShowWindowFlags.SW_SHOWNORMAL : placement.showCmd;
 
                 var hwnd = new WindowInteropHelper(this).Handle;
-                NativeMethods.SetWindowPlacement(hwnd, ref placement);
+                User32.SetWindowPlacement(hwnd, ref placement);
             }
 
             var setting = (MainWindowSettings) WindowSettings;
@@ -54,10 +54,9 @@ namespace Anne.Windows
 
             var setting = (MainWindowSettings) WindowSettings;
 
-
             WINDOWPLACEMENT placement;
             var hwnd = new WindowInteropHelper(this).Handle;
-            NativeMethods.GetWindowPlacement(hwnd, out placement);
+            User32.GetWindowPlacement(hwnd, out placement);
 
             setting.Placement = placement;
             setting.Columns = RepositoryView.Columns.ColumnDefinitions.Select(x => x.ActualWidth).ToArray();

@@ -31,6 +31,7 @@
                                                          VerticalScrollBarVisibility="Auto"
                                                          WordWrap="True" />
 
+                                    <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
                                     <wpfSpark:FluidProgressBar ClipToBounds="True" Foreground="{StaticResource AccentBrushKey}">
                                         <wpfSpark:FluidProgressBar.Style>
                                             <Style TargetType="{x:Type wpfSpark:FluidProgressBar}">
