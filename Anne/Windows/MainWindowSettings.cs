@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Reflection;
 using Jil;
-using MetroRadiance.Controls;
-using MetroRadiance.Core.Win32;
+using MetroRadiance.Interop.Win32;
+using MetroRadiance.UI.Controls;
 
 namespace Anne.Windows
 {

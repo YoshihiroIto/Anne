@@ -220,6 +220,7 @@
         <!--  ReSharper restore Xaml.MissingGridIndex  -->
 
         <!--  ReSharper disable Xaml.MissingGridIndex  -->
+        <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <wpfSpark:FluidProgressBar ClipToBounds="True" Foreground="{StaticResource AccentBrushKey}">
             <!--  ReSharper restore Xaml.MissingGridIndex  -->
             <wpfSpark:FluidProgressBar.Style>
