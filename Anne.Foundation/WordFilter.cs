@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Anne.Foundation
@@ -16,7 +17,8 @@ namespace Anne.Foundation
         {
             _regexes = src
                 .Split(' ')
-                .Where(x => x.Length >= 3)
+                // アスキー文字で３文字、ひらがな・カタカナ等は１文字でも受け付ける
+                .Where(x => Encoding.UTF8.GetByteCount(x) >= 3)
                 .Select(x => MigemoHelper.Instance.MakeRegex(x))
                 .ToArray();
         }
