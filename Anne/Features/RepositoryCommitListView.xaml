@@ -139,7 +139,12 @@
             </ItemsControl>
         </DataTemplate>
 
-        <DataTemplate x:Key="DoneCommitListGraphItemTemplate" DataType="{x:Type features:WipCommitVm}" />
+        <DataTemplate x:Key="DoneCommitListGraphItemTemplate" DataType="{x:Type features:DoneCommitVm}">
+            <controls:CommitGraphNodeCellView Height="16"
+                                              Margin="-5,0"
+                                              DataContext="{Binding CommitGraphNode,
+                                                                    Mode=OneTime}" />
+        </DataTemplate>
 
         <DataTemplate x:Key="DoneCommitListCommentItemTemplate" DataType="{x:Type features:DoneCommitVm}">
             <TextBlock Margin="-5,0"

@@ -97,8 +97,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommitGraph\CommitGraphNode.cs" />
+    <Compile Include="CommitGraph\CommitGraphNodeCell.cs" />
     <Compile Include="CommitLabelType.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controls\CommitGraphNodeCellView.cs" />
     <Compile Include="Controls\FpsDisplay.xaml.cs">
       <DependentUpon>FpsDisplay.xaml</DependentUpon>
     </Compile>

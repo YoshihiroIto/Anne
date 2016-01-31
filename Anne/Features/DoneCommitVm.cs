@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
+using Anne.Foundation.CommitGraph;
 using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
 using LibGit2Sharp;
@@ -28,6 +29,8 @@ namespace Anne.Features
         public string Hash => $"{_model.Sha} [{_model.Sha.Substring(0, 7)}]";
         public string Auther => $"{_model.AutherName} <{_model.AutherEmail}>";
         public string Date => _model.When.ToString("F");
+
+        public CommitGraphNode CommitGraphNode => _model.CommitGraphNode;
 
         #region AutherImage
 
@@ -210,6 +213,7 @@ namespace Anne.Features
                     });
             }
         }
+
 
         public TwoPaneLayoutVm TwoPaneLayout { get; }
 

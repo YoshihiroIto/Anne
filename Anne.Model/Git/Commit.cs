@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Anne.Foundation;
+using Anne.Foundation.CommitGraph;
 using Anne.Foundation.Mvvm;
-using Anne.Model.Git.CommitGraph;
 using LibGit2Sharp;
 
 namespace Anne.Model.Git

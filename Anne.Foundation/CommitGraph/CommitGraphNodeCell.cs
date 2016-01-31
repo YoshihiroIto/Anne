@@ -1,4 +1,4 @@
-﻿namespace Anne.Model.Git.CommitGraph
+﻿namespace Anne.Foundation.CommitGraph
 {
     public class CommitGraphNodeCell
     {

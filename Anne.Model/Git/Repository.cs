@@ -6,10 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Runtime.InteropServices;
 using Anne.Foundation;
 using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
+using Anne.Model.Git.Helper;
 using LibGit2Sharp;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -124,10 +124,12 @@ namespace Anne.Model.Git
 
         private void UpdateAll()
         {
-            UpdateBranches();
-            UpdateCommitLabelDict(Branches.ToArray());
-            UpdateCommits();
-            UpdateGraph();
+            using (new NoGcBlock())
+            {
+                UpdateBranches();
+                UpdateCommitLabelDict(Branches.ToArray());
+                UpdateCommits();
+            }
         }
 
         private void UpdateBranches()
@@ -150,12 +152,11 @@ namespace Anne.Model.Git
                 });
         }
 
-        private readonly Dictionary<string, Commit> _shaToCommit = new Dictionary<string, Commit>();
 
         private void UpdateCommits()
         {
+            var shaToCommit = new Dictionary<string, Commit>();
             var index = 0;
-            _shaToCommit.Clear();
 
             Commits =
                 Internal.Commits.QueryBy(
@@ -168,42 +169,12 @@ namespace Anne.Model.Git
                     .Select(x =>
                     {
                         var commit = new Commit(this, x.Sha, index++);
-                        _shaToCommit.Add(commit.Sha, commit);
+                        shaToCommit.Add(commit.Sha, commit);
                         return commit;
                     })
                     .ToObservableCollection();
-        }
 
-        private void UpdateGraph()
-        {
-            Commit priorCommit = null;
-
-            Commits.ForEach(commit =>
-            {
-                var depth = 0;
-
-                if (priorCommit != null)
-                {
-                    var priorCommitParents = priorCommit.ParentShas
-                        .Select(x => _shaToCommit[x])
-                        .ToArray();
-
-                    var index = priorCommitParents.TakeWhile(p => p != commit).Count();
-
-                    depth = index;
-                }
-
-                commit.CommitGraphNode.AddNodeCell(depth);
-
-                var parentCount = 0;
-                commit.ParentShas.ForEach(parentSha =>
-                {
-                    commit.CommitGraphNode.AddLineCell(depth, parentCount);
-                    ++ parentCount;
-                });
-
-                priorCommit = commit;
-            });
+            RepositoryHelper.UpdateGraph(Commits, shaToCommit);
         }
 
         private void UpdateBranchProps(Branch[] branches)
