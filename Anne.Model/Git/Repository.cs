@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using Anne.Foundation;
 using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
@@ -175,30 +176,33 @@ namespace Anne.Model.Git
 
         private void UpdateGraph()
         {
-            var first = Commits.FirstOrDefault();
-            if (first != null)
-                first.CommitGraphNode.Current = 0;
+            Commit priorCommit = null;
 
             Commits.ForEach(commit =>
             {
-#if true
-                if (commit.Sha == "6b8fe7fb69c7106ed1622eecbf217ee7a1c07162")
-                {
-                    int a = 0;
-                }
-#endif
+                var depth = 0;
 
+                if (priorCommit != null)
+                {
+                    var priorCommitParents = priorCommit.ParentShas
+                        .Select(x => _shaToCommit[x])
+                        .ToArray();
+
+                    var index = priorCommitParents.TakeWhile(p => p != commit).Count();
+
+                    depth = index;
+                }
+
+                commit.CommitGraphNode.AddNodeCell(depth);
+
+                var parentCount = 0;
                 commit.ParentShas.ForEach(parentSha =>
                 {
-                    Debug.Assert(_shaToCommit.ContainsKey(parentSha));
-                    var parentIndex = _shaToCommit[parentSha].Index;
-
-                    Commits[parentIndex].CommitGraphNode.PutCurrent();
-
-                    // 自分の直後から親の直前まで
-                    for (var i = commit.Index + 1; i < parentIndex; ++ i)
-                        Commits[i].CommitGraphNode.Forward();
+                    commit.CommitGraphNode.AddLineCell(depth, parentCount);
+                    ++ parentCount;
                 });
+
+                priorCommit = commit;
             });
         }
 

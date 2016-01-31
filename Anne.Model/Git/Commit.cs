@@ -7,11 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Anne.Foundation;
 using Anne.Foundation.Mvvm;
+using Anne.Model.Git.CommitGraph;
 using LibGit2Sharp;
 
 namespace Anne.Model.Git
 {
-    [DebuggerDisplay("Current={CommitGraphNode._current}, Depth={CommitGraphNode._depth}, Message={MessageShort}")]
+    //[DebuggerDisplay("Current={CommitGraphNode.Current}, Depth={CommitGraphNode._depth}, Message={MessageShort}")]
     public class Commit : ModelBase
     {
         public readonly int Index;
