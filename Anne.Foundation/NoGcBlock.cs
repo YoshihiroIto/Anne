@@ -17,9 +17,7 @@ namespace Anne.Foundation
 
         public void Dispose()
         {
-            Interlocked.Decrement(ref _depth);
-
-            if (_depth == 0)
+            if (Interlocked.Decrement(ref _depth) == 0)
                 if (GCSettings.LatencyMode == GCLatencyMode.NoGCRegion)
                     GC.EndNoGCRegion();
         }
