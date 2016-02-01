@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 
@@ -37,11 +38,14 @@ namespace Anne.Model
         {
             AppConfig.SaveToFile(ConfigFilePath, _config);
 
-            Instance.Repositories.ForEach(x => x.Dispose());
             Instance.Dispose();
         }
 
         private App()
+        {
+        }
+
+        public void Startup()
         {
             MultipleDisposable.Add(() => Repositories.ForEach(x => x.Dispose()));
 

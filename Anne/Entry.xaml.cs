@@ -43,6 +43,7 @@ namespace Anne
 
             MigemoHelper.Instance.Initialize();
             Model.App.Initialize();
+            Model.App.Instance.Startup();
         }
     }
 }
