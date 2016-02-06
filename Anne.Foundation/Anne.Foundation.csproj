@@ -110,6 +110,7 @@
       <DependentUpon>FpsDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LogMessageTextBox.cs" />
+    <Compile Include="Controls\RemoveParentMargin.cs" />
     <Compile Include="Controls\RepositoryOutlinerItemMark.xaml.cs">
       <DependentUpon>RepositoryOutlinerItemMark.xaml</DependentUpon>
     </Compile>
