@@ -3,9 +3,8 @@
     <SolidColorBrush x:Key="CurrentBorderBrush" Color="#FFFF2050" />
     <SolidColorBrush x:Key="SelectionBrush" Color="#FFFF2050" />
 
-    <Pen x:Key="CurrentBackgroundPen" Brush="{StaticResource CurrentBackgroundBrush}" />
-    <Pen x:Key="CurrentBorderPen" Brush="{StaticResource CurrentBorderBrush}" />
-
+    <Pen x:Key="CurrentBackgroundPen" Brush="{StaticResource CurrentBackgroundBrush}" Thickness="0.5" />
+    <Pen x:Key="CurrentBorderPen" Brush="{StaticResource CurrentBorderBrush}" Thickness="0.5" />
 
     <Style TargetType="{x:Type ScrollViewer}">
         <Setter Property="OverridesDefaultStyle" Value="True" />

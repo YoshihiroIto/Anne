@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Media;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
+using Anne.Foundation.Controls;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace Anne.Diff
@@ -43,7 +44,11 @@ namespace Anne.Diff
                     d.StartIndex,
                     d.EndIndex)
                 )
-                .ForEach(r => args.DrawingContext.DrawRectangle(brush, null, r));
+                .ForEach(r =>
+                {
+                    using(new GuidelineSetBlock(args.DrawingContext, r))
+                        args.DrawingContext.DrawRectangle(brush, null, r);
+                });
         }
     }
 }

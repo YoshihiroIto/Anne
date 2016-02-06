@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using Anne.Foundation;
+using Anne.Foundation.Controls;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace Anne.Diff
@@ -73,7 +74,8 @@ namespace Anne.Diff
 
                     // ReSharper disable once PossibleUnintendedReferenceComparison
                     if (brush != default(Brush))
-                        dc.DrawRectangle(brush, null, rect);
+                        using (new GuidelineSetBlock(dc, rect))
+                            dc.DrawRectangle(brush, null, rect);
 
                     if (perLineDraw != null)
                     {

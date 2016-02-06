@@ -5,6 +5,7 @@ namespace Anne.Foundation
     public static class Constants
     {
         public static readonly Pen FramePen = new Pen(Brushes.LightGray, 0.5);
+        public static readonly Brush FrameBrush = Brushes.LightGray;
 
         public static readonly SolidColorBrush ChunkTagBackground =
             new SolidColorBrush(Color.FromRgb(0xF0, 0xF0, 0xFF));

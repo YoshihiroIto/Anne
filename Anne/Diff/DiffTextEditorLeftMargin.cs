@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using Anne.Features.Interfaces;
 using Anne.Foundation;
+using Anne.Foundation.Controls;
 using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 
@@ -84,22 +85,43 @@ namespace Anne.Diff
                 DrawIndex(args.DrawingContext, args.Rect, args.DiffLine);
         }
 
+        private static Pen _gridPen;
+
         private static void DrawForeground(DiffTextEditorHelper.PerLineDrawArgs args)
         {
-            args.DrawingContext.DrawLine(
-                Constants.FramePen,
-                new Point(OldIndexOffset, args.Rect.Top),
-                new Point(OldIndexOffset, args.Rect.Bottom));
+            if (_gridPen == null)
+            {
+                var presentationSource = PresentationSource.FromVisual(args.TextView);
+                if (presentationSource?.CompositionTarget != null)
+                {
+                    var m = presentationSource.CompositionTarget.TransformToDevice;
+                    _gridPen = new Pen(Constants.FrameBrush, 1 / m.M11);   // 物理ピクセルで１
+                    _gridPen.Freeze();
+                }
 
-            args.DrawingContext.DrawLine(
-                Constants.FramePen,
-                new Point(NewIndexOffset, args.Rect.Top),
-                new Point(NewIndexOffset, args.Rect.Bottom));
+                Debug.Assert(_gridPen != null);
+            }
 
-            args.DrawingContext.DrawLine(
-                Constants.FramePen,
-                new Point(LineTypeIndexOffset, args.Rect.Top),
-                new Point(LineTypeIndexOffset, args.Rect.Bottom));
+            var halfPenWidth = _gridPen.Thickness * 0.5;
+
+            using (new GuidelineSetBlock(
+                args.DrawingContext,
+                xGuides: new[]
+                {
+                    NewIndexOffset + halfPenWidth,
+                    LineTypeIndexOffset + halfPenWidth
+                }))
+            {
+                args.DrawingContext.DrawLine(
+                    _gridPen,
+                    new Point(NewIndexOffset, args.Rect.Top - 1),
+                    new Point(NewIndexOffset, args.Rect.Bottom + 1));
+
+                args.DrawingContext.DrawLine(
+                    _gridPen,
+                    new Point(LineTypeIndexOffset, args.Rect.Top - 1),
+                    new Point(LineTypeIndexOffset, args.Rect.Bottom + 1));
+            }
 
             if (args.Index == 0)
                 DrawFileTypeMark(args.DrawingContext, args.Rect, args.DiffLine);

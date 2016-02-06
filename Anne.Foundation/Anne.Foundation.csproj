@@ -68,6 +68,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Interactive, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ix-Main.1.2.5\lib\net45\System.Interactive.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -118,8 +122,10 @@
     <Compile Include="Controls\Selectors\CommitLabelMarkSelector.cs" />
     <Compile Include="Controls\Selectors\RepositoryOutlinerItemMarkSelector.cs" />
     <Compile Include="Controls\Selectors\FileStatusMarkSelector.cs" />
+    <Compile Include="Controls\GuidelineSetBlock.cs" />
     <Compile Include="Controls\TextEditor.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Extentions\DictionaryExtensions.cs" />
     <Compile Include="Converters\PathStringToSyntaxHighlightingConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\TypeOfConverter.cs" />
