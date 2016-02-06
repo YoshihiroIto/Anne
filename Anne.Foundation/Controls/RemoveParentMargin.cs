@@ -14,7 +14,7 @@ namespace Anne.Foundation.Controls
             var cp = VisualTreeHelper.GetParent(this) as FrameworkElement;
 
             if (cp != null)
-                cp.Margin = new Thickness(0.0);
+                cp.Margin = new Thickness(0);
         }
     }
 }
