@@ -86,8 +86,8 @@
                             <Border Margin="0,0,1,0"
                                     Background="{Binding Background,
                                                          Mode=OneTime}"
-                                    BorderBrush="Black"
-                                    BorderThickness="1"
+                                    BorderBrush="DimGray"
+                                    BorderThickness="0.5"
                                     SnapsToDevicePixels="True">
                                 <StackPanel Orientation="Horizontal">
                                     <controls:CommitLabelMark Width="12"
@@ -121,8 +121,8 @@
                                 <DataTemplate>
                                     <Border Background="{Binding Background,
                                                                  Mode=OneTime}"
-                                            BorderBrush="Black"
-                                            BorderThickness="1"
+                                            BorderBrush="DimGray"
+                                           BorderThickness="1"
                                             Padding="2,0"
                                             SnapsToDevicePixels="True">
                                         <StackPanel Orientation="Horizontal">
@@ -174,7 +174,6 @@
                 </DockPanel>
             </Border>
         </ControlTemplate>
-
     </ListView.Template>
 
     <ListView.View>
