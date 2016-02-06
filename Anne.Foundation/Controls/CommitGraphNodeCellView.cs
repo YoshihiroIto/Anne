@@ -15,6 +15,11 @@ namespace Anne.Foundation.Controls
             EdgePen.Freeze();
         }
 
+        public CommitGraphNodeCellView()
+        {
+            DataContextChanged += (_, __) => InvalidateVisual();
+        }
+
         private CommitGraphNode CommitGraphNode => DataContext as CommitGraphNode;
 
         protected override void OnRender(DrawingContext dc)
