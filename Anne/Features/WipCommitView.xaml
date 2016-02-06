@@ -9,8 +9,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:diff="clr-namespace:Anne.Diff"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:input="clr-namespace:Microsoft.Expression.Interactivity.Input;assembly=Microsoft.Expression.Interactions"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       DataContextChanged="Grid_DataContextChanged"
       d:DesignHeight="600"
       d:DesignWidth="300"
@@ -41,7 +41,7 @@
                                     Text="{Binding Summary,
                                                    UpdateSourceTrigger=PropertyChanged}">
                 <controls:PromptTextBox.InputBindings>
-                    <KeyBinding Command="{Binding CommitCommand, Mode=OneTime}" Key="Enter" />
+                    <KeyBinding Key="Enter" Command="{Binding CommitCommand, Mode=OneTime}" />
                 </controls:PromptTextBox.InputBindings>
             </controls:PromptTextBox>
 
@@ -140,7 +140,9 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="20" Background="Transparent">
+                    <Grid Height="20"
+                          Margin="2,0"
+                          Background="Transparent">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -159,7 +161,7 @@
                                                   Status="{Binding Status.Value,
                                                                    Mode=OneWay}" />
 
-                        <Grid Grid.Column="2" Margin="4,0,0,0">
+                        <Grid Grid.Column="2" Margin="4,0,0,0" VerticalAlignment="Center">
                             <controls1:PathTextBlock VerticalAlignment="Center" PathText="{Binding Path.Value, Mode=OneWay}" />
                         </Grid>
 
