@@ -37,10 +37,10 @@ namespace Anne.Foundation
             if (NetworkInterface.GetIsNetworkAvailable() == false)
                 return null;
 
-            BitmapImage bitmap = null;
-
             try
             {
+                BitmapImage bitmap = null;
+
                 var url = GenerateUrlFromEmail(email);
 
                 using (var wc = new WebClient())
