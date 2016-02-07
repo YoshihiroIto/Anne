@@ -14,7 +14,8 @@ namespace Anne.Foundation.Extentions
             if (list.Count == 0)
                 return 0;
             
-            int lo = 0, hi = list.Count - 1;
+            var lo = 0;
+            var hi = list.Count - 1;
 
             while (lo < hi)
             {
@@ -31,7 +32,5 @@ namespace Anne.Foundation.Extentions
 
             return lo;
         }
-
-         
     }
 }
