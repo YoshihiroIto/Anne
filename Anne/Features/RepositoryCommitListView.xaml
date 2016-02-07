@@ -21,7 +21,7 @@
           VirtualizingPanel.VirtualizationMode="Recycling"
           d:DesignHeight="300"
           d:DesignWidth="600"
-          listViewLayout:ListViewLayoutManager.Enabled="true"
+          listViewLayout:ListViewLayoutManager.Enabled="True"
           mc:Ignorable="d">
     <ListView.Resources>
         <ContextMenu x:Key="WipCommitContextMenu">
@@ -167,7 +167,11 @@
                     SnapsToDevicePixels="True">
                 <DockPanel>
                     <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                    <GridViewHeaderRowPresenter Columns="{Binding View.Columns, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type features:RepositoryCommitListView}}}" DockPanel.Dock="Top" />
+                    <GridViewHeaderRowPresenter AllowsColumnReorder="False"
+                                                Columns="{Binding View.Columns,
+                                                                  RelativeSource={RelativeSource FindAncestor,
+                                                                                                 AncestorType={x:Type features:RepositoryCommitListView}}}"
+                                                DockPanel.Dock="Top" />
                     <ScrollViewer Background="White" HorizontalScrollBarVisibility="Disabled">
                         <ItemsPresenter />
                     </ScrollViewer>
