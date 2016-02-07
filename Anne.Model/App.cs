@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Anne.Foundation.Extentions;
 using Anne.Foundation.Mvvm;
 using Anne.Model.Git;
 
