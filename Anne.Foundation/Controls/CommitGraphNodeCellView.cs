@@ -47,7 +47,7 @@ namespace Anne.Foundation.Controls
                     var presentationSource = PresentationSource.FromVisual(this);
                     if (presentationSource?.CompositionTarget != null)
                     {
-                        var gridBrush = new SolidColorBrush(Color.FromRgb(0xD0, 0xC0, 0xC0));
+                        var gridBrush = new SolidColorBrush(Color.FromArgb(0x30, 0x30, 0x30, 0x30));
                         gridBrush.Freeze();
 
                         var m = presentationSource.CompositionTarget.TransformToDevice;
