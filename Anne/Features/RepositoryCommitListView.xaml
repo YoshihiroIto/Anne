@@ -168,7 +168,7 @@
                 <DockPanel>
                     <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
                     <GridViewHeaderRowPresenter Columns="{Binding View.Columns, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type features:RepositoryCommitListView}}}" DockPanel.Dock="Top" />
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <ScrollViewer Background="White" HorizontalScrollBarVisibility="Disabled">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </DockPanel>
