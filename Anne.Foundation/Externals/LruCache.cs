@@ -42,7 +42,7 @@ namespace Jewelry.Collections
         private readonly Dictionary<TKey, LinkedListNode<KeyValue>> _lookup =
             new Dictionary<TKey, LinkedListNode<KeyValue>>();
 
-        private readonly object _sync;
+        private readonly object _lockObj;
 
         private readonly int _maxCapacity;
         private int _currentSize = 0;
@@ -54,7 +54,7 @@ namespace Jewelry.Collections
         public LruCache(int maxCapacity, bool isThreadSafe)
         {
             _maxCapacity = maxCapacity;
-            _sync = isThreadSafe ? new object() : null;
+            _lockObj = isThreadSafe ? new object() : null;
         }
 
         /// <summary>
@@ -81,11 +81,11 @@ namespace Jewelry.Collections
         /// </summary>
         public void Clear()
         {
-            if (_sync == null)
+            if (_lockObj == null)
                 ClearInternal();
             else
             {
-                lock (_sync)
+                lock (_lockObj)
                 {
                     ClearInternal();
                 }
@@ -99,11 +99,11 @@ namespace Jewelry.Collections
         /// <returns>The key of the value to get.</returns>
         public TValue Get(TKey key)
         {
-            if (_sync == null)
+            if (_lockObj == null)
                 return GetInternal(key);
             else
             {
-                lock (_sync)
+                lock (_lockObj)
                 {
                     return GetInternal(key);
                 }
@@ -112,11 +112,11 @@ namespace Jewelry.Collections
 
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
         {
-            if (_sync == null)
+            if (_lockObj == null)
                 return GetOrAddInternal(key, valueFactory);
             else
             {
-                lock (_sync)
+                lock (_lockObj)
                 {
                     return GetOrAddInternal(key, valueFactory);
                 }
@@ -130,11 +130,11 @@ namespace Jewelry.Collections
         /// <param name="value">The value of the element to add.</param>
         public void Add(TKey key, TValue value)
         {
-            if (_sync == null)
+            if (_lockObj == null)
                 AddInternal(key, value);
             else
             {
-                lock (_sync)
+                lock (_lockObj)
                 {
                     AddInternal(key, value);
                 }
@@ -147,11 +147,11 @@ namespace Jewelry.Collections
         /// <param name="key">The key of the element to remove.</param>
         public void Remove(TKey key)
         {
-            if (_sync == null)
+            if (_lockObj == null)
                 RemoveInternal(key);
             else
             {
-                lock (_sync)
+                lock (_lockObj)
                 {
                     RemoveInternal(key);
                 }

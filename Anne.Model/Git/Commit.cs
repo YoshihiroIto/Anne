@@ -55,7 +55,7 @@ namespace Anne.Model.Git
 
             get
             {
-                lock (_isFileDiffsMakeDoneSync)
+                lock (_isFileDiffsMakeDoneLockObj)
                 {
                     if (_isFileDiffsMakeDone)
                         return _changeFiles;
@@ -88,7 +88,7 @@ namespace Anne.Model.Git
         private LibGit2Sharp.Commit Internal => _repos.FindCommitBySha(Sha);
 
         private bool _isFileDiffsMakeDone;
-        private readonly object _isFileDiffsMakeDoneSync = new object();
+        private readonly object _isFileDiffsMakeDoneLockObj = new object();
 
         private readonly Repository _repos;
         private ManualResetEventSlim _disposeResetEvent;
@@ -104,7 +104,7 @@ namespace Anne.Model.Git
 
             MultipleDisposable.AddFirst(() =>
             {
-                lock (_isFileDiffsMakeDoneSync)
+                lock (_isFileDiffsMakeDoneLockObj)
                 {
                     if (_isFileDiffsMakeDone)
                         _disposeResetEvent = new ManualResetEventSlim();

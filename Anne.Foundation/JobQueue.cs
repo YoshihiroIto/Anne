@@ -16,6 +16,7 @@ namespace Anne.Foundation
 
         //public ReadOnlyReactiveCollection<string> JobSummaries { get; }
         public ReactiveCollection<string> JobSummaries { get; } = new ReactiveCollection<string>();
+
         public ReactiveProperty<string> WorkingJob { get; } =
             new ReactiveProperty<string>(Scheduler.Immediate);
 
@@ -28,7 +29,7 @@ namespace Anne.Foundation
         private readonly Queue<Job> _jobs = new Queue<Job>();
         private volatile bool _isActive;
 
-        private readonly object _syncObj = new object();
+        private readonly object _lockObj = new object();
 
         private bool _isRunning;
 
@@ -44,7 +45,7 @@ namespace Anne.Foundation
 
         public void AddJob(string summary, Action action)
         {
-            lock (_syncObj)
+            lock (_lockObj)
             {
                 _jobs.Enqueue(new Job {Summary = summary, Action = action});
 
@@ -63,7 +64,7 @@ namespace Anne.Foundation
         {
             Job job;
 
-            lock(_syncObj)
+            lock (_lockObj)
             {
                 if (_jobs.Any() == false || _disposeResetEvent != null)
                 {
@@ -92,7 +93,7 @@ namespace Anne.Foundation
                         JobExecutingException?.Invoke(this, args);
 
                         // 例外が起きたので以降のジョブは実行しない
-                        lock (_syncObj)
+                        lock (_lockObj)
                         {
                             _jobs.Clear();
                         }
@@ -105,7 +106,7 @@ namespace Anne.Foundation
 
         public void Dispose()
         {
-            lock (_syncObj)
+            lock (_lockObj)
             {
                 if (_isActive)
                     _disposeResetEvent = new ManualResetEventSlim();

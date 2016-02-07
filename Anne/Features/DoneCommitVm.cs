@@ -46,7 +46,7 @@ namespace Anne.Features
                 if (_autherImage != null)
                     return _autherImage;
 
-                lock (_isDownloadingSync)
+                lock (_isDownloadingLockObj)
                 {
                     if (_isDownloading)
                         return null;
@@ -73,7 +73,7 @@ namespace Anne.Features
         }
 
         private volatile bool _isDownloading;
-        private readonly object _isDownloadingSync = new object();
+        private readonly object _isDownloadingLockObj = new object();
 
         #endregion
 
@@ -231,7 +231,7 @@ namespace Anne.Features
 
             MultipleDisposable.AddFirst(() =>
             {
-                lock (_isDownloadingSync)
+                lock (_isDownloadingLockObj)
                 {
                     if (_isDownloading)
                         _disposeResetEvent = new ManualResetEventSlim();

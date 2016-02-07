@@ -33,7 +33,7 @@ namespace Anne.Features
                 if (_diff != null)
                     return _diff;
 
-                lock (_diffMakingSync)
+                lock (_diffMakingLockObj)
                 {
                     if (IsDiffMaking)
                         return null;
@@ -59,7 +59,7 @@ namespace Anne.Features
             set { SetProperty(ref _diff, value); }
         }
 
-        private readonly object _diffMakingSync = new object();
+        private readonly object _diffMakingLockObj = new object();
         private bool _isDiffMaking;
 
         public bool IsDiffMaking
@@ -89,7 +89,7 @@ namespace Anne.Features
 
             MultipleDisposable.AddFirst(() =>
             {
-                lock (_diffMakingSync)
+                lock (_diffMakingLockObj)
                 {
                     if (IsDiffMaking)
                         _disposeResetEvent = new ManualResetEventSlim();
