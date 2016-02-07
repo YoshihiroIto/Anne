@@ -1,8 +1,8 @@
 ﻿// ReSharper disable All
 
-// Copyright (c) 2013 Yoshihiro Ito (yo.i.jewelry.bab@gmail.com)
+// Copyright (c) 2013-2016 Yoshihiro Ito (yo.i.jewelry.bab@gmail.com)
 // 
-// Permission is hereby granted, free of charge, to any person obtaininga copy
+// Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -45,12 +45,13 @@ namespace Jewelry.Collections
         private readonly object _lockObj;
 
         private readonly int _maxCapacity;
-        private int _currentSize = 0;
+        private int _currentSize;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="maxCapacity">The maximum number of values this instance can hold.</param>
+        /// <param name="isThreadSafe"></param>
         public LruCache(int maxCapacity, bool isThreadSafe)
         {
             _maxCapacity = maxCapacity;
@@ -83,6 +84,7 @@ namespace Jewelry.Collections
         {
             if (_lockObj == null)
                 ClearInternal();
+
             else
             {
                 lock (_lockObj)
@@ -101,6 +103,7 @@ namespace Jewelry.Collections
         {
             if (_lockObj == null)
                 return GetInternal(key);
+
             else
             {
                 lock (_lockObj)
@@ -114,6 +117,7 @@ namespace Jewelry.Collections
         {
             if (_lockObj == null)
                 return GetOrAddInternal(key, valueFactory);
+
             else
             {
                 lock (_lockObj)
@@ -132,6 +136,7 @@ namespace Jewelry.Collections
         {
             if (_lockObj == null)
                 AddInternal(key, value);
+
             else
             {
                 lock (_lockObj)
@@ -149,6 +154,7 @@ namespace Jewelry.Collections
         {
             if (_lockObj == null)
                 RemoveInternal(key);
+
             else
             {
                 lock (_lockObj)
