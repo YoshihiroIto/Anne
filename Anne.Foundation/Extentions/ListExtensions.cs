@@ -9,8 +9,7 @@ namespace Anne.Foundation.Extentions
         // list:ソート済みのもの
         public static int MakeInsertIndex<T>(this IList<T> list, T value, Func<T, T, int> comp)
         {
-            if (list == null)
-                throw new ArgumentNullException(nameof(list));
+            if (list == null) throw new ArgumentNullException(nameof(list));
 
             if (list.Count == 0)
                 return 0;
