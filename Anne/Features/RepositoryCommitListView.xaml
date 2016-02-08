@@ -50,11 +50,11 @@
         <DataTemplate x:Key="WipCommitListCommentItemTemplate" DataType="{x:Type features:WipCommitVm}">
             <controls:RemoveParentMargin>
                 <Grid>
-                    <TextBlock Height="16"
+                    <TextBlock Height="18"
                                VerticalAlignment="Center"
                                Text="{Binding Summary,
                                               Mode=OneWay}" />
-                    <TextBlock Height="16"
+                    <TextBlock Height="18"
                                VerticalAlignment="Center"
                                FontWeight="Bold"
                                Foreground="DimGray"
@@ -70,7 +70,7 @@
         <!--  Region Done  -->
         <DataTemplate x:Key="DoneCommitListLabelItemTemplate" DataType="{x:Type features:DoneCommitVm}">
             <controls:RemoveParentMargin>
-                <ItemsControl Height="14"
+                <ItemsControl Height="16"
                               Margin="1,0,0,0"
                               VerticalAlignment="Center"
                               Focusable="False"
@@ -88,7 +88,7 @@
                                     Background="{Binding Background,
                                                          Mode=OneTime}"
                                     BorderBrush="DimGray"
-                                    BorderThickness="0.5"
+                                    BorderThickness="1"
                                     SnapsToDevicePixels="True">
                                 <StackPanel Orientation="Horizontal">
                                     <controls:CommitLabelMark Width="11"
@@ -144,7 +144,7 @@
 
         <DataTemplate x:Key="DoneCommitListGraphItemTemplate" DataType="{x:Type features:DoneCommitVm}">
             <controls:RemoveParentMargin>
-                <controls:CommitGraphNodeCellView Height="16" DataContext="{Binding CommitGraphNode, Mode=OneTime}" />
+                <controls:CommitGraphNodeCellView Height="18" DataContext="{Binding CommitGraphNode, Mode=OneTime}" />
             </controls:RemoveParentMargin>
         </DataTemplate>
 
