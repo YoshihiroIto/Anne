@@ -15,7 +15,7 @@ namespace Anne.Foundation.Controls
 
         static CommitGraphNodeCellView()
         {
-            EdgePen = new Pen(Brushes.MediumVioletRed, 0.5);
+            EdgePen = new Pen(Brushes.MediumVioletRed, 1);
             EdgePen.Freeze();
         }
 
