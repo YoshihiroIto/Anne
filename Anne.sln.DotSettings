@@ -20,4 +20,5 @@
 	<s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=_30B3_30F3_30DD_30FC_30CD_30F3_30C8_304B_3089/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=_30CD_30C3_30C8_30A2_30AF_30BB_30B9_3057_305F_304F_306A_3044_6642_306Ffalse_306B_3059_308B/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=_4F8B_5916_304C_8D77_304D_305F_306E_3067_4EE5_964D_306E_30B8_30E7_30D6_306F_5B9F_884C_3057_306A_3044/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=_53C2_7167_4E0D_53EF_80FD_306B_306A_308A_307E_3059/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=_53C2_7167_4E0D_53EF_80FD_306B_306A_308A_307E_3059/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=_7269_7406_30D4_30AF_30BB_30EB_3067/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
